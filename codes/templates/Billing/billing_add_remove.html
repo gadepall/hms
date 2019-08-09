@@ -1,0 +1,237 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+<style>
+#lab td, #lab th {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align:center
+}
+</style>
+
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-5">
+<table id="lab" style="width:100%">
+  <tr>
+    <td colspan="2" style="color:green;background-color:pink"><b>SERVICES ADMINISTRATION</b></td>
+  </tr>
+  <tr>
+    <td><b>Add</b></td>
+    <td><b>View/Edit</b></td>
+  </tr>
+  <tr>
+    <td><a href="{{ url_for('InsertDressingRedir') }}">Add Dressing</a></td>
+    <td><a href="{{ url_for('ViewDressing') }}">View Dressing</a></td>
+  </tr>
+  <tr>
+    <td><a href="{{ url_for('InsertPhyRedir') }}">Add Physiotherapy</a></td>
+    <td><a href="{{ url_for('ViewPhy') }}">View Physiotherapy</a></td>
+  </tr>
+  <tr>
+    <td><a href="{{ url_for('InsertTherapyRedir') }}">Add Therapy</a></td>
+    <td><a href="{{ url_for('ViewTherapy') }}">View Therapy</a></td>
+  </tr>
+</table>
+</div>
+</div>
+
+{%if dflag==1%}
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-5">
+<table id="lab" style="width:100%">
+  <tr>
+    <td colspan="3" style="color:white;background-color:#008080"><b>INSERT NEW DRESSING</b></td>
+  </tr>
+  <tr>
+    <td colspan="3"><b>{{ack}}</b></td>
+  </tr>
+  <tr>
+    <td><b>Dressing Name</b></td>
+    <td><b>Amount</b></td>
+    <td><b>Save</b></td>
+  </tr>
+  <tr>
+    <form action="InsertNewDressing" method="POST">
+    <td><input type="text" class="spalphanum" name="drsname"></td>
+    <td><input type="text" class="spalphanum" name="drsamount"></td>
+    <td><input type="submit" value="Save"></td>
+  </form>
+  </tr>
+</table>
+</div>
+</div>
+{%endif%}
+
+{%if dflag==2%}
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-5">
+<table id="lab" style="width:100%">
+  <tr>
+    <td colspan="3" style="color:white;background-color:#4169E1"><b>UPDATE DRESSING</b></td>
+  </tr>
+  <tr>
+    <td colspan="3"><b>{{ack}}</b></td>
+  </tr>
+  <tr>
+    <td><b>Dressing Name</b></td>
+    <td><b>Amount</b></td>
+    <td><b>Update</b></td>
+  </tr>
+  {%for row in data%}
+  <form action="UpdateDressing" method="POST">
+  <tr>
+    <td><input type="text" name="drsname" class="spalphanum" value="{{row[1]}}"></td>
+    <td><input type="text" name="drsamount" class="spalphanum" value="{{row[2]}}"></td>
+    <td><input type="hidden" name="drsid" value="{{row[0]}}"><input type="submit" value="Update"></td>
+  </tr>
+</form>
+  {%endfor%}
+</table>
+</div>
+</div>
+{%endif%}
+
+
+{%if pflag==1%}
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-5">
+<table id="lab" style="width:100%">
+  <tr>
+    <td colspan="3" style="color:white;background-color:#008080"><b>INSERT NEW PHYSIOTHERAPY</b></td>
+  </tr>
+  <tr>
+    <td colspan="3"><b>{{ack}}</b></td>
+  </tr>
+  <tr>
+    <td><b>Physiotherapy Name</b></td>
+    <td><b>Amount</b></td>
+    <td><b>Save</b></td>
+  </tr>
+  <tr>
+    <form action="InsertNewPhy" method="POST">
+    <td><input type="text" class="spalphanum" name="phyname"></td>
+    <td><input type="text" class="spalphanum" name="phyamount"></td>
+    <td><input type="submit" value="Save"></td>
+  </form>
+  </tr>
+</table>
+</div>
+</div>
+{%endif%}
+
+{%if pflag==2%}
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-5">
+<table id="lab" style="width:100%">
+  <tr>
+    <td colspan="3" style="color:white;background-color:#4169E1"><b>UPDATE PHYSIOTHERAPY</b></td>
+  </tr>
+  <tr>
+    <td colspan="3"><b>{{ack}}</b></td>
+  </tr>
+  <tr>
+    <td><b>Physiotherapy Name</b></td>
+    <td><b>Amount</b></td>
+    <td><b>Update</b></td>
+  </tr>
+  {%for row in data%}
+  <form action="UpdatePhy" method="POST">
+  <tr>
+    <td><input type="text" name="phyname" class="spalphanum" value="{{row[1]}}"></td>
+    <td><input type="text" name="phyamount" class="spalphanum" value="{{row[2]}}"></td>
+    <td><input type="hidden" name="phyid" value="{{row[0]}}"><input type="submit" value="Update"></td>
+  </tr>
+</form>
+  {%endfor%}
+</table>
+</div>
+</div>
+{%endif%}
+
+<!----------------------- Therapy Starts -------------------------------------->
+
+<script>
+function CalcAmount(){
+  var a =$("#tamount").val();
+  var b = a/60;
+  $("#adm_therapyamount").val(b);
+}
+</script>
+
+{%if tflag==1%}
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-5">
+<table id="lab" style="width:100%">
+  <tr>
+    <td colspan="3" style="color:white;background-color:#008080"><b>INSERT NEW THERAPY</b></td>
+  </tr>
+  <tr>
+    <td colspan="3" style="font-weight:bold;">{{ack}}</td>
+  </tr>
+  <tr>
+    <td><b>Therapy Name</b></td>
+    <td><b>Amount (Rs/Hr)</b></td>
+    <td><b>Save</b></td>
+  </tr>
+  <tr>
+    <form action="InsertNewTherapy" method="POST">
+    <td><input type="text" class="spalphanum" name="adm_therapyname"></td>
+    <td><input type="text" class="spalphanum" name="tamount" id="tamount" onblur="CalcAmount()"></td>
+    <td style="display:none"><input type="text" class="spalphanum" name="adm_therapyamount" id="adm_therapyamount" readonly></td>
+    <td><input type="submit" value="Save"></td>
+  </form>
+  </tr>
+</table>
+</div>
+</div>
+{%endif%}
+
+{%if tflag==2%}
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-5">
+<table id="lab" style="width:100%">
+  <tr>
+    <td colspan="3" style="color:white;background-color:#4169E1"><b>UPDATE THERAPY</b></td>
+  </tr>
+  <tr>
+    <td colspan="3" style="font-weight:bold;">{{ack}}</td>
+  </tr>
+  <tr>
+    <td><b>Therapy Name</b></td>
+    <td><b>Amount (Rs/Hr)</b></td>
+    <td><b>Update</b></td>
+  </tr>
+  {%for row in data%}
+  <form action="UpdateTherapy" method="POST">
+  <tr>
+    <td><input type="text" name="adm_therapyname" class="spalphanum" value="{{row[1]}}"></td>
+    <td><input type="text" name="amount" id="amount" onblur="CalcAmount1()" class="spalphanum" value="{{row[2]}}"></td>
+    <td style="display:none"><input type="text" name="adm_therapyamount" id= "adm_therapyamount" class="spalphanum" readyonly></td>
+
+    <td><input type="hidden" name="adm_therapyid" value="{{row[0]}}"><input type="submit" value="Update"></td>
+  </tr>
+</form>
+  {%endfor%}
+</table>
+</div>
+</div>
+{%endif%}
+
+<script>
+function CalcAmount1(){
+  var a =$("#amount").val();
+  var b = a/60;
+  $("#adm_therapyamount").val(b);
+}
+</script>
+
+<!------------------------- Therapy Ends -------------------------------------->
+
+
+{% endblock %}

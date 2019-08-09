@@ -1,0 +1,319 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+<style>
+	#tab {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#tab td, #mainTable th {
+  padding: 8px;
+}
+
+#tab td{
+  padding: 8px;
+  font-size: 15px;
+}
+#tab tr:nth-child(even){background-color: #f2f2f2;}
+
+#tab tr:hover {background-color: #ddd;}
+
+#tab thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+}
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+#tab thead,th {
+  background-color:#778899;
+}
+/* SEPERATE CODE */
+
+
+
+#tab2 {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#tab2 td, #inventory th {
+  padding: 8px;
+}
+
+#tab2 td{
+  padding: 8px;
+  font-size: 15px;
+}
+#tab2 tr:nth-child(even){background-color: #f2f2f2;}
+
+#tab2 tr:hover {background-color: #ddd;}
+
+#tab2 thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+}
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+#tab2 thead,th {
+  background-color:#778899;
+}
+/* SEPERATE CODE */
+
+
+
+
+.subtitle
+{
+background-color:#F0E68C;
+}
+.spnhead{
+  font-size: 20px;
+  font-weight: bold;
+}
+.spndata{
+  font-size: 18px;
+  font-weight: bold;
+}
+
+
+</style>
+
+<script>
+	function RequiredFields()
+	{
+		if (document.getElementById('issued_date').value =='')
+	alert("Please Fill In The Issued Date ");
+	if (document.getElementById('Entrytime').value == '')
+	alert("Please Fill In The EntryTime ");
+	if (document.getElementById('person_name').value == '')
+	alert("Please Fill In The Person Name");
+
+}
+function RequiredFields1()
+{
+
+	if (document.getElementById('issued_date').value =='')
+alert("Please Fill In The Issued Date ");
+if (document.getElementById('Entrytime').value == '')
+alert("Please Fill In The EntryTime ");
+if (document.getElementById('person_name').value == '')
+alert("Please Fill In The Person Name");
+if (document.getElementById('issuedto').value == '')
+alert("Please Select the WardName");
+}
+
+
+function CalRemQty(maintab)
+{
+	var onhand = parseInt($(maintab).closest('tr').children()[7].textContent);  // on hand qty
+	var remqty = parseInt($(maintab).closest('tr').children()[8].textContent);  //remaining qty
+	var iqty =  parseInt($(maintab).closest('tr').find('#issuedqty').val());  //issued qty
+
+	if (remqty >= iqty){
+		$(maintab).closest('tr').children()[8].textContent = onhand-iqty;
+		return false;
+	}
+	else if(remqty <= iqty)
+	{
+		//alert("ONHAND "+onhand);
+		//alert("REMAINING "+remqty);
+		//alert("QTY"+ iqty);
+	   alert('Issued quantity cannot be more than Remaining quantity');
+		var iqty = $(maintab).closest('tr').find('#issuedqty').val('');
+		return false;
+		}
+	var iqty = $(maintab).closest('tr').find('#issuedqty').val('');
+
+}
+
+function showDrugList(medname)
+{
+    $("#tab").find("tr:gt(0)").remove();
+    medname = medname.value;
+    medtype=$('#med_type').val();
+      $.ajax({
+      type:"post",
+      url:"/getDrugList",
+      data:{"medname":medname,"medtype":medtype},
+      success:function(string){
+      var samname = JSON.parse(string)['data'];
+      var rows = '';
+
+      for(var k=0;k<samname.length;k++)
+        rows=rows+"<tr><td>"+samname[k][0]+"</td><td>"+samname[k][1]+"</td><td>"+samname[k][2]+"</td><td>"+samname[k][3]+"</td><td>"+samname[k][4]+"</td><td>"+samname[k][5]+"</td><td>"+samname[k][6]+"</td><td>"+samname[k][7]+"</td><td>"+samname[k][8]+"</td><td><input type='text' name='issuedqty1' id='issuedqty' onblur='CalRemQty(this);'></td><td><a id='addme' onclick='addMe(this);' >ADD</a></td></tr>";
+      //tab = "<table border=1 id='group'>"+rows+"</table>";
+      $("#tab").append(rows);
+      }
+    });
+
+}
+function addMe(id)
+{
+	var qty=$(id).closest('tr').find('#issuedqty').val()
+	if (qty!='')
+	{
+  var column1 = $(id).closest('tr').children()[0].textContent; //inventory_id
+  var column2 = $(id).closest('tr').children()[1].textContent;
+  var column3 = $(id).closest('tr').children()[2].textContent;
+  var column4 = $(id).closest('tr').children()[3].textContent;
+  var column5 = $(id).closest('tr').children()[4].textContent;
+  var column6 = $(id).closest('tr').children()[5].textContent;
+  var column7 = $(id).closest('tr').children()[6].textContent;
+  var column8 = $(id).closest('tr').children()[7].textContent; //on hand qty
+  var column9 = $(id).closest('tr').children()[8].textContent; //remaining qty
+  var column10 = $(id).closest('tr').find('#issuedqty').val(); //issued qty
+	//alert("onhand"+column9);
+	//alert("rem"+column10);
+	//alert("iss"+column10);
+	var rows='';
+  rows=rows+"<tr><td style='display:none;'><input type=text name=inve_id value="+column1+"></td><td><input type=text  value='"+column2+"'></td><td><input   value="+column3+" size='6'></td><td><input type=text  value="+column4+" size='7'></td><td><input type=text  value="+column5+" ></td><td><input type=text  value="+column6+"></td><td><input type=text value="+column7+" size='6'></td><td><input type=text value="+column8+" size='6'></td><td><input type=text  name='remainingqty' id='remainingqty' value="+column9+" size='6'></td><td><input type=text name=issuedqty value='"+column10+"' size='6'></td><td><button id='rmvme' onclick='rmvMe(this);'>Remove</button></td></tr>";
+
+  $("#tab2").append(rows);
+}
+else
+	{
+		alert("Please Enter IssuedQuantity..");
+	}
+
+}
+function rmvMe(ID) {
+    $(ID).parent().parent().remove();
+}
+</script>
+</head>
+<body>
+
+
+<div class="col12">
+<div class="titlebox">MEDICINE OUTWARD DETAILS</div>
+
+<form action="ShowMedicineOutwardDetail" method="post">
+
+<div class="row myrow">
+
+<div class="col-3">
+<span class="texttule">Issued Date:</span>
+<input type="date" name="issued_date" id="issued_date">
+</div>
+
+<div class="col-3">
+   <span class="texttule">Time:</span>
+   <input type="time" name="Entrytime" id="Entrytime">
+</div>
+
+<div class="col-3">
+<span class="texttule">Person Name:</span>
+<input type="text" name="person_name" id="person_name" class="alphaonly" placeholder="Person Name" autocomplete="off">
+</div>
+
+</div>
+<br>
+<div class="row myrow">
+<div class="col-3">
+
+   <span class="texttule">Issued To:</span>
+    <select name="issuedto" id="issuedto" onchange="RequiredFields()">
+     <option value="">--Select--</option>
+		 {%for row in result%}
+		 <option value="{{row[0]}}">{{row[1]}}</option>
+		 {%endfor%}
+          </select>
+
+   </div>
+
+		<div class="col-3">
+          <span class="texttule">Drug Type:</span>
+           <select name="med_type" id="med_type" onchange="RequiredFields1()">
+            <option value="">--Select--</option>
+						{%for row in result1%}
+						 <option value="{{row[0]}}">{{row[0]}}</option>
+						 {%endfor%}
+
+            </select>
+          </div>
+
+	<div class="ui-widget">
+	  <div class="col-3">
+       <span class="texttule">Drug Name:</span>
+       <input type="text" name="drugname" id="drugname"  placeholder="Drug Name" autocomplete="off" onfocus="this.value=''" onkeyup="showDrugList(this);">
+       </div>
+       </div>
+
+         </div>
+
+
+  		  <div style="width:100%;max-height:400px;line-height:1em;overflow:scroll;">
+			  <br>
+			  <br>
+<br>
+<br>
+
+<div id="tablecontainer"></div>
+<table border=3 id="tab">
+	<thead>
+     <tr>
+	  <th>Inv_id</th>
+      <th>Drug Name</th>
+      <th>Drug Type</th>
+      <th>Batch Number</th>
+      <th>Expiry Date</th>
+      <th>Manufacturing Date</th>
+      <th>Price</th>
+      <th>On Hand</th>
+      <th>Remaining Quantity</th>
+      <th>Issued Quantity</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+ </table>
+
+
+   <br>
+
+  <table border=3 id="tab2">
+    <tr>
+	  <th style='display:none;'>Inv_id</th>
+      <th>Drug Name</th>
+      <th>Drug Type</th>
+      <th>Batch Number</th>
+      <th>Expiry Date</th>
+      <th>Manufacturing Date</th>
+      <th>Price</th>
+      <th>On Hand</th>
+      <th>Remaining Quantity</th>
+      <th>Issued Quantity</th>
+      <th>Action</th>
+
+    </tr>
+  </table>
+
+  <br><br>
+  <div class="row myrow">
+   <div class="col-5"></div>
+   <div class="col-3">
+  <input type="submit" class="button"  value="SUBMIT"  style="height:40px;width:100px;background-color:#A9A9A9;font-weight:bold">
+  </div></div>
+</form>
+</body>
+
+   <div class="col=5"><p><b> {{ack}}</b></p></div>
+
+      </div>
+
+
+</body>
+{% endblock %}

@@ -1,0 +1,183 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+
+<script>
+	$(function()
+	  {
+	      $("#drugname1").autocomplete({
+	          source: function(request,response )
+	          {
+							var drugname1=$('#drugname1').val();
+							var wardid=$('#issuedto').val();
+	              $.ajax({
+	                  type:"POST",
+	                  url: "GetDataForMedicicneReturn",
+	                  data:{'drugname1':drugname1,'issuedto':wardid},
+	                  success: function( data )
+	                  {
+											$("#drugname1").val(data[1]);
+
+	                    //alert(data['d'][2]);
+	                    response(data);
+
+
+	                  }
+	              });
+	          },
+	      });
+	  });
+function ShowData(idval)
+{
+  var idval = idval.value;
+   var arr = idval.split(">");
+    $('#drugname1').val(arr[0]);
+     temp = arr[1];
+		 //alert(temp);
+     $("#drugtype").val(temp.substring(2,temp.length-2));
+  		temp = arr[2];
+			//alert(temp);
+    $('#issuedquantity').val(temp.substring(11,temp.length));
+		 temp = arr[3];
+		 //alert(temp);
+		 $('#batch_no').val(temp.substring(9,temp.length));
+		 temp = arr[4];
+		 //alert(temp);
+		 $('#inventoryid').val(temp.substring(6,temp.length));
+		 temp = arr[5];
+		 //alert(temp);
+		 $('#tempqty').val(temp.substring(8,temp.length));
+		 temp = arr[6];
+		 //alert(temp);
+		 $('#meddet_id').val(temp.substring(9,temp.length));
+
+
+}
+function CalReturnqty()
+{
+	var rqty = parseFloat(document.getElementById('returnquantity').value);
+	//alert(rqty);
+	var iqty = parseFloat(document.getElementById('issuedquantity').value);
+	//alert(iqty);
+	if (rqty > iqty)
+{
+//alert("inside if");
+alert("Medicine Quantity returned is more than Medicine issued quantity")
+$('#returnquantity').css("background-color","red");
+document.getElementById('returnquantity').value='';
+}
+ else
+ {//alert("inside else");
+	 var rqty = document.getElementById('returnquantity').value;
+	 var iqty = document.getElementById('issuedquantity').value;
+	 var tqty = document.getElementById('tempqty').value;
+	 var addtqty=parseFloat(rqty)+parseFloat(tqty);
+	 //alert(addtqty);
+	  document.getElementById('tempqty').value=(addtqty);
+		var subqty=parseFloat(iqty)-parseFloat(rqty);
+		//alert(subqty);
+		document.getElementById('issuedquantity').value=(subqty);
+
+
+ }
+}
+function resetQty()
+{
+  $('#returnquantity').val('');
+  $('#returnquantity').css("background-color","white");
+
+}
+
+    </script>
+
+<div class="col12">
+  <div id="content">
+    <div class="titlebox">MEDICINE OUTWARD RETURN</div>
+     <br>
+<form action ="MedicineReturnDetailInsert" method="POST">
+	<div class="row myrow">
+	<input type="text" name="inventoryid" id="inventoryid" style="display:none;">
+	<input type="text" name="meddet_id" id="meddet_id" style="display:none;">
+	<input type="text" name="tempqty" id="tempqty" style="display:none;">
+
+
+	</div>
+
+
+        <div class="row myrow">
+        <div class="col-3">
+        <span class="texttule">WardName:</span>
+        <select name="issuedto" id="issuedto">
+        <option value="">--Select--</option>
+    		{%for row in result1%}
+    		<option value="{{row[0]}}">{{row[1]}}</option>
+    		{%endfor%}
+        </select>
+        </div>
+
+				<div class="col-3">
+          <div class="ui-widget">
+          <span class="texttule">Drugname:</span>
+        <input  type="text" id="drugname1" class="" name ="drugname1" onblur="ShowData(this)" >
+        </div>
+				</div>
+
+				<div class="col-3">
+				<span class="texttule">DrugType :</span>
+				<input  type="text" id="drugtype" class="" name= "drugtype" readonly>
+				</div>
+
+				<div class="col-3">
+				<span class="texttule">Batch Number:</span>
+				<input  type="text" id="batch_no"  class="" name= "batch_no" readonly>
+				</div>
+
+
+				</div>
+				<br>
+				<div class="row myrow">
+				<div class="col-3">
+        <span class="texttule">Date:</span>
+        <input  type="date" id="returndate"  name ="returndate" required>
+        </div>
+
+        <div class="col-3">
+	      <span class="texttule">Person Name:</span>
+	      <input  type="text" id="personname" class="alphaonly" name= "personname" required>
+		    </div>
+
+        <div class="col-3">
+	      <span class="texttule">Return Quantity:</span>
+				<input  type="text" id="returnquantity" class="numeric" name= "returnquantity" onblur="CalReturnqty()" onfocus="resetQty()" required>
+				<input  type="text" id="issuedquantity" name="issuedquantity" style="display:none;">
+		    </div>
+        </div>
+
+				<br>
+        <div class="row myrow">
+        <div class="col-5"></div>
+        <div class="col-3">
+        <input type="submit" class="button"  value="SAVE" style="height:40px;width:100px;background-color:#A9A9A9;font-weight:bold">
+        </div>
+				<div class="col-5"><p><b> {{ack}}</b></p></div>
+        </div>
+				</div>
+
+
+</div></div></form>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

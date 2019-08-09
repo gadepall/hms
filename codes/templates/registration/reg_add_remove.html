@@ -1,0 +1,269 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+<style>
+#lab td, #lab th {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align:center
+}
+</style>
+
+
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-5">
+<table id="lab" style="width:100%">
+  <tr>
+    <td colspan="2" style="color:green;background-color:pink"><b>OUTPATIENT ADMINISTRATION</b></td>
+  </tr>
+  <tr>
+    <td><b>Add</b></td>
+    <td><b>View/Edit</b></td>
+  </tr>
+  <tr>
+    <td><a href="{{ url_for('newdistrictRedir') }}"> Add District</a></td>
+    <td><a href="{{ url_for('Viewnewdistrict') }}"> View District</a></td>
+  </tr>
+  <tr>
+    <td><a href="{{ url_for('insertCompanyRedir') }}"> Add Company</a></td>
+    <td><a href="{{ url_for('ViewAllCompany') }}"> View Company</a></td>
+  </tr>
+
+  <tr>
+    <td><a href="{{ url_for('insertGenMsgRedir') }}"> Add New General Message</a></td>
+    <td><a href="{{ url_for('ViewGenMsg') }}"> View Message</a></td>
+  </tr>
+
+  <tr>
+    <td><a href="{{ url_for('insertDelMsgRedir') }}"> Add New Delivery Message</a></td>
+    <td><a href="{{ url_for('ViewDeliveryMsg') }}"> View Message</a></td>
+  </tr>
+
+</table>
+</div>
+</div>
+
+{%if flag==1%}
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-5">
+<table id="lab" style="width:100%">
+  <tr>
+    <td colspan="3" style="color:white;background-color:#008080"><b>INSERT NEW DISTRICT</b></td>
+  </tr>
+  <tr>
+    <td colspan="3"><b>{{ack}}</b></td>
+  </tr>
+  <tr>
+    <td><b>District Name</b></td>
+    <td><b>Save</b></td>
+  </tr>
+  <tr>
+    <form action="Insertnewdistrict" method="POST">
+    <td><input type="text" class="alphaonly" name="district"></td>
+    <td><input type="submit" value="Save"></td>
+  </form>
+  </tr>
+</table>
+</div>
+</div>
+{%endif%}
+
+{%if flag==2%}
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-5">
+<table id="lab" style="width:100%">
+  <tr>
+    <td colspan="3" style="color:white;background-color:#4169E1"><b>UPDATE DISTRICT</b></td>
+  </tr>
+  <tr>
+    <td colspan="3"><b>{{ack}}</b></td>
+  </tr>
+  <tr>
+    <td><b>District Name</b></td>
+    <td><b>Update</b></td>
+  </tr>
+  {%for row in data%}
+  <form action="UpdateNewDistrict" method="POST">
+  <tr>
+    <td><input type="text" name="district" class="alphaonly" value="{{row[1]}}"></td>
+    <td><input type="hidden" name="did" value="{{row[0]}}"><input type="submit" value="Update"></td>
+  </tr>
+</form>
+  {%endfor%}
+</table>
+</div>
+</div>
+{%endif%}
+
+
+
+{%if cflag==1%}
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-5">
+<table id="lab" style="width:100%">
+  <tr>
+    <td colspan="3" style="color:white;background-color:#008080"><b>INSERT NEW COMPANY</b></td>
+  </tr>
+  <tr>
+    <td colspan="3"><b>{{ack}}</b></td>
+  </tr>
+  <tr>
+    <td><b>Company Name</b></td>
+    <td><b>Save</b></td>
+  </tr>
+  <tr>
+    <form action="InsertNewCompany" method="POST">
+    <td><input type="text" class="alphaonly" name="cname"></td>
+    <td><input type="submit" value="Save"></td>
+  </form>
+  </tr>
+</table>
+</div>
+</div>
+{%endif%}
+
+{%if cflag==2%}
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-5">
+<table id="lab" style="width:100%">
+  <tr>
+    <td colspan="3" style="color:white;background-color:#4169E1"><b>UPDATE COMPANY</b></td>
+  </tr>
+  <tr>
+    <td colspan="3"><b>{{ack}}</b></td>
+  </tr>
+  <tr>
+    <td><b>Company Name</b></td>
+    <td><b>Update</b></td>
+  </tr>
+  {%for row in data%}
+  <form action="UpdateNewCompany" method="POST">
+  <tr>
+    <td><input type="text" name="cname"  class="alphaonly" value="{{row[1]}}"></td>
+    <td><input type="hidden" name="cid" value="{{row[0]}}"><input type="submit" value="Update"></td>
+  </tr>
+</form>
+  {%endfor%}
+</table>
+</div>
+</div>
+{%endif%}
+
+{%if flag2==1%}
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-5">
+<table id="lab" style="width:100%">
+  <tr>
+    <td colspan="3" style="color:white;background-color:#008080"><b>INSERT NEW GENERAL MESSAGE</b></td>
+  </tr>
+  <tr>
+    <td colspan="3"><b>{{ack}}</b></td>
+  </tr>
+  <tr>
+    <td><b>Message Name</b></td>
+    <td><b>Save</b></td>
+  </tr>
+  <tr>
+    <form action="InsertnewGenMsg" method="POST">
+      <td><textarea name="genmsg" placeholder="Enter Your Message Here" rows="5" cols="25" style="border:2px solid black;font-weight:bold"></textarea></td>
+    <td><input type="submit" value="Save"></td>
+  </form>
+  </tr>
+</table>
+</div>
+</div>
+{%endif%}
+
+
+{%if flag2==2%}
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-5">
+<table id="lab" style="width:100%">
+  <tr>
+    <td colspan="3" style="color:white;background-color:#4169E1"><b>UPDATE MESSAGE</b></td>
+  </tr>
+  <tr>
+    <td colspan="3"><b>{{ack}}</b></td>
+  </tr>
+  <tr>
+    <td><b>Message Name</b></td>
+    <td><b>Update</b></td>
+  </tr>
+  {%for row in data%}
+  <form action="UpdateGenMsg" method="POST">
+  <tr>
+    <td><textarea name="genmsg" rows="5" cols="25" style="border:2px solid black;font-weight:bold">{{row[1]}}</textarea></td>
+    <td><input type="hidden" name="genid" value="{{row[0]}}"><input type="submit" value="Update"></td>
+  </tr>
+</form>
+  {%endfor%}
+</table>
+</div>
+</div>
+{%endif%}
+
+
+{%if flag3==1%}
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-5">
+<table id="lab" style="width:100%">
+  <tr>
+    <td colspan="3" style="color:white;background-color:#008080"><b>INSERT NEW DELIVERY MESSAGE</b></td>
+  </tr>
+  <tr>
+    <td colspan="3"><b>{{ack}}</b></td>
+  </tr>
+  <tr>
+    <td><b>Message Name</b></td>
+    <td><b>Save</b></td>
+  </tr>
+  <tr>
+    <form action="InsertnewDelMsg" method="POST">
+      <td><textarea name="delmsg" placeholder="Enter Your Message Here" rows="5" cols="25" style="border:2px solid black;font-weight:bold"></textarea></td>
+    <td><input type="submit" value="Save"></td>
+  </form>
+  </tr>
+</table>
+</div>
+</div>
+{%endif%}
+
+
+{%if flag3==2%}
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-5">
+<table id="lab" style="width:100%">
+  <tr>
+    <td colspan="3" style="color:white;background-color:#4169E1"><b>UPDATE MESSAGE</b></td>
+  </tr>
+  <tr>
+    <td colspan="3"><b>{{ack}}</b></td>
+  </tr>
+  <tr>
+    <td><b>Message Name</b></td>
+    <td><b>Update</b></td>
+  </tr>
+  {%for row in data%}
+  <form action="UpdateDelMsg" method="POST">
+  <tr>
+    <td><textarea name="delmsg" rows="5" cols="25" style="border:2px solid black;font-weight:bold">{{row[1]}}</textarea></td>
+    <td><input type="hidden" name="delid" value="{{row[0]}}"><input type="submit" value="Update"></td>
+  </tr>
+</form>
+  {%endfor%}
+</table>
+</div>
+</div>
+{%endif%}
+
+
+
+{% endblock %}

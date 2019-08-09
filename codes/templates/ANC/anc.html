@@ -1,0 +1,1355 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+
+<style>
+
+  .subtitlebox{
+      font-weight: bold;
+      font-size: 20px;
+      font-family: Times New Roman;
+      padding:5px;
+      background:#80DFFF;
+      width:101%;
+  }
+
+.subtitle
+{
+background-color:#F0E68C;
+width: 101%;
+}
+.spnhead{
+  font-size: 20px;
+  font-weight: bold;
+}
+.spndata{
+  font-size: 18px;
+  font-weight: bold;
+}
+
+
+		.container{
+			width: 100%;
+      padding-right: 0px;
+      padding-left: 0px;
+      margin-right: auto;
+      margin-left: auto;
+		}
+
+
+
+		ul.tabs{
+			margin: 0px;
+			padding: 0px;
+			list-style: none;
+		}
+    ul.tabs li{
+      background: none;
+      display: inline-block;
+      padding: 8px 15px;
+      padding-right:50px;
+      cursor: pointer;
+      color: #222;
+      font-size: 22px;
+		}
+
+		ul.tabs li.current{
+			background: #F0FFFF;
+			color: #222;
+      font-weight: bold;
+		}
+
+		.tab-content{
+			display: none;
+			background: #F0FFFF;
+			padding: 15px;
+		}
+
+		.tab-content.current{
+			display: inherit;
+		}
+
+
+    #mainTable {
+      font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    #mainTable td, #mainTable th {
+      padding: 8px;
+    }
+
+    #mainTable td{
+      padding: 8px;
+      font-size: 15px;
+    }
+    #mainTable tr:nth-child(even){background-color: #f2f2f2;}
+
+    #mainTable tr:hover {background-color: #ddd;}
+
+    #mainTable thead,th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      color: white;
+      font-size: 17px;
+    }
+
+    /* GENERAL CODE */
+
+
+    /* SEPERATE CODE */
+    #mainTable thead,th {
+      background-color:#778899;
+    }
+    /* SEPERATE CODE */
+
+</style>
+
+
+<script src="jquery-1.12.4.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$('ul.tabs li').click(function(){
+		var tab_id = $(this).attr('data-tab');
+
+		$('ul.tabs li').removeClass('current');
+		$('.tab-content').removeClass('current');
+
+		$(this).addClass('current');
+		$("#"+tab_id).addClass('current');
+	})
+
+})
+
+function insertRow(e){
+    var table=document.getElementById("myTable");
+    var r =  table.rows.length;
+    while(r > 1) {
+        table.deleteRow(r-1);
+        r--;
+    }
+    if(document.getElementById("grvd").value != "")
+    {
+    for(var i=1;i<e;i++)
+    {
+        var count = 0;
+        var row=table.insertRow(table.rows.length);
+            var cell=row.insertCell(count);
+            var t=document.createElement("input");
+                t.id = "r"+i+"d"+(count);
+                t.name = "r"+i+"d"+(count);
+                t.value = i;
+                t.style = "width:105%;text-align:center;";
+                t.setAttribute("readonly", "true");
+                cell.appendChild(t);
+
+                count++;
+            var cell=row.insertCell(count);
+            var t=document.createElement("input");
+            	t.setAttribute("type","date")
+                t.id = "r"+i+"d"+(count);
+                t.name = "dopa";
+                cell.appendChild(t);
+
+                count++;
+            var cell=row.insertCell(count);
+            var t=document.createElement("input");
+                t.id = "r"+i+"d"+(count);
+                t.name = "dop";
+                cell.appendChild(t);
+
+                count++;
+            var cell=row.insertCell(count);
+            var t=document.createElement("input");
+                t.id = "r"+i+"d"+(count);
+                t.name = "aop";
+                cell.appendChild(t);
+
+                count++;
+            var cell=row.insertCell(count);
+            var t=document.createElement("input");
+                t.id = "r"+i+"d"+(count);
+                t.name = "lsch";
+                cell.appendChild(t);
+
+                count++;
+            var cell=row.insertCell(count);
+            var t=document.createElement("input");
+                t.id = "r"+i+"d"+(count);
+                t.name = "delivery_type";
+                cell.appendChild(t);
+
+                count++;
+            var cell=row.insertCell(count);
+            var t=document.createElement("input");
+                t.id = "r"+i+"d"+(count);
+                t.class="numeric"
+                t.name = "no_babies";
+                cell.appendChild(t);
+
+                count++;
+            var cell=row.insertCell(count);
+            var t=document.createElement("input");
+                t.id = "r"+i+"d"+(count);
+                t.name = "baby_status";
+                cell.appendChild(t);
+
+                count++;
+            var cell=row.insertCell(count);
+            var t=document.createElement("input");
+                t.id = "r"+i+"d"+(count);
+                t.name = "puerperium";
+                cell.appendChild(t);
+
+                count++;
+            var cell=row.insertCell(count);
+            var t=document.createElement("input");
+                t.id = "r"+i+"d"+(count);
+                t.name = "childsex";
+                cell.appendChild(t);
+
+                count++;
+            var cell=row.insertCell(count);
+            var t=document.createElement("input");
+                t.id = "r"+i+"d"+(count);
+                t.name = "baby_wt";
+                cell.appendChild(t);
+
+                count++;
+            var cell=row.insertCell(count);
+            var t=document.createElement("input");
+                t.id = "r"+i+"d"+(count);
+                t.name = "brstfed_btlefed";
+                cell.appendChild(t);
+
+                count++;
+            var cell=row.insertCell(count);
+            var t=document.createElement("input");
+                t.id = "r"+i+"d"+(count);
+                t.name = "gh_others";
+                cell.appendChild(t);
+    }
+}
+
+}
+
+
+function addFields(){
+	var n = document.getElementById("no").value;
+	var x = document.getElementById("fhs");
+	while (x.hasChildNodes()) {
+		x.removeChild(x.lastChild);
+		}
+		for (i=0;i<n;i++){
+			x.appendChild(document.createTextNode("FHS " + (i+1)));
+			var input = document.createElement("input");
+			input.type = "text";
+      input.name="FoV_fhs"
+			x.appendChild(input);
+			x.appendChild(document.createElement("br"));
+    }
+  }
+
+  // INSERT DATA USING AJAX
+  $(document).ready(function () {
+  $('form').submit(function (e) {
+    var formurl = $(this).attr('action');
+          $.ajax({
+              type: "POST",
+              url: $(this).attr('action'), // url to post to, from the forms action
+              data: $(this).serialize(),
+              success: function (data) {
+
+                if (formurl == 'ANCPatientHistory' && data['ack']=='DATA SUCCESSFULLY STORED!'){
+                  $("#aphsubmit").prop('disabled', true);
+                  document.getElementById('aphack').innerHTML = data['ack'];
+                }
+                else if(formurl == 'ANCGravidaHistory' && data['ack']=='DATA SUCCESSFULLY STORED!'){
+                  $("#aghsubmit").prop('disabled', true);
+                  document.getElementById('aghack').innerHTML = data['ack'];
+                }
+                else if(formurl == 'ANCFirstVisit' && data['ack']=='DATA SUCCESSFULLY STORED!'){
+                  $("#afivsubmit").prop('disabled', true);
+                  document.getElementById('afivack').innerHTML = data['ack'];
+                }
+                else if(formurl == 'ANCFollowUpVisit' && data['ack']=='DATA SUCCESSFULLY STORED!'){
+                  $("#afovsubmit").prop('disabled', true);
+                  document.getElementById('afovack').innerHTML = data['ack'];
+                }
+                else if(formurl == 'ANCLabCheckUp' && data['ack']=='DATA SUCCESSFULLY STORED!'){
+                  $("#alcsubmit").prop('disabled', true);
+                  document.getElementById('alcack').innerHTML = data['ack'];
+                }
+                else if(formurl == 'ANCUsgReport' && data['ack']=='DATA SUCCESSFULLY STORED!'){
+                  $("#aursubmit").prop('disabled', true);
+                  document.getElementById('aurack').innerHTML = data['ack'];
+                }
+              alert(data['ack']);
+              }
+          })
+          e.preventDefault(); // block the traditional submission of the form.
+      });
+    });
+
+function calldate(){
+  var dt = document.getElementById("lmp").value;
+  var d = new Date(dt);
+  d.setMonth(d.getMonth()+9);
+  d.setDate(d.getDate()+7);
+  document.getElementById("edd").value = ("0" + d.getUTCDate()).slice(-2) + "/" + ("0" + (d.getUTCMonth()+1)).slice(-2) + "/" + d.getUTCFullYear();
+}
+
+function calldate1(){
+  var dt = document.getElementById("usg_lmp").value;
+  var d = new Date(dt);
+  d.setMonth(d.getMonth()+9);
+  d.setDate(d.getDate()+7);
+  document.getElementById("usg_edd").value = ("0" + d.getUTCDate()).slice(-2) + "/" + ("0" + (d.getUTCMonth()+1)).slice(-2) + "/" + d.getUTCFullYear();
+}
+
+
+function CalcBmi() {
+
+var weight = document.getElementById('Weight').value
+var height = document.getElementById('Height').value
+  if(weight > 0 || height > 0){
+var finalBmi = weight/(height/100*height/100)
+document.getElementById('Bmi').value = finalBmi.toFixed(2);
+}
+else
+  {
+  alert("Please Fill in everything correctly")
+  }
+}
+</script>
+
+<script>
+function usgFoetusType()
+{
+  var usg_foetus = document.getElementById('usg_foetus').value;
+  if(usg_foetus=='Others')
+  {
+    document.getElementById('othersdiv').style.display = 'block';
+    document.getElementById('otherFoetus').required = true;
+  }
+  else
+  {
+    document.getElementById('othersdiv').style.display = 'none';
+    document.getElementById('otherFoetus').required = false;
+  }
+}
+
+function usgPresentationType()
+{
+  var usg_presentation = document.getElementById('usg_presentation').value;
+  if(usg_presentation=='Others')
+  {
+    document.getElementById('othersdivtwo').style.display = 'block';
+    document.getElementById('otherPreType').required = true;
+  }
+  else
+  {
+    document.getElementById('othersdivtwo').style.display = 'none';
+    document.getElementById('otherPreType').required = false;
+  }
+}
+
+function usgPlacentaType()
+{
+  var usg_placenta = document.getElementById('usg_placenta').value;
+  if(usg_placenta=='Others')
+  {
+    document.getElementById('othersdivthree').style.display = 'block';
+    document.getElementById('otherPlacentaType').required = true;
+  }
+  else
+  {
+    document.getElementById('othersdivthree').style.display = 'none';
+    document.getElementById('otherPlacentaType').required = false;
+  }
+}
+
+function usgLiquorType()
+{
+  var usg_liquor = document.getElementById('usg_liquor').value;
+  if(usg_liquor=='Others')
+  {
+    document.getElementById('othersdivfour').style.display = 'block';
+    document.getElementById('otherLiquorType').required = true;
+  }
+  else
+  {
+    document.getElementById('othersdivfour').style.display = 'none';
+    document.getElementById('otherLiquorType').required = false;
+  }
+}
+
+</script>
+
+
+<div class="col12">
+
+  <div id="content">
+
+    <div class="titlebox" style="text-align:center;">ANTE NATAL CARE</div>
+
+    <div class="row" style="padding-bottom:2px;"></div>
+    {% for row in ds1%}
+    <div class="row myrow subtitle">
+      <div class="col-2"><span class="spnhead">Regno:</span><span class="spndata">{{row[0]}}</span></div>
+      <div class="col-3"><span class="spnhead">Name:</span><span class="spndata">{{row[1]}} {{row[2]}} {{row[3]}}</span></div>
+      <div class="col-2"><span class="spnhead">Sex:</span><span class="spndata">{{row[7]}}</span></div>
+      <div class="col-2"><span class="spnhead">Age:</span><span class="spndata">{{row[5]}} {{row[6]}}</span></div>
+      <div class="col-2"><span class="spnhead">Reg Date:</span><span class="spndata">{{row[4]}}</span></div>
+      <div class="col-2"><span class="spnhead">Education:</span><span class="spndata">{{row[8]}}</span></div>
+
+    </div>
+    <br>
+    {%endfor%}
+    <div class="row" style="padding-bottom:2px;"></div>
+
+    <div class="container">
+
+      <ul class="tabs">
+        <li class="tab-link current" data-tab="tab-1">Patient's History</li>
+        <li class="tab-link" data-tab="tab-2">Gravida History</li>
+        <li class="tab-link" data-tab="tab-3">First Visit</li>
+        <li class="tab-link" data-tab="tab-4">Follow Up Visit</li>
+    	  <li class="tab-link" data-tab="tab-5">Lab Check Up</li>
+        <li class="tab-link" data-tab="tab-6">USG Report</li>
+    	</ul>
+      <br>
+
+<!--------------------- Patient's History Starts ----------------------->
+
+      {%for row in gd%}
+      {%if row[3]==0%}
+      <div id="tab-1" class="tab-content current">
+
+        <div class="subtitlebox">Patient's History:</div>
+        <br>
+        <form action="ANCPatientHistory" method="POST">
+
+          <input type="text" name="anc_id" value="{{row[0]}}" style="display:none;">
+
+          <div class="col-2"><span class="texttule">Date:</span>
+            <input type="date" name="ph_date" required>
+          </div>
+
+          <br>
+          <br>
+
+          <div class="col-12 subtitlebox">Menstrual Cycle</div>
+
+          <div class="row myrow">
+          <br>
+
+            <div class="col-2"><span class="texttule">Age:</span>
+              <input type="text" class="numeric" style="max-width:60px" name="ph_age" placeholder="Age" required>
+            </div>
+
+            <div class="col-2"><span class="texttule">Duration:</span>
+              <input type="text" class="spalphanum" style="max-width:60px" name="duration" placeholder="Duration">
+            </div>
+
+            <div class="col-2"><span class="texttule">Cycle:</span>
+              <input type="text" class="spalphanum" style="max-width:60px" name="cycle" placeholder="Cycle">
+            </div>
+
+            <div class="col-3"><span class="texttule">LMP:</span>
+              <input type="date" style="max-width:68%" name="lmp" id="lmp" onblur="calldate()">
+            </div>
+
+            <div class="col-3"><span class="texttule">EDD:</span>
+              <input type="text" style="max-width:100px" name="edd" placeholder="EDD" id="edd" onblur="calldate()" readonly>
+            </div>
+
+          </div> <!-- row -->
+          <br>
+
+          <div class="row myrow">
+
+            <div class="col-2"><span class="texttule">Occupation:</span>
+              <input type="text" placeholder="Occupation" class="alphaonly" style="max-width:100px" name="occupation">
+            </div>
+
+            <div class="col-2"><span class="texttule">Marital Status:</span>
+              <input type="text" placeholder="Marital Status" class="alphanumeric" style="max-width:60px" name="martial_status">
+            </div>
+
+          </div> <!-- row -->
+
+          <br>
+
+          <div class="row myrow">
+
+            <div class="col-3">
+              <div class="subtitlebox" style="max-width:70%">Past History:</div>
+              <br>
+              <textarea name="past_history" placeholder="Enter Past History Here" class="spalphanum" rows="5" cols="25" style="border:2px solid black;font-weight:bold"></textarea>
+            </div>
+
+            <div class="col-3">
+              <div class="subtitlebox" style="max-width:70%">Family History:</div>
+              <br>
+              <textarea name="family_history" placeholder="Enter Family History Here" class="spalphanum" rows="5" cols="25" style="border:2px solid black;font-weight:bold"></textarea>
+            </div>
+
+            <div class="col-3">
+              <div class="subtitlebox" style="max-width:70%">Contraceptive History:</div>
+              <br>
+              <textarea name="contraceptive_history" placeholder="Enter Contraceptive History Here" class="spalphanum" rows="5" cols="25" style="border:2px solid black;font-weight:bold"></textarea>
+            </div>
+
+            <div class="col-3">
+              <div class="subtitlebox" style="max-width:70%">Others:</div>
+              <br>
+              <textarea name="ph_others" placeholder="Enter Other Details Here" class="spalphanum" rows="5" cols="25" style="border:2px solid black;font-weight:bold"></textarea>
+            </div>
+
+          </div> <!-- row -->
+          <br>
+          <br>
+
+          <div class="col-12" align="center">
+            <input type="submit" value="Submit" id="aphsubmit" style="height:40px;width:100px;background-color:#A9A9A9;font-weight:bold">
+          </div>
+          <br>
+          <p id="aphack" style="font-weight:bold;color:green;display:inline;"></p>
+
+        </form>
+      </div> <!-- tab -->
+
+      {%else%}
+      <div id="tab-1" class="tab-content current" style="display:none;">
+      </div>
+      {%endif%}
+      {%endfor%}
+
+
+<!---------------------- Patient's History Ends ------------------------------>
+
+<!-------------------Gravida History Starts ---------------------------------->
+      {%for row in gd%}
+      {%if row[4]==0%}
+      <div id="tab-2" class="tab-content">
+        <div class="subtitlebox">Gravida History:</div>
+        <br>
+        <form action="ANCGravidaHistory" method="POST">
+
+          <input type="text" name="anc_id" value="{{row[0]}}" style="display:none;">
+
+          <div class="col-2" ><span class="texttule">Date:</span>
+            <input type="date" style="max-width:68%" name="gh_date" placeholder="Date" required>
+          </div>
+
+          <br>
+          <br>
+
+          <div class="col-12 subtitlebox">Previous Pregnancies</div>
+          <br>
+          <br>
+
+          <div class="row myrow">
+
+            <div class="col-2"><span class="texttule">Gravida:</span>
+              <input type="number" style="max-width:60px" name="gravida" id="grvd" class="numeric" onkeyup="insertRow(this.value)" onkeydown="insertRow(this.value)" placeholder="Gravida" size="10">
+            </div>
+
+            <div class="col-2"><span class="texttule">Parity:</span>
+              <input type="number" class="numeric" style="max-width:60px" name="parity_live" placeholder="Parity">
+            </div>
+
+          </div> <!-- row -->
+          <br>
+          <br>
+
+          <div class="col-12">
+            <div style="width:100%;height:auto;line-height:1em;overflow:auto;">
+              <table border=1 align="center" id="myTable">
+                <tr>
+                  <th style="width:8%;text-align:center;">S.No</th>
+                  <th style="text-align:center;">Date of Pregnancy/Abortion</th>
+                  <th style="text-align:center;">Duration of Pregnancy</th>
+                  <th style="text-align:center;">Abnormalities of Pregnancy</th>
+                  <th style="text-align:center;">Labor Spont/compl Home/Hospital</th>
+                  <th style="text-align:center;">Type of Delivery</th>
+                  <th style="text-align:center;">No. of Babies</th>
+                  <th style="text-align:center;">Status of Baby</th>
+                  <th style="text-align:center;">Puerperium</th>
+                  <th style="text-align:center;">Child Sex</th>
+                  <th style="text-align:center;">Baby Weight</th>
+                  <th style="text-align:center;">BreastFed/BottleFed</th>
+                  <th style="text-align:center;">Others</th>
+                </tr>
+                <tbody>
+                </tbody>
+              </table>
+            </div> <!-- style -->
+          </div> <!-- col-12 -->
+          <br>
+          <br>
+
+          <div class="col-12" align="center">
+            <input type="submit" value="Submit" id="aghsubmit" style="height:40px;width:100px;background-color:#A9A9A9;font-weight:bold">
+          </div>
+          <br>
+          <p id="aghack" style="font-weight:bold;color:green;display:inline;"></p>
+
+        </form>
+      </div> <!-- tab -->
+
+      {%else%}
+      <div id="tab-2" class="tab-content" style="display: none;"></div>
+      {%endif%}
+      {%endfor%}
+<!-------------------Gravida History Ends ----------------------------------->
+
+
+<!-------------------- First Visit Starts ----------------------------------->
+      {%for row in gd%}
+      {%if row[5]==0%}
+    	<div id="tab-3" class="tab-content">
+        <div class="subtitlebox" style="text-align:center">First Visit</div>
+        <br>
+        <form action="ANCFirstVisit" method="POST">
+
+          <input type="text" name="anc_id" value="{{row[0]}}" style="display:none;">
+
+          <div class="row myrow">
+            <div class="col-1"></div>
+
+            <div class="col-2" ><span class="texttule">Date:</span><br>
+              <input type="date" name="FiV_date" required>
+            </div>
+
+
+            <div class="col-2"><span class="texttule">Seen by Doctor:</span>
+              <input type="text" placeholder="Doctor Name" class="alphaonly" style="max-width:50%" name="FiV_seen_doctor">
+            </div>
+
+            <div class="col-2"><span class="texttule">Seen by Sister:</span>
+              <input type="text" placeholder="Sister Name" class="alphaonly"  style="max-width:50%" name="FiV_seen_sister">
+            </div>
+
+            <div class="col-2"><span class="texttule">Heart:</span>
+              <input type="text" placeholder="Heart" class="spalphanum" name="FiV_heart">
+            </div>
+
+            <div class="col-2"><span class="texttule">Pulse:</span><br>
+              <input type="text" placeholder="Pulse" class="numeric" style="max-width:80px" name="FiV_pulse">
+            </div>
+
+          </div> <!-- row -->
+
+          <br>
+          <div class="row myrow">
+            <div class="col-1"></div>
+
+            <div class="col-2"><span class="texttule">Weight:</span><br>
+              <input type="text" placeholder="Weight" class="spalphanum" style="max-width:60px" id="weight" onblur="calcBmi()" name="FiV_wt" required>
+            </div>
+
+            <div class="col-2"><span class="texttule">Height:</span><br>
+              <input type="text" placeholder="Height" class="spalphanum" style="max-width:60px" id ="height" onblur="calcBmi()" name="FiV_ht" required>
+            </div>
+
+            <div class="col-2"><span class="texttule">BMI:</span><br>
+              <input type="text" placeholder="BMI" style="max-width:60px" id="bmi" name="FiV_bmi" onblur="calcBmi()" readonly>
+            </div>
+
+            <div class="col-2"><span class="texttule">Systolic:</span><br>
+              <input type="text" placeholder="Systolic" class="numeric" style="max-width:60px" name="FiV_systolic" required>
+            </div>
+
+            <div class="col-2"><span class="texttule">Diastolic:</span><br>
+              <input type="text" placeholder="Diastolic" class="numeric" style="max-width:60px" name="FiV_diastolic" required>
+            </div>
+
+          </div> <!-- row -->
+
+          <br>
+          <div class="row myrow">
+            <div class="col-1"></div>
+
+            <div class="col-2"><span class="texttule">Lungs:</span><br>
+              <input type="text" placeholder="Lungs" class="spalphanum" style="max-width:60%" name="FiV_lungs">
+            </div>
+
+            <div class="col-2"><span class="texttule">Breast:</span><br>
+              <input type="text" placeholder="Breast" class="spalphanum" style="max-width:60%" name="FiV_breast">
+            </div>
+
+            <div class="col-2"><span class="texttule">Anaemia:</span><br>
+              <input type="text" placeholder="Anaemia" class="spalphanum" style="max-width:60%" name="FiV_anaemia">
+            </div>
+
+            <div class="col-2"><span class="texttule">Jaundice:</span><br>
+              <input type="text" placeholder="Janudice" class="spalphanum" style="max-width:60%" name="FiV_jaundice">
+            </div>
+
+            <div class="col-2"><span class="texttule">Tongue:</span><br>
+              <input type="text" placeholder="Tongue" class="spalphanum" style="max-width:60%" name="FiV_tongue">
+            </div>
+
+          </div> <!-- row -->
+          <br>
+          <div class="row myrow">
+            <div class="col-1"></div>
+            <div class="col-2"><span class="texttule">Thyroid:</span><br>
+              <input type="text" placeholder="Thyroid" class="spalphanum" style="max-width:60%" name="FiV_thyroid">
+            </div>
+
+            <div class="col-2"><span class="texttule">Neck Glands:</span><br>
+             <input type="text" placeholder="Neck Glands" class="spalphanum" style="max-width:50%" name="FiV_neckglds">
+            </div>
+
+            <div class="col-2"><span class="texttule">Teeth:</span><br>
+             <input type="text" placeholder="Teeth" class="spalphanum" style="max-width:60%" name="FiV_teeth">
+            </div>
+
+            <div class="col-2"><span class="texttule">Gum:</span><br>
+              <input type="text" placeholder="Gum" class="spalphanum" style="max-width:60%" name="FiV_gum">
+            </div>
+
+            <div class="col-2"><span class="texttule">Throat:</span><br>
+              <input type="text" placeholder="Throat" class="spalphanum" style="max-width:60%" name="FiV_throat">
+            </div>
+
+
+          </div> <!-- row -->
+
+          <br>
+
+          <div class="row myrow">
+            <div class="col-1"></div>
+            <div class="col-2"><span class="texttule">Kidneys:</span><br>
+              <input type="text" placeholder="Kidneys" class="spalphanum" style="max-width:60%" name="FiV_kidneys">
+            </div>
+
+            <div class="col-2"><span class="texttule">Oedema:</span><br>
+              <input type="text" placeholder="Oedema" class="spalphanum" style="max-width:60%" name="FiV_oedema">
+            </div>
+
+            <div class="col-2"><span class="texttule">Spleen:</span><br>
+              <input type="text" placeholder="Spleen" class="spalphanum" style="max-width:60%" name="FiV_spleen">
+            </div>
+
+            <div class="col-2"><span class="texttule">Liver:</span><br>
+              <input type="text" placeholder="Liver" class="spalphanum" style="max-width:60%" name="FiV_liver">
+            </div>
+
+            <div class="col-2"><span class="texttule">Varicose Veins:</span><br>
+              <input type="text" placeholder="Varicose Veins" class="spalphanum" style="max-width:60%" name="FiV_variveins">
+            </div>
+
+          </div> <!-- row -->
+
+          <br>
+
+          <div class="row myrow">
+            <div class="col-1"></div>
+
+            <div class="col-2" ><span class="texttule">Pallor:</span><br>
+              <input type="text" placeholder="Pallor" class="spalphanum" style="max-width:60%" name="FiV_pallor">
+            </div>
+
+            <div class="col-2" ><span class="texttule">Icterus:</span><br>
+              <input type="text" placeholder="Icterus" class="spalphanum" style="max-width:60%" name="FiV_icterus">
+            </div>
+
+            <div class="col-2"><span class="texttule">Others:</span>
+              <textarea name="FiV_others" placeholder="Enter Other Details Here" class="spalphanum" rows="5" cols="25" style="border:2px solid black;font-weight:bold"></textarea>
+            </div>
+
+          </div> <!-- row -->
+
+          <div class="col-12" align="center">
+            <input type="submit" value="Submit" id="afivsubmit" style="height:40px;width:100px;background-color:#A9A9A9;font-weight:bold">
+          </div>
+          <br>
+          <p id="afivack" style="font-weight:bold;color:green;display:inline;"></p>
+
+        </form>
+      </div> <!-- tab -->
+
+      {%else%}
+      <div id="tab-3" class="tab-content" style="display: none;"></div>
+      {%endif%}
+      {%endfor%}
+
+<!------------------------- First Visit Ends ---------------------------------->
+
+
+<!---------------------- Follow Up Visit Starts ------------------------------->
+
+      <div id="tab-4" class="tab-content">
+        <div class="subtitlebox" style="text-align:center">Follow Up Visit</div>
+        <br>
+
+        <form action="ANCFollowUpVisit" method="POST">
+          {%for row in gd%}
+          <input type="text" name="anc_id" value="{{row[0]}}" style="display:none;">
+          {%endfor%}
+
+          <div class="row myrow">
+            <div class="col-1"></div>
+
+            <div class="col-2" ><span class="texttule">Date:</span><br>
+              <input type="date" name="FoV_date" required>
+            </div>
+
+            <div class="col-2"><span class="texttule">Seen by Doctor:</span>
+              <input type="text" placeholder="Doctor Name" class="alphaonly" style="max-width:50%" name="FoV_seen_doctor">
+            </div>
+
+            <div class="col-2"><span class="texttule">Seen by Sister:</span>
+              <input type="text" placeholder="Sister Name"class="alphaonly" style="max-width:50%" name="FoV_seen_sister">
+            </div>
+
+            <div class="col-2" ><span class="texttule">Systolic:</span><br>
+              <input type="text" placeholder="Systolic" class="numeric" style="max-width:60px" name="FoV_systolic" required>
+            </div>
+
+            <div class="col-2" ><span class="texttule">Diastolic:</span><br>
+              <input type="text" placeholder="Diastolic" class="numeric" style="max-width:60px" name="FoV_diastolic" required>
+            </div>
+
+
+
+          </div> <!-- row -->
+
+          <br>
+
+          <div class="row myrow">
+            <div class="col-1"></div>
+
+            <div class="col-2"><span class="texttule">Weight:</span><br>
+              <input type="text" placeholder="Weight" class="spalphanum" style="max-width:60px" id="Weight" onblur="CalcBmi()" name="FoV_wt" required>
+            </div>
+
+            <div class="col-2"><span class="texttule">Height:</span><br>
+              <input type="text" placeholder="Height" class="spalphanum" style="max-width:60px" id ="Height" onblur="CalcBmi()" name="FoV_ht" required>
+            </div>
+
+            <div class="col-2"><span class="texttule">BMI:</span><br>
+              <input type="text" style="max-width:60px" placeholder="BMI" id="Bmi" name="FoV_bmi" onblur="CalcBmi()" readonly>
+            </div>
+
+            <div class="col-2" ><span class="texttule">Pulse:</span><br>
+              <input type="text" placeholder="Pulse" class="numeric" style="max-width:60px" name="FoV_pulse">
+            </div>
+
+            <div class="col-2" ><span class="texttule">Body Temperature:</span><br>
+              <input type="text" placeholder="Body Temp" class="spalphanum" style="max-width:80px" name="FoV_bodytemp">
+            </div>
+
+          </div> <!-- row -->
+
+          <br>
+
+          <div class="row myrow">
+            <div class="col-1"></div>
+
+            <div class="col-2" ><span class="texttule">Respiration Rate:</span><br>
+              <input type="text" placeholder="Respiration Rate" class="numeric" style="max-width:60px" name="FoV_resprate">
+            </div>
+
+            <div class="col-2" ><span class="texttule">Uterus Size:</span><br>
+              <input type="text" placeholder="Uterus Size" class="numeric" style="max-width:50%" name="FoV_utsize">
+            </div>
+
+            <div class="col-2" ><span class="texttule">Oedema:</span><br>
+              <input type="text" placeholder="Oedema" class="spalphanum" style="max-width:60%" name="FoV_oedema">
+            </div>
+
+            <div class="col-2" ><span class="texttule">No of Foetus:</span><br>
+              <input type="text" class="numeric" style="max-width:60px" name="FoV_no_foetus" id="no" onkeyup="addFields(this.value)" onkeydown="addFields(this.value)">
+            </div>
+            <div class="col-2" id="fhs"><span class="texttule">FHS:</span>
+            </div>
+
+          </div> <!-- row -->
+
+          <br>
+
+          <div class="row myrow">
+            <div class="col-1"></div>
+
+
+            <div class="col-2" ><span class="texttule">Pallor:</span><br>
+              <input type="text" placeholder="Pallor" class="spalphanum" style="max-width:60%" name="FoV_pallor">
+            </div>
+
+            <div class="col-2" ><span class="texttule">Cyanosis:</span><br>
+              <input type="text" placeholder="Cyanosis" class="spalphanum" style="max-width:60%" name="FoV_cyanosis">
+            </div>
+
+            <div class="col-2" ><span class="texttule">Icterus:</span><br>
+              <input type="text" placeholder="Icterus" class="spalphanum" style="max-width:60%" name="FoV_icterus">
+            </div>
+
+            <div class="col-3" ><span class="texttule">Varicose Veins:</span><br>
+              <input type="text" placeholder="Varicose Veins" class="spalphanum" style="max-width:60%" name="FoV_variveins">
+            </div>
+
+          </div> <!-- row -->
+          <br>
+
+          <div class="row myrow">
+            <div class="col-1"></div>
+            <div class="col-2"><span class="texttule">Immunization Status:</span><br>
+              <select name="FoV_immstatus" id="immustatus" required>
+                <option value="">--Select--</option>
+                <option value="FirstDose">First Dose</option>
+                <option value="Done">Done</option>
+                <option value="FirstDoseSHD">First Dose SHD</option>
+                <option value="DoneSHD">Done SHD</option>
+                <option value="NotDone">Not Done</option>
+              </select>
+            </div>
+
+            <div class="col-1"><span class="texttule">Others:</span>
+              <textarea name="FoV_others" placeholder="Enter Other Details Here" class="spalphanum" rows="5" cols="25" style="border:2px solid black;font-weight:bold"></textarea>
+            </div>
+
+          </div> <!-- row -->
+          <br>
+
+          <div class="col-12" align="center">
+            <input type="submit" value="Submit" id="afovsubmit" style="height:40px;width:100px;background-color:#A9A9A9;font-weight:bold">
+          </div>
+          <br>
+          <p id="afovack" style="font-weight:bold;color:green;display:inline;"></p>
+
+        </form>
+      </div> <!-- tab -->
+
+<!-------------------- Follow Up Visit Ends ---------------------------->
+
+<!------------------------- Lab Check Up Starts ------------------------->
+
+      <div id="tab-5" class="tab-content">
+
+        <div class="col-12 subtitlebox" style="text-align:center;">Lab Check Up</div>
+
+        <br>
+        <form action="ANCLabCheckUp" method="POST">
+
+          {%for row in gd%}
+          <input type="text" name="anc_id" value="{{row[0]}}" style="display:none;">
+          {%endfor%}
+
+          <div class="row myrow">
+
+            <div class="col-3"><span class="texttule">Date:</span>
+              <input type="date" style="max-width:68%" name="lc_date" required>
+            </div>
+
+            <div class="col-3"><span class="texttule">Test done from:</span>
+              <select name="lc_testdone" id="testdone" required>
+                <option value="">--Select--</option>
+                <option value="ShaheedHospital">Shaheed Hospital</option>
+                <option value="Outside">Outside</option>
+              </select>
+            </div>
+
+          </div> <!-- row -->
+
+          <br>
+
+          <div class="col-12 subtitlebox">Urine Analysis:</div>
+
+          <div class="row myrow">
+
+            <br>
+
+            <div class="col-2"><span class="texttule">Sugar:</span>
+              <input type="text" placeholder="Sugar" class="spalphanum" style="max-width:60px" name="lc_sugar">
+            </div>
+
+            <div class="col-2"><span class="texttule">Albumin:</span>
+              <input type="text" placeholder="Albumin" class="spalphanum" style="max-width:60px" name="lc_albumin">
+            </div>
+
+            <div class="col-2"><span class="texttule">Microscopy:</span>
+              <input type="text" placeholder="Microscopy" class="alphanumeric" style="max-width:60px" name="lc_microscopy">
+            </div>
+
+          </div> <!-- row -->
+
+          <br>
+          <div class="col-12 subtitlebox">Blood Test:</div>
+          <div class="row myrow">
+            <br>
+
+            <div class="col-2"><span class="texttule">Haemoglobin:</span>
+              <input type="text" placeholder="Haemoglobin" class="spalphanum" style="max-width:60px" name="lc_hb" required> <b>g/dl</b>
+            </div>
+
+            <div class="col-2"><span class="texttule">Blood Group:</span>
+              <select name="lc_bldgrp" id="lc_bldgrp" required>
+                <option value="">--Select--</option>
+                <option value="O+ve">O+ve</option>
+                <option value="O-ve">O-ve</option>
+                <option value="A+ve">A+ve</option>
+                <option value="A-ve">A-ve</option>
+                <option value="B+ve">B+ve</option>
+                <option value="B-ve">B-ve</option>
+                <option value="AB+ve">AB+ve</option>
+                <option value="AB-ve">AB-ve</option>
+              </select>
+            </div>
+
+            <div class="col-2"><span class="texttule">Sickling:</span>
+              <select name="lc_sickling" id="lc_sickling">
+                <option value="">--Select--</option>
+                <option value="Positive">Positive</option>
+                <option value="Negative">Negative</option>
+              </select>
+            </div>
+
+            <div class="col-2"><span class="texttule">V.D.R.L:</span>
+              <select name="lc_vdrl" id="lc_vdrl">
+                <option value="">--Select--</option>
+                <option value="Positive">Positive</option>
+                <option value="Negative">Negative</option>
+              </select>
+            </div>
+
+            <div class="col-2"><span class="texttule">H.Bs.Ag:</span>
+              <select name="lc_hbsag" id="lc_hbsag">
+                <option value="">--Select--</option>
+                <option value="Positive">Positive</option>
+                <option value="Negative">Negative</option>
+              </select>
+            </div>
+
+            <div class="col-2"><span class="texttule">HIV:</span>
+              <select name="lc_hiv" id="lc_hiv">
+                <option value="">--Select--</option>
+                <option value="Positive">Positive</option>
+                <option value="NR">NR</option>
+              </select>
+            </div>
+
+          </div> <!-- row -->
+
+          <br>
+          <div class="row myrow">
+            <div class="col-2"><span class="texttule">RBS:</span>
+              <input type="text" placeholder="RBS" class="alphanumeric" style="max-width:60px" name="lc_rbs"> <b>mg/dl</b>
+            </div>
+
+            <div class="col-2"><span class="texttule">TSH:</span>
+              <input type="text" placeholder="TSH" class="alphanumeric" style="max-width:60px" name="lc_tsh"> <b>mU/l</b>
+            </div>
+
+          </div> <!-- row -->
+
+          <br>
+
+          <div class="row myrow">
+
+            <div class="col-1"><span class="texttule">Others:</span>
+              <textarea name="lc_others" placeholder="Enter Other Details Here" class="spalphanum" rows="5" cols="25" style="border:2px solid black;font-weight:bold"></textarea>
+            </div>
+
+          </div> <!-- row -->
+
+          <br>
+
+          <div class="col-12" align="center">
+            <input type="submit" value="Submit" id="alcsubmit" style="height:40px;width:100px;background-color:#A9A9A9;font-weight:bold">
+          </div>
+          <br>
+          <p id="alcack" style="font-weight:bold;color:green;display:inline;"></p>
+
+        </form>
+
+
+      </div> <!-- tab -->
+
+
+<!--------------------- USG Report Starts ----------------------------------->
+
+      <div id="tab-6" class="tab-content">
+        <form action="ANCUsgReport" method="POST">
+          {%for row in gd%}
+          <input type="text" name="anc_id" value="{{row[0]}}" style="display:none;">
+          {%endfor%}
+
+          <div class="col-12 subtitlebox" style="text-align:center">USG Report</div>
+          <br>
+
+          <div class="row myrow">
+            <div class="col-1"></div>
+            <div class="col-2"><span class="texttule">Date:</span>
+              <input type="date" style="max-width:68%" name="usg_date" required>
+            </div>
+
+            <div class="col-3"><span class="texttule">Test done from:</span>
+              <select name="usg_testdone" id="testdone" required>
+                <option value="">--Select--</option>
+                <option value="ShaheedHospital">Shaheed Hospital</option>
+                <option value="Outside">Outside</option>
+              </select>
+            </div>
+
+            <div class="col-2"><span class="texttule">Gravida:</span>
+              <input type="text" placeholder="Gravida" class="numeric" style="max-width:60px" name="usg_gravida">
+            </div>
+
+            <div class="col-2"><span class="texttule">LMP:</span>
+              <input type="date" style="max-width:68%" id="usg_lmp" name="usg_lmp" onblur="calldate1()">
+            </div>
+
+            <div class="col-2"><span class="texttule">EDD:</span>
+              <input type="text" placeholder="EDD" style="max-width:68%" name="usg_edd" id="usg_edd" onblur="calldate1()" readonly>
+            </div>
+
+          </div> <!-- row -->
+          <br>
+
+          <div class="row myrow">
+            <div class="col-1"></div>
+            <div class="col-2"><span class="texttule">Foetus:</span>
+              <select name="usg_foetus" id="usg_foetus" onchange="usgFoetusType()">
+                <option value="">--Select--</option>
+                <option value="Single">Single</option>
+                <option value="Twins">Twins</option>
+                <option value="Triplets">Triplets</option>
+                <option value="Quadruplets">Quadruplets</option>
+                <option value="Quintuplets">Quintuplets</option>
+                <option value="Sextuplets">Sextuplets</option>
+                <option value="Others">Others</option>
+              </select>
+              <br>
+              <div class="col-3" id="othersdiv" style="display:none;">
+                <input type="text" class="alphaonly" name="otherFoetus" id="othertype">
+              </div>
+            </div>
+
+            <div class="col-3"><span class="texttule">Presentation:</span>
+              <select name="usg_presentation" id="usg_presentation" onchange="usgPresentationType()">
+                <option value="">--Select--</option>
+                <option value="Chephalic">Chephalic</option>
+                <option value="Breech">Breech</option>
+                <option value="Transverse">Transverse</option>
+                <option value="Others">Others</option>
+              </select>
+              <br>
+              <div class="col-3" id="othersdivtwo" style="display:none;">
+              <input type="text" class="alphaonly" name="otherPresentation" id="otherPreType">
+              </div>
+            </div>
+
+            <div class="col-2"><span class="texttule">Placenta:</span>
+              <select name="usg_placenta" id="usg_placenta" onchange="usgPlacentaType()">
+                <option value="">--Select--</option>
+                <option value="Fundal">Fundal</option>
+                <option value="Anterior">Anterior</option>
+                <option value="Posterior">Posterior</option>
+                <option value="Praevia">Praevia</option>
+                <option value="Low_Lying">Low Lying</option>
+                <option value="Others">Others</option>
+              </select>
+              <br>
+              <div class="col-3" id="othersdivthree" style="display:none;">
+                <input type="text" class="alphaonly" name="otherPlacenta" id="otherPlacentaType">
+              </div>
+            </div>
+
+            <div class="col-2"><span class="texttule">Liquor:</span>
+              <select name="usg_liquor" id="usg_liquor" onchange="usgLiquorType()">
+                <option value="">--Select--</option>
+                <option value="Adequate">Adequate</option>
+                <option value="Oligohydroamnios">Oligohydroamnios</option>
+                <option value="Polyhydroamnios">Polyhydroamnios</option>
+                <option value="Others">Others</option>
+
+              </select>
+              <br>
+              <div class="col-3" id="othersdivfour" style="display:none;">
+                <input type="text" class="alphaonly" name="otherLiquor" id="otherLiquorType">
+              </div>
+            </div>
+
+
+          </div> <!-- row -->
+          <br>
+
+          <div class="row myrow">
+            <div class="col-1"></div>
+
+            <div class="col-3"><span class="texttule">CRL:</span>
+              <input type="text" placeholder="CRL" class="alphanumeric" style="max-width:60px" name="usg_crl">
+            </div>
+
+            <div class="col-3"><span class="texttule">FA:</span>
+              <input type="text" placeholder="FA" class="alphanumeric" style="max-width:60px" name="usg_fa1">
+            </div>
+
+            <div class="col-3"><span class="texttule">EDD:</span>
+              <input type="date" style="max-width:68%" name="usg_edd1">
+            </div>
+
+          </div> <!-- row -->
+
+          <br>
+
+          <div class="row myrow">
+            <div class="col-1"></div>
+
+            <div class="col-3"><span class="texttule">BPD</span>
+              <input type="text" placeholder="BPD" class="alphanumeric" style="max-width:60px" name="usg_bpd">
+            </div>
+
+            <div class="col-3"><span class="texttule">FA:</span>
+              <input type="text" placeholder="FA" class="alphanumeric" style="max-width:60px" name="usg_fa2">
+            </div>
+
+            <div class="col-3"><span class="texttule">EDD:</span>
+              <input type="date" style="max-width:68%" name="usg_edd2">
+            </div>
+
+          </div> <!-- row -->
+
+          <br>
+
+          <div class="row myrow">
+            <div class="col-1"></div>
+              <div class="col-3"><span class="texttule">HC:</span>
+              <input type="text" placeholder="HC" class="alphanumeric" style="max-width:60px" name="usg_hc">
+            </div>
+
+            <div class="col-3"><span class="texttule">FA:</span>
+              <input type="text" placeholder="FA" class="alphanumeric" style="max-width:60px" name="usg_fa3">
+            </div>
+
+            <div class="col-3"><span class="texttule">EDD:</span>
+              <input type="date"  style="max-width:68%" name="usg_edd3">
+            </div>
+
+          </div> <!-- row -->
+
+          <br>
+
+          <div class="row myrow">
+            <div class="col-1"></div>
+            <div class="col-3"><span class="texttule">AC:</span>
+              <input type="text" placeholder="AC" class="alphanumeric" style="max-width:60px" name="usg_ac">
+            </div>
+
+            <div class="col-3"><span class="texttule">FA:</span>
+              <input type="text" placeholder="FA" class="alphanumeric" style="max-width:60px" name="usg_fa4">
+            </div>
+
+            <div class="col-3"><span class="texttule">EDD:</span>
+              <input type="date" style="max-width:68%" name="usg_edd4">
+            </div>
+
+          </div> <!-- row -->
+
+          <br>
+
+          <div class="row myrow">
+            <div class="col-1"></div>
+            <div class="col-3"><span class="texttule">FL:</span>
+              <input type="text" placeholder="FL" class="alphanumeric" style="max-width:60px" name="usg_fl">
+            </div>
+
+            <div class="col-3"><span class="texttule">FA:</span>
+              <input type="text" placeholder="FA" class="alphanumeric" style="max-width:60px" name="usg_fa5">
+            </div>
+
+            <div class="col-3"><span class="texttule">EDD:</span>
+              <input type="date" class="alphanumeric" style="max-width:68%" name="usg_edd5">
+            </div>
+
+          </div> <!-- row -->
+
+          <br>
+
+          <div class="row myrow">
+            <div class="col-3"></div>
+
+            <div class="col-3" style="margin-left:45px;color:green;"><span class="texttule">Average FA:</span>
+              <input type="text" placeholder="FA" class="alphanumeric" name="usg_fa6" style="max-width:80px;border:2px solid green;font-weight:bold">
+            </div>
+
+            <div class="col-3" style="margin-left:65px;color:blue;"><span class="texttule">EDD:</span>
+              <input type="date" name="usg_edd6" style="border:2px solid blue;font-weight:bold">
+            </div>
+
+          </div> <!-- row -->
+
+          <br>
+
+          <div class="row myrow">
+            <div class="col-1"></div>
+
+            <div class="col-3"><span class="texttule">FHR:</span>
+              <input type="text" placeholder="FHR" class="alphanumeric" style="max-width:60px" name="usg_fhr">
+            </div>
+
+            <div class="col-3"><span class="texttule">FWT:</span>
+              <input type="text" placeholder="FWT" class="alphanumeric" style="max-width:60px" name="usg_fwt">
+            </div>
+
+            <div class="col-4"><span class="texttule">HC/AE:</span>
+              <input type="text" placeholder="HC/AE" class="spalphanum" style="max-width:60px;border:2px solid red;font-weight:bold;" name="usg_hc_ae"><span class="texttule"> N.Range = 1.05 to 1.21</span>
+            </div>
+
+          </div> <!-- row -->
+            <div class="row myrow">
+            <div class="col-1"></div>
+
+
+          </div> <!-- row -->
+
+          <br>
+
+          <div class="row myrow">
+            <div class="col-1"></div>
+
+              <div class="col-3"><span class="texttule">FL/HE:</span>
+                <input type="text" placeholder="FL/HE" class="spalphanum" style="max-width:60px;border:2px solid blue;font-weight:bold;" name="usg_fl_he"><span class="texttule"> N.Range = 18.7 to 20.3</span></div>
+
+                <div class="col-3"><span class="texttule">FL/AE:</span>
+                  <input type="text" placeholder="FL/AE" class="spalphanum" style="max-width:60px;border:2px solid green;font-weight:bold;" name="usg_fl_ae" ><span class="texttule"> N.Range = 20.4 to 23</span>
+                </div>
+
+                <div class="col-3">
+                  <div class="subtitlebox" style="max-width:70%">Comments:</div>
+                  <br>
+                  <textarea name="usg_others" class="spalphanum" placeholder="Add Your Comments.." rows="5" cols="25" style="border:2px solid black;font-weight:bold"></textarea>
+                </div>
+
+              </div> <!-- row -->
+
+
+
+
+            <div class="col-12" align="center">
+              <input type="submit" value="Submit" id="aursubmit" style="height:40px;width:100px;background-color:#A9A9A9;font-weight:bold">
+            </div>
+            <br>
+            <p id="aurack" style="font-weight:bold;color:green;display:inline;"></p>
+
+          </form>
+
+
+
+        </div> <!-- tab -->
+      </div><!-- container -->
+
+    </div> <!--- Content --->
+  </div><!--- col-12 --->
+
+<!----------------------- USG Report Ends --------------------------->
+
+
+{% endblock %}

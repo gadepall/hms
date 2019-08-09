@@ -1,0 +1,221 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+
+
+		<style>
+/* GENERAL CODE */
+#mainTable {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#mainTable td, #mainTable th {
+  padding: 8px;
+}
+
+#mainTable td{
+  padding: 8px;
+  font-size: 15px;
+}
+#mainTable tr:nth-child(even){background-color: #f2f2f2;}
+
+#mainTable tr:hover {background-color: #ddd;}
+
+#mainTable thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+}
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+#mainTable thead,th {
+  background-color:#778899;
+}
+/* SEPERATE CODE */
+
+.subtitle
+{
+background-color:#F0E68C;
+}
+.spnhead{
+  font-size: 20px;
+  font-weight: bold;
+}
+.spndata{
+  font-size: 18px;
+  font-weight: bold;
+}
+
+</style>
+
+<!--checkbox-->
+<script type="text/javascript">
+    function ShowHide(chk,index) {
+        var uploadxray = document.getElementById("uploadxray"+index);
+        //uploadxray.style.display = chk.checked ? "block" : "none";
+				if(chk.checked){
+					uploadxray.style.display = 'block';
+					$("#uploadxray"+index).prop('required',true);
+				}
+				else{
+					uploadxray.style.display = 'none';
+					$("#uploadxray"+index).prop('required',false);
+				}
+				alert(chk.checked);
+		}
+</script>
+
+<!--Ajax AutoSelect-->
+
+<script>
+  function getAllXray(sel,k)
+  {
+		//var rt = $("#rowtotal").val();
+			val = sel.value;
+			sele = "sele"+k;
+      $.ajax({
+      type: "POST",
+      url: "/getAllXrayList",
+      data:"xraytype=" + val,
+      success: function(string){
+      	var data = JSON.parse(string)['data'];
+      	$("#"+sele).html(htmlify(data));
+      }
+      });
+  };
+
+      function htmlify(val)
+  {
+      var Data = "<option value=''>--Select--</option>";
+      for (var index = 0; index < val.length; ++index) {
+      var entry = val[index];
+      Data = Data + "<option value='"+entry[0]+"'>"+entry[1]+"</option>";
+        };
+      return Data;
+  };
+</script>
+
+<!--THis will pick amount on change of subxray------>
+<script>
+      function getAllSubxray(sele,k)
+
+  {
+			val=sele.value;
+			amount="amount"+k;
+      //var val = $("#sele").val();
+      $.ajax({
+      type: "POST",
+      url: "/getAllXraySubList",
+      data:"subxray=" + val,
+      success: function(string){
+      var data = JSON.parse(string)['data'];
+      $("#"+amount).val(data[0]);
+
+          }
+       });
+  };
+
+
+</script>
+<!------------------Script End Here---------------->
+
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" type="text/css" href="static/css/mycss.css">
+
+
+
+<div class="col12">
+    <div id="content">
+        <div class="titlebox">Patient Vitals</div>
+        <div class="row" style="padding-bottom:3px;"></div>
+        {% for row in ds2%}
+        <div class="col-12 subtitle">
+					<div class="col-2"><span class="spnhead">Regno:</span><span class="spndata">{{row[0]}}</span></div>
+          <div class="col-3"><span class="spnhead">Name:</span><span class="spndata">{{row[1]}} {{row[2]}} {{row[3]}}</span></div>
+          <div class="col-2"><span class="spnhead">Sex:</span><span class="spndata">{{row[4]}}</span></div>
+          <div class="col-2"><span class="spnhead">Age:</span><span class="spndata">{{row[5]}}</span></div>
+
+          <div class="col-2"><span class="spnhead">Location:</span><span class="spndata">{{loc}}</span></div>
+        </div>
+				{%endfor%}
+
+ <div class="col-12" align="center">
+	 <div style="width:100%;height:auto;line-height:1em;overflow:auto;">
+	   <table border=1 id="mainTable" >
+              <tr>
+                <th>Date</th>
+                <th>Xray Type</th>
+                <th>SubType</th>
+                <th>Amount</th>
+                <th>Old Xray Preview</th>
+                <th>Upload New Xray</th>
+                <th>Update</th>
+              </tr>
+
+             <tr>
+
+
+
+
+							 {% for row in ds1%}
+            <form action="/update_xray" method="POST" enctype="multipart/form-data">
+							<td style="display:none;"><input type="text" name="id" readonly value="{{row[1]}}"></td>
+							<td style="display:none;"><input type="text" name="regno" readonly value="{{ds2[0][0]}}"></td>
+
+
+              <td><input type="date" id="date" name=xdate value="{{row[2]}}" placeholder="enter date"></td>
+
+							  <td><select id="sel{{loop.index}}" name="xrayname" onchange="getAllXray(this,{{loop.index}})" required>
+                    <option style="font-weight:bold;" value="{{row[3]}}"><b>{{row[4]}}</b></option>
+										<option value="">--Select--</option>
+          					{%for xname in xname%}
+            				<option value="{{xname[0]}}">{{xname[1]}}</option>
+          					{%endfor%}
+										</select>
+            	</td>
+          			<td> <select id="sele{{loop.index}}" name="subxray" onchange="getAllSubxray(this,{{loop.index}})">
+            		<option style="font-weight:bold;" value="{{row[5]}}">{{row[6]}}</option>
+            		{%for subname in subname%}
+            		<option value="{{subname[0]}}">{{subname[2]}}</option>
+          {%endfor%}
+        						</select>
+
+    </td>
+
+        <td> <input type="text" id="amount{{loop.index}}" name="amount" value="{{row[7]}}" maxlength="3"  style="width:60px;" readonly></td>
+        <input type="text" id="oldup" name="oldupload" value="{{row[8]}}" style="display:none;">
+        <td style="width: 10px;"><img src="/static/XrayUploads/{{row[8]}}" alt={{row[8]}} height="150px"></td>
+
+
+      <!--checkbox-->
+
+        <td> <input type="checkbox" name="chkbox" id="chk{{loop.index}}" onclick="ShowHide(this,{{loop.index}})" style="width:50px;height: 30px;">
+        <input type="file" name="uploadxray" id="uploadxray{{loop.index}}" multiple='' style=display:none ></td>
+        <td><input type="submit" value="Update"  style="height:40px;width:150px;"></td>
+				<br>
+				<p style="display:inline;color:green;"><b>{{ack}}</b></p>
+
+      </form>
+  </tr>
+  {%endfor%}
+  </table>
+	</div>
+</div>
+
+
+
+
+  </div> <!--- Content --->
+  </div><!--- col-12 --->
+
+
+  {% endblock %}

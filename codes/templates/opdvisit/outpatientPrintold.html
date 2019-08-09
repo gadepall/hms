@@ -1,0 +1,162 @@
+<html>
+<head>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name ="viewport" content="width=device-width">
+</head>
+<style type="text/css" media="print">
+@media print{
+	@page { margin:0; }
+	body { margin: 1.6; }
+}
+footer {
+    clear: both;
+    text-align: center;
+
+    height: 40px;
+    margin-top:160px
+
+}
+
+</style>
+<body>
+<div style="border:1px solid;width:100%;height:100%;">
+<table style="width:100%;" border=0px>
+  <tr>
+    <td style="width:200px;">
+      <img src="static/icon4/slogo.jpg" width="80" height="80">
+    </td>
+    <td>
+      <p style="text-align: center;"><font size="6" color="red"><b>शहीद अस्पताल</b></font></p>
+      <p style="text-align: center;"><font color="green"<b>दल्ली राजहरा , जिला - बालोद  (छत्तीसगढ़)</b></font></p>
+      <p style="text-align: center;"><font color="green"<b>फ़ोन : (07748)216088</b></font></p>
+    </td>
+    <td>
+      <img src="static/icon4/slogan.jpg" align=right>
+    </td>
+  </tr>
+
+    <td colspan=6 style="border:0px">
+    <!-- colors -->
+      <div style="background-color:red;height:5px;">&nbsp;</div>
+      <div style="background-color:green;height:5px;">&nbsp;</div>
+    <!-- colors End -->
+  </td>
+  </tr>
+</table>
+  <!---FOR DATA--->
+
+    <table border="0" style="width:100%;padding:5px;">
+      {% for row in ds %}
+        <tr>
+
+          <td style="padding-bottom:10px;"><b>Date:</b>{{ row[0]}}</td>
+          <td style="padding-bottom:10px;"><b>Regno:</b>{{row[1]}}</td>
+          <td style="padding-bottom:10px;"><b>Name:</b> {{row[2]}} {{row[3]}} {{row[4]}}</td>
+          <td style="padding-bottom:10px;"><b>{{row[5]}}:</b>{{row[6]}} {{row[7]}} {{row[8]}}</td>
+
+        </tr>
+        <tr>
+          <td style="padding-bottom:10px;"><b>Age:</b>{{row[9]}} {{row[10]}}</td>
+          <td style="padding-bottom:10px;"><b>Sex:</b>{{ row[11]}}</td>
+          <td style="padding-bottom:10px;"><b>Address:</b>{{ row[12]}}</td>
+          <td style="padding-bottom:10px;"><b>Contact No.:</b>{{ row[15] }}</td>
+        </tr>
+        <tr>
+          <td style="padding-bottom:10px;"><b>Qualification:</b>{{ row[13] }}</td>
+          <td style="padding-bottom:10px;"><b>Occupation:</b>{{ row[14] }}</td>
+          <td style="padding-bottom:10px;"><b>Complaint:</b> {{ row[16] }}</td>
+        </tr>
+
+      </table>
+    <div style="border:1px solid black;"></div>
+    <table>
+      <tr>
+        <td><b>Height:</b><br><input type="text" style="width: 40%; font-size:16px;" value="{{ row[17] }}"><b>Cm</b></td>
+        <td><b>Weight:</b><br><input type="text" style="width: 40%; font-size:16px;" value="{{ row[18] }}"><b>Kg</b></td>
+        <td><b>BMI:</b><br><input type="text" style="width: 50%; font-size:16px;" value="{{ row[19] }}"><b>Kg/m<sup>2</sup></b></td>
+        <td><b>Temp:</b><br><input type="text" style="width: 50%; font-size:16px;" value="{{ row[20] }}"><b>&#8457;</b></td>
+        <td><b>Pulse:</b><br><input type="text" style="width: 60%; font-size:16px;" value="{{ row[21] }}"><b>ppm</b></td>
+        <td><b>BP:</b><br><input type="text" style="width: 70%; font-size:16px;" value="{{row[22]}} / {{row[23]}}"></td>
+        <td><b>RR:</b><br><input type="text" style="width: 50%; font-size:16px;" value="{{ row[24] }}"><b>BPM</b></td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <table>
+      <tr>
+        <td ><b>History_with_Duration:</b></td>
+        <td><b>General:</b></td>
+      </tr>
+      <tr>
+
+        <td style="height:120px;width:900px;border:1px solid;" rowspan="6"></td>
+      </tr>
+
+                <tr>
+                  <td>Conscious<b>/</b>Irritated</td>
+                  <td>SemiConscious<b>/</b><b>Un</b>Conscious</td>
+                </tr>
+                <tr>
+                  <td>Afebrile<b>/</b>Febrile</td>
+                  <td>J.V.P Raised<b>/Not</b> Raised</td>
+                </tr>
+                <tr>
+                  <td><b>No</b> Cynosis<b>/</b>Cynosis</td>
+                  <td><b>No</b> Pallor<b>/</b>Pallor</td>
+                </tr>
+                <tr>
+                  <td><b>No</b> Oedema<b>/</b>Oedema</td>
+                  <td><b>No</b> Iceterus<b>/</b>Iceterus</td>
+                </tr>
+                <tr>
+                  <td style="width:25%;"><b>No</b> Dehydration<b>/</b>Dehydration</td>
+                  <td><b>No</b>LooseMotion<b>/</b>LooseMotion</td>
+                </tr>
+
+    </table>
+    <table>
+      <tr>
+        <td><b>GI:</b></td>
+        <td><b>CNS:</b></td>
+        <td><b>CVS:</b></td>
+        <td><b>RV:</b></td>
+      </tr>
+      <tr>
+        <td style="height:60px;width:300px;border:1px solid;"></td>
+        <td style="height:60px;width:300px;border:1px solid"></td>
+        <td style="height:60px;width:300px;border:1px solid;"></td>
+        <td style="height:60px;width:300px;border:1px solid"></td>
+    </tr>
+    </table>
+<table>
+  <tr>
+    <br>
+    <td ><b>Investigation:</b></td>
+    <td style="text-align:center;"><b>Provisional Diagnosis:</b>
+      <td>
+</tr>
+<tr>
+  <td style="height:350px;width:500px;border:0px solid;"></td>
+  <td style="height:200px;width:500px;border:0px solid;"></td>
+</tr>
+<tr>
+  <td ><b>Others:</b>
+    <td>
+</tr>
+
+<tr>
+  <td style="height:153px;width:200px;border:0px solid;"></td>
+</tr>
+
+<tr style="text-align:center;">
+  <td colspan="8" >
+    <b>*** ओ.पी.डी. खुलने का समय सुबह 8:00 बजे से दोपहर 2:00 बजे तक रहेगा तथा मंगलवार को ओ.पी.डी. बंद रहेगा ***
+    </b>
+  </td>
+</tr>
+</table>
+</div>
+
+</body>
+</html>

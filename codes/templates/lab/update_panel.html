@@ -1,0 +1,45 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+
+
+<div class="col12">
+  <div id="content">
+    <div class="titlebox">Update Panel Info</div>
+     <br>
+     <form action="Updatepanel2" method="POST">
+
+      <div class="row myrow">
+        <div class="col-2">
+        <span class="texttule">Samples:</span>
+        <select name="sample_id" id='sample_id' required>
+          <option value="{{pdata[0][1]}}">{{pdata[0][4]}}</option>
+          <option value="">--Select--</option>
+            {% for row in value %}
+                <option value="{{ row[0] }}">{{ row[1] }}</option>
+            {% endfor %}
+          </select>
+        </div>
+          <div class="col-3">
+            <span class="texttule">Panel Name:</span>
+        <input type="text" name="panel_name" class="alphanumeric" id="panel_name" value="{{ pdata[0][2] }}" required>
+        <input type="hidden" name="panel_id" id="panel_id" value="{{ pdata[0][0] }}" >
+      </div>
+
+      <div class="col-3">
+        <input type="submit" class="button" id='btnsave' value="UPDATE" style="height:40px;width:150px;">
+      </div>
+      </div>
+      <br>
+      <div class="row myrow"><div class="col-3"><p>{{ack}}</p></div></div>
+    </form>
+  </div> <!--- Content --->
+</div><!--- col-12 --->
+
+
+
+
+
+
+
+
+{% endblock %}

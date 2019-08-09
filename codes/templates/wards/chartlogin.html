@@ -1,0 +1,27 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+
+<div class="col12">
+  <div id="content">
+    <div align="center" class="titlebox">Patients Charts Of {{wname}}</div>
+    <br>
+    <form action="charts" method="POST">
+    <div align="center">
+    <div class="row myrow">
+      <div class="col-12">
+        <span class="texttule">Enter Reg No:</span>
+        <input type="text" name="regno" required>
+        <input type="submit" value="Search">
+        <input type="text" name="wardname" id="wardname" value="{{wname}}" style="display:block;">
+        <input type="text" name="wid" value="{{wid}}" style="display:block;">
+      </div>
+    </div>
+    <br>
+  </div>
+  </form>
+</div> <!--- Content --->
+</div><!--- col-12 --->
+
+
+
+{%endblock%}

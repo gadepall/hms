@@ -1,0 +1,155 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+
+<script>
+function display_c(){
+var refresh=1000; // Refresh rate in milli seconds
+mytime=setTimeout('display_ct()',refresh)
+}
+
+function display_ct(){
+
+var today = new Date();
+var h = today.getHours();
+var m = today.getMinutes();
+var s = today.getSeconds();
+var dd = today.getDate();
+var mm = today.getUTCMonth()+1;
+var yy = today.getFullYear();
+m = checkTime(m);
+s = checkTime(s);
+
+dd = checkTime(dd);
+mm = checkTime(mm);
+
+
+document.getElementById('condate').value = yy + "-" + mm + "-" + dd;
+tt=display_c();
+}
+</script>
+
+<style>
+  #showLabData {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#showLabData td, #showLabData th {
+  padding: 8px;
+}
+
+#showLabData td{
+  padding: 8px;
+  font-size: 15px;
+}
+
+
+#showLabData thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+}
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+#showLabData thead,th {
+  background-color:#778899;
+}
+
+
+    /* SEPERATE CODE */
+.subtitle
+{
+background-color:#F0E68C;
+}
+.spnhead{
+  font-size: 20px;
+  font-weight: bold;
+}
+.spndata{
+  font-size: 18px;
+  font-weight: bold;
+}
+</style>
+
+<div class="col12">
+  <div id="content">
+  <div class="titlebox">Collected Sample View</div>
+  <div class="row myrow">
+    <form action="getSampleByAccNo" method="POST">
+      <div class="col-3">
+        <span class="texttule">Accession No:</span>
+        <input type="text" name="acno" size=8 class="alphanumeric">
+        <input type="submit" value="Search">
+      </div>
+    </form>
+
+    <form action="getSampleByRegNo" method="POST">
+      <div class="col-3">
+        <span class="texttule">RegnoNo:</span>
+        <input type="text" name="regno" size=8 class="alphanumeric">
+        <input type="submit" value="Search">
+      </div>
+    </form>
+
+    <form action="getSampleByDate" method="POST">
+      <div class="col-4">
+        <div >
+        <span class="texttule">Sample Date:</span>
+      </div>
+        <span class="texttule">From:</span>
+        <input type="date" name="fdate">
+        <span class="texttule">To:</span>
+        <input type="date" name="tdate">
+        <input type="submit" value="Search">
+      </div>
+    </div>
+  </form>
+
+  </div> <!--- Content --->
+</div><!--- col-12 --->
+<div class="row myrow">{{ack}}</div>
+<div class="col-12">
+  <table id="showLabData" border=1>
+    <thead>
+      <th>Edit</th>
+      <th>Validate</th>
+      <th>AccessionNo</th>
+      <th>Regno</th>
+      <th>Name</th>
+      <th>Age</th>
+      <th>Date</th>
+      <th>Test(s) Name</th>
+      <th>Patient From</th>
+    </thead>
+    {%for row in labdata%}
+    <tr>
+      <td><form action="editSample" method="POST"><button name="accession_no" value="{{row[0]}}">Edit</button><input type="hidden" value="Spage" name="page"></form></td>
+      <td><form action="validate_sample" method="POST"><button name="accession_no" value="{{row[0]}}">Validate</button></form></td>
+      <td>{{row[0]}}</td>
+      <td>{{row[1]}}</td>
+      <td>{{row[2]}} {{row[3]}} {{row[4]}}</td>
+      <td>{{row[5]}} {{row[6]}}</td>
+      <td>{{row[7]}}</td>
+      <td>
+      {%for trow in testdata%}
+        {%if row[0]==trow[0]%}
+        {{trow[1]}}
+          {%if tname|length != loop.index%},{%endif%}
+        {%endif%}
+      {%endfor%}
+    </td>
+    <td>{{row[8]}}</td>
+
+    </tr>
+    {%endfor%}
+  </table>
+</div>
+
+
+{% endblock %}

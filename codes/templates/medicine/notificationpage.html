@@ -1,0 +1,181 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+#mainTable {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#mainTable td, #mainTable th {
+  padding: 8px;
+}
+
+#mainTable td{
+  padding: 8px;
+  font-size: 15px;
+}
+#mainTable tr:nth-child(even){background-color: #f2f2f2;}
+
+#mainTable tr:hover {background-color: #ddd;}
+
+#mainTable thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+}
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+#mainTable thead,th {
+  background-color:#778899;
+
+}
+/* Popup container - can be anything you want */
+.popup {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* The actual popup */
+.popup .popuptext {
+  visibility: hidden;
+  width: 160px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -80px;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class - hide and show the popup */
+.popup .show {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity:1 ;}
+}
+</style>
+</head>
+
+
+<script>
+// When the user clicks on div, open the popup
+
+
+  $(function()
+    {
+        $("#drugname").autocomplete
+        ({
+            source: function(request,response )
+            {
+              var drugname=document.getElementById('drugname').value;
+                $.ajax
+                ({
+                    type:"POST",
+                    url: "getAllDrugname",
+                    data:'drugname='+drugname,
+                    success: function( data )
+                    {
+                      //alert(data['d'][2]);
+                      response(data);
+                    }
+                });
+            },
+        });
+    });
+
+function myFunction() {
+    var popup = document.getElementById("myPopup");
+    popup.classList.toggle("show");
+
+</script>
+
+<div class="col-12">
+  <div class="content">
+    <div class="titlebox">NOTIFICATION PAGE</div>
+    <form action ="ViewBy3MonthExpiry" method="POST">
+      <div class="row myrow">
+        <div class="col-5">
+          <span class="texttule">Expiry Medicine Issued From Store To Wards :</span>
+          <span class="" style="font-weight:bold;color:green;font-size:20px;">{{getdata|length}}</span>
+
+          <input type="submit" class="button"  value="Show list" style="height:30px;width:110px;">
+
+        </div>
+        </div>
+      </form>
+
+      <form action ="ViewBy3MonthExpiryOnlyInMedicineStore" method="POST">
+        <div class="row myrow">
+          <div class="col-5">
+            <span class="texttule">Expiry Medicine In Store Only:</span>
+            <span class="" style="font-weight:bold;color:purple;font-size:20px;">{{result2|length}}</span>
+            <input type="submit" class="button"  value="Show list" style="height:30px;width:110px;">
+
+
+          </div>
+          </div>
+        </form>
+
+      <form action ="ViewBy3MonthMinValue" method="POST">
+        <div class="row myrow">
+          <div class="col-5">
+            <span class="texttule">Low Stock:</span>
+            <span class="" style="font-weight:bold;color:red;font-size:20px;">{{result|length}}</span>
+            <input type="submit" class="button"  value="Show list" style="height:30px;width:110px;">
+          </div>
+        </div>
+      </form>
+
+     <form action ="ViewBy3MonthMaxValue" method="POST">
+       <div class="row myrow">
+         <div class="col-5">
+           <span class="texttule">Above Stock:</span>
+           <span class="" style="font-weight:bold;color:royalblue;font-size:20px;">{{result1|length}}</span>
+           <input type="submit" class="button"   value="Show list" style="height:30px;width:110px;">
+         </div>
+       </div>
+     </form>
+   </div>
+</div>
+
+{% endblock %}

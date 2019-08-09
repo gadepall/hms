@@ -1,0 +1,711 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+
+<style>
+
+td,th {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align:center
+}
+
+
+
+.subtitle
+{
+background-color:#F0E68C;
+}
+.spnhead{
+  font-size: 20px;
+  font-weight: bold;
+  color:#000080;
+}
+.spndata{
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#rowdiv{
+  background-color:#6495ED;
+}
+</style>
+<script>
+
+function display_c(){
+var refresh=1000; // Refresh rate in milli seconds
+mytime=setTimeout('display_ct()',refresh)
+}
+
+function display_ct(){
+
+var today = new Date();
+var h = today.getHours();
+var m = today.getMinutes();
+var s = today.getSeconds();
+var dd = today.getDate();
+var mm = today.getUTCMonth()+1;
+var yy = today.getFullYear();
+m = checkTime(m);
+s = checkTime(s);
+
+dd = checkTime(dd);
+mm = checkTime(mm);
+
+
+document.getElementById('distime').value = h + ":" + m + ":" + s;
+document.getElementById('disdate').value = yy + "-" + mm + "-" + dd;
+tt=display_c();
+}
+
+
+function chooseScheme()
+{
+  if(document.getElementById('gscheme').value == 'eligible'){
+    document.getElementById('schemename').style.display='block';
+    document.getElementById('schemename').required=true;
+  }
+  else{
+    document.getElementById('schemename').style.display='none';
+    document.getElementById('schemename').required=false;
+  }
+}
+
+function choosePfrom()
+{
+  if(document.getElementById('pfrom').value == 'Referred'){
+    document.getElementById('referred_details').style.display='block';
+    document.getElementById('hname').required=true;
+    document.getElementById('dname').required=true;
+  }
+  else{
+    document.getElementById('referred_details').style.display='none';
+    document.getElementById('hname').required=false;
+    document.getElementById('dname').required=false;
+  }
+}
+
+function grandTotal(){
+  var grandtotal = 0;
+  var advance=$("#admoney").text();
+  if (advance =='')
+    advance=0;
+  var bedcharge=$("#bed").val();
+  if (bedcharge==''){
+    $("#bed").val(0);
+    bedcharge=0;
+  }
+  var servicecharge=$("#service").val();
+  if (servicecharge==''){
+    $("#servicecharge").val(0);
+    servicecharge=0;
+  }
+  var othercharge=$("#others").val();
+  if (othercharge==''){
+    $("#othercharge").val(0);
+    othercharge=0;
+  }
+  var rebate=$("#rebate").val();
+  if (rebate==''){
+    $("#rebate").val(0);
+    rebate=0;
+  }
+
+
+  var medicinetotal =$("#medicinetotal").val();
+  if (typeof medicinetotal === 'undefined')
+    medicinetotal=0.0
+  else
+    medicinetotal=parseFloat(medicinetotal);
+
+    console.log("medicinetotal="+medicinetotal);
+
+  var intaketotal =$("#intaketotal").val();
+  if (typeof intaketotal === 'undefined')
+    intaketotal=0.0
+  else
+    intaketotal=parseFloat(intaketotal);
+
+    console.log("intaketotal="+intaketotal);
+
+  var isutotal =$("#isutotal").val();
+  if (typeof isutotal === 'undefined')
+    isutotal=0.0
+  else
+    isutotal=parseFloat(isutotal);
+
+    console.log("isutotal="+isutotal);
+
+  var poitotal =$("#poitotal").val();
+  if (typeof poitotal === 'undefined')
+    poitotal=0.0
+  else
+    poitotal=parseFloat(poitotal);
+    console.log("poitotal="+poitotal);
+
+
+
+  var contotal =$("#contotal").val();
+  if (typeof contotal === 'undefined')
+    contotal=0.0
+  else
+    contotal=parseFloat(contotal);
+    console.log("contotal="+contotal);
+
+  var surtotal =$("#surtotal").val();
+  if (typeof surtotal === 'undefined')
+    surtotal=0.0
+  else
+    surtotal=parseFloat(surtotal);
+    console.log("surtotal="+surtotal);
+
+  var ltotal =$("#ltotal").val();
+    if (typeof ltotal === 'undefined')
+        ltotal=0.0
+    else
+        ltotal=parseFloat(ltotal);
+
+        console.log("ltotal="+ltotal);
+
+  var xtotal =$("#xtotal").val();
+    if (typeof xtotal === 'undefined')
+        xtotal=0.0
+    else
+        xtotal=parseFloat(xtotal);
+        console.log("xtotal="+xtotal);
+
+
+
+    var ecgtotal=0.0
+
+
+    var dretotal =$("#dretotal").val();
+    if (typeof dretotal === 'undefined')
+        dretotal=0.0
+    else
+        dretotal=parseFloat(dretotal);
+
+        console.log("dretotal="+dretotal);
+
+
+    var phytotal =$("#phytotal").val();
+    if (typeof phytotal === 'undefined')
+        phytotal=0.0
+    else
+        phytotal=parseFloat(phytotal);
+        console.log("phytotal="+phytotal);
+
+    grandtotal = parseFloat(grandtotal)+parseFloat(bedcharge)+parseFloat(servicecharge)+parseFloat(othercharge)+parseFloat(medicinetotal)+parseFloat(intaketotal)+parseFloat(isutotal)+parseFloat(poitotal)+parseFloat(contotal)+parseFloat(surtotal)+parseFloat(ltotal)+parseFloat(xtotal)+parseFloat(ecgtotal)+parseFloat(dretotal)+parseFloat(phytotal);
+    $("#totalamount").text(grandtotal);
+    $("#totalamounttxt").val(grandtotal);
+    grandtotal= parseFloat(grandtotal)-parseFloat(rebate)-parseFloat(advance);
+    $("#netamount").text(grandtotal);
+    $("#netamounttxt").val(grandtotal);
+
+}
+</script>
+
+<div class="col-12">
+  <div id="content">
+    <div class="titlebox">Patient Information </div>
+    <div class="row" style="padding-bottom:2px;"></div>
+        {% for row in ds%}
+        <div class="col-12 subtitle">
+          <div class="row myrow">
+          <div class="col-3"><span class="spnhead">Regno:</span><span class="spndata">{{row[1]}}</span></div>
+          <div class="col-3"><span class="spnhead">Name:</span><span class="spndata">{{row[2]}} {{row[3]}} {{row[4]}}</span></div>
+          <div class="col-4"><span class="spnhead">Relative Name:</span><span class="spndata">({{row[5]}}) {{row[6]}} {{row[7]}} {{row[8]}}</span></div>
+          </div>
+          <div class="row myrow">
+          <div class="col-3"><span class="spnhead">Sex:</span><span class="spndata">{{row[13]}}</span></div>
+          <div class="col-3"><span class="spnhead">Age:</span><span class="spndata">{{row[11]}} {{row[12]}}</span></div>
+          <div class="col-3"><span class="spnhead">Education:</span><span class="spndata">{{row[14]}}</span></div>
+          <div class="col-3"><span class="spnhead">Occupation:</span><span class="spndata">{{row[15]}}</span></div>
+          </div>
+          <div class="row myrow">
+          <div class="col-3"><span class="spnhead">ContactNo:</span><span class="spndata">{{row[16]}}</span></div>
+          <div class="col-3"><span class="spnhead">Category:</span><span class="spndata">{{row[28]}}</span></div>
+          <div class="col-3"><span class="spnhead">Cast:</span><span class="spndata">{{row[22]}}</span></div>
+          <div class="col-3"><span class="spnhead">AadharNo:</span><span class="spndata">{{row[23]}}</span></div>
+          </div>
+          <div class="row myrow">
+          <div class="col-3"><span class="spnhead">Post:</span><span class="spndata">{{row[18]}}</span></div>
+          <div class="col-3"><span class="spnhead">Tehsil:</span><span class="spndata">{{row[19]}}</span></div>
+          <div class="col-3"><span class="spnhead">District:</span><span class="spndata">{{row[29]}}</span></div>
+          <div class="col-3"><span class="spnhead">Address:</span><span class="spndata">{{row[21]}}</span></div>
+          </div>
+          <div class="row myrow">
+            <div class="col-3"><span class="spnhead">RationCard:</span><span class="spndata">{{row[24]}}</span></div>
+            <div class="col-4"><span class="spnhead">Government Scheme:</span><span class="spndata">{{row[30]}}</span></div>
+          </div>
+          <div class="row myrow">
+            <div class="col-3"><span class="spnhead">Admission Date:</span><span class="spndata">{{row[25].strftime('%d/%m/%Y')}}</span></div>
+            <div class="col-3"><span class="spnhead">Ward:</span><span class="spndata">{{row[26]}}</span></div>
+          <div class="col-3"><span class="spnhead">BedNo:</span><span class="spndata">{{row[27]}}</span></div>
+          </div>
+    </div>
+    {%endfor%}
+
+    {%if ack!=''%}
+    <div class="row myrow" style="padding-bottom:3px;">
+      <div class="col-4"></div>
+      <p style="color:red;font-weight:bold;">{{ack}}</p>
+    </div>
+    {%endif%}
+    <form action="keepIpdBilling" method="POST">
+      <input type="date" name="dischargedate" id="disdate" style="display:none;">
+      <input type="text" name="dischargetime" id="distime" style="display:none;">
+    {% for row in ds%}
+    <input type="hidden" name="wrd_id" value="{{row[32]}}">
+    <input type="hidden" name="regno" value="{{row[1]}}">
+    <input type="hidden" name="ipdid" value="{{row[33]}}">
+    <input type="hidden" name="bid" value="{{row[34]}}">
+    <div class="col-12" style="background-color:#FA8072;">
+        <div class="col-3"></div>
+        <div class="col-2">
+          <span class="spnhead" style="color:white;">Total Amount:</span>
+          <span class="spnhead"  id="totalamount" style="color:white;"></span>
+          <input type="text" name="totalamounttxt" id="totalamounttxt" style="display:none;">
+        </div>
+        <div class="col-3">
+          <span class="spnhead" style="color:white;">Advance Amount:</span>
+          <span class="spnhead"  id="admoney" style="color:white;">{{row[31]}}</span>
+          <input type="text" id="advancetxt" style="display:none;">
+        </div>
+        <div class="col-2">
+          <span class="spnhead" style="color:white;font-size:23px;">Net Amount:</span>
+          <span class="spnhead"  id="netamount" style="color:white;font-size:23px;"></span>
+          <input type="text" name="netamounttxt" id="netamounttxt" style="display:none;">
+        </div>
+      </div>
+      {%endfor%}
+
+    <div class="row myrow">
+      <div class="col-2">
+        <span class="spnhead" style="color:black;">Bed Charges:</span>
+        <input type="text" name="bed" id="bed" value="0" size=14 style="text-align:center;"  onblur="grandTotal()" required>
+      </div>
+      <div class="col-2">
+        <span class="spnhead" style="color:black;">Service Charges:</span>
+        <input type="text" name="service" id="service" value="0"  size=18 style="text-align:center;" onblur="grandTotal()" required>
+      </div>
+      <div class="col-2">
+        <span class="spnhead" style="color:black;">Other Charges:</span>
+        <input type="text" name="others" id="others" value="0" size=16 style="text-align:center;" onblur="grandTotal()" required>
+      </div>
+      <div class="col-2">
+        <span class="spnhead" style="color:black;">Rebate Amount:</span>
+        <input type="text" name="rebate" id="rebate" value="0" size=17 style="text-align:center;" onblur="grandTotal()" required>
+      </div>
+      <div class="col-2" >
+        <span class="spnhead" style="color:black;">Payment Status:</span>
+        <select name="paymentstatus" style="width:70%" required>
+          <option value="">--Select--</option>
+          <option value="Paid">Paid</option>
+          <option value="Not Paid">Not Paid</option>
+          <option value="Free">Free</option>
+        </select>
+      </div>
+      <div class="col-2">
+        <span class="spnhead" style="color:black;">Received By:</span>
+        <input type="text" name="received"  size=17  required>
+      </div>
+    </div>
+    <div class="row myrow">
+    <div class="col-5"></div>
+    <div class="col-2">
+      <span class="spnhead">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+      <input type="submit" value="Save" style="width:70%;">
+    </div>
+    </div>
+
+    <div class="row myrow"><div class="col-4"></div></div>
+    <div class="row myrow">
+      <div class="col-12">
+        <div class="col-3"></div>
+
+    </div>
+    </div>
+    <div class="row myrow"><div class="col-4"></div></div>
+
+{%if mdata|length!=0%}
+    <div class="col-12" id="rowdiv">
+      <div class="col-2">
+        <span class="spnhead" style="color:white;">Medicine(s)</span>
+      </div>
+      <div class="col-8"></div>
+    </div>
+
+    <div class="row myrow">
+        <table border=1 style="width:98.9%;">
+          <tr style="background-color:#E7E7EB;">
+            <th>Medicine Type</th>
+            <th>Medicine Name</th>
+            <th>Total Quantity</th>
+            <th>Unit Price</th>
+            <th style="width:20%;">Amount</th>
+          </tr>
+          {%for row in mdata%}
+          <tr>
+            <td>{{row[0]}}</td>
+            <td>{{row[1]}}</td>
+            <td>{{row[2]}} {{row[3]}}(s)</td>
+            <td>{{row[4]}}</td>
+            <td><b>{{row[5]}}</b></td>
+          </tr>
+          {%endfor%}
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><b>Total Amount</b></td>
+            <td><input type="text" name="medicinetotal" id="medicinetotal" value="{{mtotal[0][0]}}" style="border:2px solid #ADFF2F;font-weight:bold;text-align:center;color:green;">
+            </td>
+          </tr>
+        </table>
+    </div>
+{%else%}
+<input type="hidden" name="medicinetotal" id="medicinetotal" value="0">
+{%endif%}
+
+{%if isdata|length!=0%}
+    <div class="col-12" style="background-color:#D3D3D3;"><div class="col-1"></div></div>
+    <div class="col-12" id="rowdiv">
+      <div class="col-4">
+      	<span class="spnhead" style="color:white;">Injection(s) &medicine Salin(s)</span>
+      </div>
+      <div class="col-8"></div>
+    </div>
+
+    <div class="row myrow">
+        <table border=1 style="width:98.9%;">
+          <tr style="background-color:#E7E7EB;">
+            <th>Injection/Salin Name</th>
+            <th>Injection/Salin Type</th>
+            <th>Total Quantity</th>
+            <th>Unit Price</th>
+            <th style="width:20%;">Amount</th>
+          </tr>
+          {%for row in isdata%}
+          <tr>
+            <td>{{row[0]}}</td>
+            <td>{{row[1]}}</td>
+            <td>{{row[2]}} {{row[3]}}(s)</td>
+            <td>{{row[4]}}</td>
+            <td><b>{{row[5]}}</b></td>
+          </tr>
+          {%endfor%}
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><b>Total Amount</b></td>
+            <td><input type="text" name="intaketotal" id="intaketotal" value="{{istotal[0][0]}}" style="border:2px solid #ADFF2F;font-weight:bold;text-align:center;color:green;">
+            </td>
+          </tr>
+        </table>
+    </div>
+{%else%}
+<input type="hidden" name="intaketotal" id="intaketotal" value="0">
+{%endif%}
+
+{%if isudata|length!=0%}
+  <div class="col-12" style="background-color:#D3D3D3;"><div class="col-1"></div></div>
+  <div class="col-12" id="rowdiv">
+      <div class="col-2">
+      	<span class="spnhead" style="color:white;">Insulin(s) [Sugar]</span>
+      </div>
+    </div>
+
+    <div class="row myrow">
+        <table border=1 style="width:98.9%;">
+          <tr style="background-color:#E7E7EB;">
+            <th>Insulin Name</th>
+            <th>Drug Type</th>
+            <th>Total Quantity</th>
+            <th>Unit Price</th>
+            <th style="width:20%;">Amount</th>
+          </tr>
+          {%for row in isdata%}
+          <tr>
+            <td>{{row[0]}}</td>
+            <td>{{row[1]}}</td>
+            <td>{{row[2]}} {{row[3]}}(s)</td>
+            <td>{{row[4]}}</td>
+            <td><b>{{row[5]}}</b></td>
+          </tr>
+          {%endfor%}
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><b>Total Amount</b></td>
+              <td><input type="text" name="isutotal" id="isutotal" value="{{isutotal[0][0]}}" style="border:2px solid #ADFF2F;font-weight:bold;text-align:center;color:green;">
+              </td>
+            </tr>
+        </table>
+    </div>
+{%else%}
+<input type="hidden" name="isutotal" id="medicinetotal" value="0">
+{%endif%}
+
+{%if poidata|length!=0%}
+  <div class="col-12" style="background-color:#D3D3D3;"><div class="col-1"></div></div>
+  <div class="col-12" id="rowdiv">
+      <div class="col-2">
+        <span class="spnhead" style="color:white;">Injection(s) [Poision]</span>
+      </div>
+    </div>
+
+    <div class="row myrow">
+        <table border=1 style="width:98.9%;">
+          <tr style="background-color:#E7E7EB;">
+            <th>Injection Name</th>
+            <th>Drug Type</th>
+            <th>Total Quantity</th>
+            <th>Unit Price</th>
+            <th style="width:20%;">Amount</th>
+          </tr>
+          {%for row in poidata%}
+          <tr>
+            <td>{{row[0]}}</td>
+            <td>{{row[1]}}</td>
+            <td>{{row[2]}} {{row[3]}}(s)</td>
+            <td>{{row[4]}}</td>
+            <td><b>{{row[5]}}</b></td>
+          </tr>
+          {%endfor%}
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><b>Total Amount</b></td>
+            <td><input type="text" name="poisontotal" id="poitotal" value="{{poitotal[0][0]}}" style="border:2px solid #ADFF2F;font-weight:bold;text-align:center;color:green;">
+            </td>
+          </tr>
+        </table>
+    </div>
+{%else%}
+<input type="hidden" name="poisontotal" id="poitotal" value="0">
+{%endif%}
+
+{%if condata|length!=0%}
+  <div class="col-12" style="background-color:#D3D3D3;"><div class="col-1"></div></div>
+  <div class="col-12" id="rowdiv">
+
+        <div class="col-2">
+          <span class="spnhead" style="color:white;">Consumable(s)</span>
+        </div>
+      </div>
+
+      <div class="row myrow">
+          <table border=1 style="width:98.9%;">
+            <tr style="background-color:#E7E7EB;">
+              <th>Consumable Name</th>
+              <th>Type</th>
+              <th>Total Quantity</th>
+              <th>Unit Price</th>
+              <th style="width:20%;">Amount</th>
+            </tr>
+            {%for row in condata%}
+            <tr>
+              <td>{{row[0]}}</td>
+              <td>{{row[1]}}</td>
+              <td>{{row[2]}}</td>
+              <td>{{row[3]}}</td>
+              <td><b>{{row[4]}}</b></td>
+            </tr>
+            {%endfor%}
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><b>Total Amount</b></td>
+              <td><input type="text" name="constotal" id="contotal" value="{{contotal[0][0]}}" style="border:2px solid #ADFF2F;font-weight:bold;text-align:center;color:green;">
+              </td>
+            </tr>
+          </table>
+      </div>
+{%else%}
+<input type="hidden" name="constotal" id="contotal" value="0">
+{%endif%}
+
+<div class="col-12" style="background-color:yellow;"><div class="col-1"></div></div>
+{%if surdata|length!=0%}
+  <div class="col-12" style="background-color:#D3D3D3;"><div class="col-1"></div></div>
+  <div class="col-12" id="rowdiv">
+        <div class="col-2">
+          <span class="spnhead" style="color:white;">Surgery</span>
+        </div>
+      </div>
+      <div class="row myrow">
+          <table border=1 style="width:98.9%;">
+            <tr style="background-color:#E7E7EB;">
+              <th>Surgery Name</th>
+              <th>Surgery Type</th>
+              <th style="width:20%;">Amount</th>
+            </tr>
+            {%for row in surdata%}
+            <tr>
+              <td>{{row[0]}}</td>
+              <td>{{row[1]}}</td>
+              <td><b>{{row[2]}}</b></td>
+            </tr>
+            {%endfor%}
+            <tr>
+              <td></td>
+              <td><b>Total Amount</b></td>
+              <td><input type="text" name="surgerytotal" id="surtotal" value="{{stotal[0][0]}}" style="border:2px solid #ADFF2F;font-weight:bold;text-align:center;color:green;">
+              </td>
+            </tr>
+          </table>
+      </div>
+{%else%}
+<input type="hidden" name="surgerytotal" id="surtotal" value="0">
+{%endif%}
+{%if ldata|length!=0%}
+      <div class="col-12" style="background-color:#D3D3D3;"><div class="col-1"></div></div>
+      <div class="col-12" id="rowdiv">
+
+        <div class="col-2">
+          <span class="spnhead" style="color:white;">Lab Checkup(s)</span>
+        </div>
+      </div>
+      <div class="row myrow">
+          <table border=1 style="width:98.9%;">
+            <tr style="background-color:#E7E7EB;">
+              <th>Test Type</th>
+              <th>Test Name</th>
+              <th style="width:20%;">Amount</th>
+            </tr>
+            {%for row in ldata%}
+            <tr>
+              <td>{{row[0]}}</td>
+              <td>{{row[1]}}</td>
+              <td>{{row[2]}}</td>
+            </tr>
+            {%endfor%}
+            <tr>
+              <td></td>
+              <td><b>Total Amount</b></td>
+              <td><input type="text" name="labtotal" id="ltotal" value="{{ltotal[0][0]}}"style="border:2px solid #ADFF2F;font-weight:bold;text-align:center;color:green;">
+              </td>
+            </tr>
+          </table>
+      </div>
+{%else%}
+<input type="hidden" name="labtotal" id="labtotal" value="0">
+{%endif%}
+
+{%if xdata|length!=0%}
+      <div class="col-12" style="background-color:#D3D3D3;"><div class="col-1"></div></div>
+      <div class="col-12" id="rowdiv">
+        <div class="col-2">
+          <span class="spnhead" style="color:white;">Xray(s)</span>
+        </div>
+      </div>
+
+      <div class="row myrow">
+          <table border=1 style="width:98.9%;">
+            <tr style="background-color:#E7E7EB;">
+              <th>Xray Type</th>
+              <th>Xray Name</th>
+              <th style="width:20%;">Amount</th>
+            </tr>
+            {%for row in xdata%}
+              <tr>
+                <td>{{row[0]}}</td>
+                <td>{{row[1]}}</td>
+                <td>{{row[2]}}</td>
+              </tr>
+            {%endfor%}
+            <tr>
+              <td></td>
+              <td><b>Total Amount</b></td>
+              <td><input type="text" name="xraytotal" id="xtotal" value="{{xtotal[0][0]}}" style="border:2px solid #ADFF2F;font-weight:bold;text-align:center;color:green;">
+              </td>
+            </tr>
+          </table>
+      </div>
+    </div>
+{%else%}
+<input type="hidden" name="xraytotal" id="xraytotal" value="0">
+{%endif%}
+
+
+{%if dredata|length!=0%}
+    <div class="col-12" style="background-color:#D3D3D3;"><div class="col-1"></div></div>
+    <div class="col-12" id="rowdiv">
+
+      <div class="col-2">
+        <span class="spnhead" style="color:white;">Dressing(s)</span>
+      </div>
+    </div>
+
+    <div class="row myrow">
+        <table border=1 style="width:98.9%;">
+          <tr style="background-color:#E7E7EB;">
+            <th>Dressing</th>
+            <th style="width:20%;">Amount</th>
+          </tr>
+          {%for row in dredata%}
+            <tr>
+              <td>{{row[0]}}</td>
+              <td>{{row[1]}}</td>
+            </tr>
+          {%endfor%}
+          <tr>
+            <td><b>Total Amount</b></td>
+            <td><input type="text" name="drestotal" id="dretotal" value="{{dretotal[0][0]}}" style="border:2px solid #ADFF2F;font-weight:bold;text-align:center;color:green;">
+            </td>
+          </tr>
+        </table>
+    </div>
+{%else%}
+<input type="hidden" name="drestotal" id="drestotal" value="0">
+{%endif%}
+
+{%if phydata|length!=0%}
+    <div class="col-12" style="background-color:#D3D3D3;"><div class="col-1"></div></div>
+    <div class="col-12" id="rowdiv">
+
+      <div class="col-2">
+        <span class="spnhead" style="color:white;">Physiotherapy(s)</span>
+      </div>
+    </div>
+
+    <div class="row myrow">
+        <table border=1 style="width:98.9%;">
+          <tr style="background-color:#E7E7EB;">
+            <th>Physiotherapy</th>
+            <th style="width:20%;">Amount</th>
+          </tr>
+          {%for row in phydata%}
+            <tr>
+              <td>{{row[0]}}</td>
+              <td>{{row[1]}}</td>
+            </tr>
+          {%endfor%}
+          <tr>
+            <td><b>Total Amount</b></td>
+            <td><input type="text" name="phystotal" id="phytotal" value="{{phytotal[0][0]}}" style="border:2px solid #ADFF2F;font-weight:bold;text-align:center;color:green;">
+            </td>
+          </tr>
+        </table>
+    </div>
+    {%else%}
+    <input type="hidden" name="phystotal" id="phystotal" value="0">
+{%endif%}
+
+</form>
+  </div> <!--- Content --->
+</div><!--- col-12 --->
+<br>
+
+
+
+
+
+
+
+
+{% endblock %}

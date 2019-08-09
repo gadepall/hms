@@ -1,0 +1,265 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+<style>
+#backgrnd{
+ opacity:0.2;
+ color:white;
+}
+.subtitle
+{
+background-color:#F0E68C;
+width: 100%;
+}
+.spnhead{
+  font-size: 20px;
+  font-weight: bold;
+}
+.spndata{
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#head{
+  display:inline;
+}
+#part{
+  display:block;
+}
+
+
+</style>
+<script>
+function showhide(divid,part,divimg){
+    if(($('#'+part).css('display') == 'none')){
+      var degrees=45;
+      $('#'+part).show(500);
+      $('#'+divimg).text();
+    }
+    else if(($('#'+part).css('display') == 'block')){
+      var degrees=-45;
+      $('#'+part).hide(500);
+      $('#'+divimg).text();
+    }
+};
+</script>
+<div class="col-12">
+  <div id="content">
+    {%for row in pinfo%}
+    <div class="titlebox"><span style="color:red;">{{row[1]}} {{row[2]}} {{row[3]}}'s</span> Details</div>
+
+      <div class="col-12 subtitle">
+        <div class="col-2"><span class="spnhead">Regno:</span><span class="spndata">{{row[0]}}</span></div>
+        <div class="col-3"><span class="spnhead">Name:</span><span class="spndata">{{row[1]}} {{row[2]}} {{row[3]}}</span></div>
+        <div class="col-2"><span class="spnhead">Age:</span><span class="spndata">{{row[4]}} {{row[5]}}</span></div>
+        <div class="col-2"><span class="spnhead">Sex:</span><span class="spndata">{{row[6]}}</span></div>
+        <div class="col-3"><span class="spnhead">Gov Scheme:</span><span class="spndata">{{row[7]}}</span></div>
+        {%endfor%}
+      </div>
+
+
+      <div class="col-12">
+          <p  id="head1" style="background-color:#FA8072;color:white;height:30px;padding:5px" onclick="showhide(this.id,'part1','divimg1')">
+            <span id="divimg1" style="font-size:20px;"></span>
+            <span style="font-size:20px;"><b>TREATMENT(s)</b></span>
+          </p>
+          <div  id="part1" style="background-color:#FFEFD5;width:100%;display:none;margin-top:-1%">
+            <table style="width:100%;">
+              <tr style="background-color:#FFD700">
+                <th>Medicine Type</th>
+                <th>Medicine Name</th>
+              </tr>
+              {%for row in mdata%}
+              <tr>
+                <td>{{row[1]}}</td>
+                <td>{{row[0]}}</td>
+              </tr>
+              {%endfor%}
+              {%for row in idata%}
+              <tr>
+                <td>{{row[1]}}</td>
+                <td>{{row[0]}}</td>
+              </tr>
+              {%endfor%}
+
+              {%for row in insudata%}
+              <tr>
+                <td>{{row[1]}}</td>
+                <td>{{row[0]}}</td>
+              </tr>
+              {%endfor%}
+              {%for row in podata%}
+              <tr>
+                <td>{{row[1]}}</td>
+                <td>{{row[0]}}</td>
+              </tr>
+              {%endfor%}
+            </table>
+          </div>
+        </div>
+
+        <div class="col-12">
+            <p  id="head2" style="background-color:#FA8072;color:white;height:30px;padding:5px" onclick="showhide(this.id,'part2','divimg2')">
+              <span id="divimg2" style="font-size:20px;"></span>
+              <span style="font-size:20px;"><b>INVESTIGATION(s)</b></span>
+            </p>
+            <div  id="part2" style="background-color:#FFEFD5;width:100%;display:none;margin-top:-1%">
+              {%if invdata|length!=0%}
+              <table id="testdata" >
+                <tr style="background-color:#FFD700">
+                  <th style="text-align:right;"><span class="spnhead">Sample</span></th>
+                  <th style="text-align:center;"><span class="spnhead">Test</span></th>
+                  <th style="text-align:right;width:1%;padding:1px;border-right:0px solid;"></th>
+                  <th style="text-align:center;border-left:0px solid;"><span class="spnhead">Result</span></th>
+                  <th style="text-align:left;"><span class="spnhead">Unit</span></th>
+                  <th colspan=4 style="text-align:center;"><span class="spnhead">{{invdata[0][2]}} Normal Range</span></th>
+                </tr>
+                {% for trow in testdata %}
+                <tr>
+                  <td style="text-align:right;font-size:16px;font-weight:bold;">{{trow[10]}}</td>
+                  <td style="text-align:center;font-size:16px;">{{trow[2]}}</td>
+                  {%if trow[9]==1%}
+                  <!--TESTING FOR is MALE--->
+                    {%if invdata[0][2] == 'Male'%}
+                      {%if trow[5]|float > trow[3]|float%} <!--Value is less --->
+                        <td style="text-align:right;">
+                          <h4 style="font-size:25px;color:red;"> &#9660; </h4>
+                        </td>
+                        <td style="font-size:16px;text-align:center;border-left:0px solid;">
+                          <span style="font-weight:bold;">{{trow[3]}}</span>
+                        </td>
+                        {%elif trow[5]|float == trow[3]|float%} <!--Value is Equal to min value--->
+                          <td style="border-right:0px solid;"></td>
+                          <td style="font-size:16px;text-align:center;border-left:0px solid;">
+                            <span style="font-weight:bold;">{{trow[3]}}</span>
+                          </td>
+                        {%elif trow[6]|float < trow[3]|float%} <!--Value is More --->
+                          <td style="text-align:right;color:#0000CD;">
+                            <h4 style="font-size:25px;display:inline;">&#9650;</h4>
+                          </td>
+                          <td style="font-size:16px;text-align:center;border-left:0px solid;">
+                            <span style="font-weight:bold;font-style:italic;">{{trow[3]}}</span>
+                          </td>
+                        {%elif trow[6]|float == trow[3]|float%} <!--Value is Equal to Max Value--->
+                          <td style="border-right:0px solid;"></td>
+                          <td style="font-size:16px;text-align:center;border-left:0px solid;">
+                            <span style="font-weight:bold;font-style:italic;color:green;">{{trow[3]}}</span>
+                          </td>
+                        {%else%} <!--Value is Normal--->
+                          <td style="border-right:0px solid;"></td>
+                          <td style="text-align:center;font-size:16px;border-left:0px solid;">{{trow[3]}}</td>
+                        {%endif%}
+                  <!--TESTING FOR is FEMALE--->
+                    {%elif invdata[0][2] == 'Female'%}
+                      {%if trow[7]|float > trow[3]|float%} <!--Value is less --->
+                        <td style="text-align:right;border-right:0px solid;">
+                          <h4 style="font-size:30px;display:inline;color:red;"> &#9660; </h4>
+                        </td>
+                        <td style="font-size:16px;text-align:center;border-left:0px solid;">
+                          <span style="font-weight:bold;">{{trow[3]}}</span>
+                        </td>
+                        {%elif trow[7]|float == trow[3]|float%} <!--Value is Equal to min value--->
+                        equal
+                          <td style="border-right:0px solid;"></td>
+                          <td style="font-size:16px;text-align:center;border-left:0px solid;">
+                            <span style="font-weight:bold;">{{trow[3]}}</span>
+                          </td>
+                      {%elif trow[8]|float < trow[3]|float%} <!--Value is More --->
+                    
+                        <td style="text-align:right;border-right:0px solid;">
+                          <h4 style="font-size:30px;display:inline;color:#0000CD;">&#9650;</h4>
+                        </td>
+                        <td style="font-size:16px;text-align:center;border-left:0px solid;">
+                          <span style="font-weight:bold;font-style:italic;">{{trow[3]}}</span>
+                        </td>
+                        {%elif trow[8]|float == trow[3]|float%} <!--Value is Equal to Max Value--->
+                          <td style="border-right:0px solid;"></td>
+                          <td style="font-size:16px;text-align:center;border-left:0px solid;">
+                            <span style="font-weight:bold;font-style:italic;text-align:center;color:green;">{{trow[3]}}</span>
+                          </td>
+                      {%else%} <!--Value is Normal --->
+                        <td style="border-right:0px solid;"></td>
+                        <td style="text-align:right;font-size:16px;border-left:0px solid;text-align:center;">{{trow[3]}}</td>
+                        {%endif%}
+                    {%endif%}
+                  {%elif trow[9]==0%}
+                  <td></td>
+                  <td style="text-align:right;font-size:16px;border-left:0px solid;">{{trow[3]}}</td>
+                  {%endif%}
+
+                    <td style="text-align:left;font-size:16px;">{{trow[4]}}</td>
+
+                  {%if invdata[0][2] == 'Male'%}
+                    <td  style="text-align:center;font-style: italic;font-size:16px;border-right:1px solid;">{{trow[5]}} - {{trow[6]}}</td>
+                  {%elif invdata[0][2] == 'Female'%}
+                    <td  style="text-align:center;font-style: italic;font-size:16px;border-right:1px solid;">{{trow[7]}} - {{trow[8]}}</td>
+                  {%endif%}
+                </tr>
+                {%endfor%}
+              </table>
+
+              {%else%}
+              <p>No Investigation Report Is Recorded Yet!</p>
+              {%endif%}
+            </div>
+          </div>
+
+          <div class="col-12">
+              <p  id="head3" style="background-color:#FA8072;color:white;height:30px;padding:5px" onclick="showhide(this.id,'part3','divimg3')">
+                <span id="divimg3" style="font-size:20px;"></span>
+                <span style="font-size:20px;"><b>XRAY(s)</b></span>
+              </p>
+              <div  id="part3" style="background-color:#FFEFD5;width:100%;display:none;margin-top:-1%">
+                {%if xinfo|length!=0 %}
+                <table style="width:100%;" >
+                  <tr style="background-color:#FFD700">
+                    <th>Date</th>
+                    <th>Xray</th>
+                    <th>Xray Name</th>
+                    <th>Preview Film</th>
+                  </tr>
+                  {%for row in xinfo%}
+                  <tr>
+                    <td>{{row[0].strftime('%d/%m/%Y')}}</td>
+                    <td>{{row[1]}}</td>
+                    <td>{{row[2]}}</td>
+                    <td style="padding:5px;width:20%;"><a href='/static/XrayUploads/{{row[3]}}' target='_blank' style='text-decoration:none;color:white;'><div style='background-color:#2F4F4F;padding:5px 5px 5px 0px;border-radius:3px;text-align:center;font-weight:bold;'><img src='/static/icon4/eye.png' height='30px' width='30px'>&nbsp;&nbsp;&nbsp;&nbsp;Preview Film</div></a></td>
+                  </tr>
+                  {%endfor%}
+                </table>
+                {%else%}
+                <p>No Xray Report Is Recorded Yet!</p>
+                {%endif%}
+              </div>
+            </div>
+
+            <div class="col-12">
+                <p  id="head4" style="background-color:#FA8072;color:white;height:30px;padding:5px" onclick="showhide(this.id,'part4','divimg4')">
+                  <span id="divimg4" style="font-size:20px;"></span>
+                  <span style="font-size:20px;"><b>SCANNED DOCUMENT(s) - {{dinfo|length}}</b></span>
+                </p>
+                <div  id="part4" style="background-color:#FFEFD5;width:100%;display:none;margin-top:-1%">
+                  <table style="width:100%;" >
+                    <tr style="background-color:#FFD700">
+                      <th>Document Date</th>
+                      <th>Document Source</th>
+                      <th>Document Name</th>
+                      <th>Preview Document</th>
+                    </tr>
+                    {%for row in dinfo%}
+                    <tr>
+                      <td>{{row[0].strftime('%d/%m/%Y')}}</td>
+                      <td>{{row[1]}}</td>
+                      <td>{{row[2]}}</td>
+                      <td style="padding:5px;width:20%;"><a href='/static/docuploads/{{row[3]}}' target='_blank' style='text-decoration:none;color:white;'><div style='background-color:#2F4F4F;padding:5px 5px 5px 0px;border-radius:3px;text-align:center;font-weight:bold;'><img src='/static/icon4/eye.png' height='30px' width='30px'>&nbsp;&nbsp;&nbsp;&nbsp;Preview</div></a></td>
+                    </tr>
+                    {%endfor%}
+                  </table>
+                </div>
+              </div>
+
+
+    <div class="row myrow"><div class="col-2"></div></div>
+  </div> <!--- Content --->
+</div><!--- col-12 --->
+
+{%endblock%}

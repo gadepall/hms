@@ -1,0 +1,1707 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+
+
+<style>
+.subtitle
+{
+background-color:#F0E68C;
+width: 100%;
+}
+.spnhead{
+  font-size: 20px;
+  font-weight: bold;
+}
+.spndata{
+  font-size: 18px;
+  font-weight: bold;
+}
+
+
+		.container{
+			width: 100%;
+      padding-right: 0px;
+      padding-left: 0px;
+      margin-right: auto;
+      margin-left: auto;
+		}
+
+
+
+		ul.tabs{
+			margin: 0px;
+			padding: 0px;
+			list-style: none;
+		}
+		ul.tabs li{
+			background: none;
+			display: inline-block;
+			padding: 8px 15px;
+      padding-right:30px;
+      cursor: pointer;
+      color: #222;
+      font-size: 18px;
+		}
+
+		ul.tabs li.current{
+			background: #F0FFFF;
+			color: #222;
+      font-weight: bold;
+		}
+
+		.tab-content{
+			display: none;
+			background: #F0FFFF;
+			padding: 15px;
+		}
+
+		.tab-content.current{
+			display: inherit;
+		}
+
+/* TABLE CSS FOR MEDICINE START */
+
+    /* GENERAL CODE */
+    #wardmedicine {
+      font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    #wardmedicine td, #wardmedicine th {
+      padding: 8px;
+    }
+
+    #wardmedicine td{
+      padding: 8px;
+      font-size: 15px;
+    }
+    #wardmedicine tr:nth-child(even){background-color: #f2f2f2;}
+
+    #wardmedicine tr:hover {background-color: #ddd;}
+
+    #wardmedicine thead,th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: center;
+      color: white;
+      font-size: 17px;
+    }
+
+    /* GENERAL CODE */
+
+
+    /* SEPERATE CODE */
+    #wardmedicine thead,th {
+      background-color:#778899;
+    }
+    /* SEPERATE CODE */
+
+/* TABLE CSS FOR MEDICINE END */
+
+
+/* TABLE CSS FOR TPR START */
+
+    /* GENERAL CODE */
+    #wardtpr {
+      font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+      }
+
+    #wardtpr td, #wardtpr th {
+      padding: 8px;
+      }
+
+    #wardtpr td{
+      padding: 8px;
+      font-size: 15px;
+      }
+    #wardtpr tr:nth-child(even){background-color: #f2f2f2;}
+
+    #wardtpr tr:hover {background-color: #ddd;}
+
+    #wardtpr thead,th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: center;
+      color: white;
+      font-size: 17px;
+      }
+
+    /* GENERAL CODE */
+
+
+    /* SEPERATE CODE */
+    #wardtpr thead,th {
+        background-color:#778899;
+    }
+    /* SEPERATE CODE */
+
+/* TABLE CSS FOR TPR START */
+
+/* TABLE CSS FOR INTAKE OUTPUT CHART START*/
+
+/* GENERAL CODE */
+#intakeouputchart {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  }
+
+#intakeouputchart td, #intakeouputchart th {
+  padding: 8px;
+  }
+
+#intakeouputchart td{
+  padding: 8px;
+  font-size: 15px;
+  }
+#intakeouputchart tr:nth-child(even){background-color: #f2f2f2;}
+
+#intakeouputchart tr:hover {background-color: #ddd;}
+
+#intakeouputchart thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+  }
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+#intakeouputchart thead,th {
+    background-color:#778899;
+}
+/* SEPERATE CODE */
+
+/* TABLE CSS FOR INTAKE OUTPUT CHART END*/
+
+
+/* TABLE CSS FOR TPR START */
+
+/* TABLE CSS FOR INTAKE OUTPUT CHART START*/
+
+/* GENERAL CODE */
+#conchart {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  }
+
+#conchart td, #conchart th {
+  padding: 8px;
+  }
+
+#conchart td{
+  padding: 8px;
+  font-size: 15px;
+  }
+#conchart tr:nth-child(even){background-color: #f2f2f2;}
+
+#conchart tr:hover {background-color: #ddd;}
+
+#conchart thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+  }
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+#conchart thead,th {
+    background-color:#778899;
+}
+/* SEPERATE CODE */
+
+/* TABLE CSS FOR INTAKE OUTPUT CHART END*/
+
+
+
+</style>
+
+<script>
+$(document).ready(function(){
+	$('ul.tabs li').click(function(){
+		var tab_id = $(this).attr('data-tab');
+
+		$('ul.tabs li').removeClass('current');
+		$('.tab-content').removeClass('current');
+
+		$(this).addClass('current');
+		$("#"+tab_id).addClass('current');
+	});
+});
+
+
+
+
+
+// INSERT DATA USING AJAX
+$(document).ready(function () {
+$('form').submit(function (e) {
+  var formurl = $(this).attr('action');
+        $.ajax({
+            type: "POST",
+            url: $(this).attr('action'), // url to post to, from the forms action
+            data: $(this).serialize(),
+            success: function (data) {
+
+              if(formurl == 'insertWardMedicine' && data['ack']=='DATA SUCCESSFULLY STORED!'){
+                $("#mdate").val('');
+                $("#givenby").val('');
+                document.getElementById('wmack').innerHTML = data['ack'];
+                $("#wmsave").attr("disabled", true);
+              }
+              else if (formurl == 'InsertNurTPR' && data['ack']=='DATA SUCCESSFULLY STORED!'){
+                document.getElementById('tprack').innerHTML = data['ack'];
+                $("#tprSubmit").attr("disabled", true);
+              }
+              else if (formurl == 'InsertWardIntake' && data['ack']=='DATA SUCCESSFULLY STORED!'){
+                document.getElementById('inack').innerHTML = data['ack'];
+                $("#insubmit").attr("disabled", true);
+              }
+              else if(formurl == 'insertWardConsume' && data['ack']=='DATA SUCCESSFULLY STORED!'){
+                document.getElementById('cack').innerHTML = data['ack'];
+                $("#csubmit").attr("disabled", true);
+              }
+              else if(formurl == 'insertWardSugar' && data['ack']=='DATA SUCCESSFULLY STORED!'){
+                $("#sdate").val('');
+                $("#stime").val('');
+                $("#sugarlevel").val('');
+                $("#insuline").val('');
+                $("#sdose").val('');
+                $("#sgivenby").val('');
+                document.getElementById('sack').innerHTML = data['ack'];
+              }
+              else if(formurl == 'insertWardDressing' && data['ack']=='DATA SUCCESSFULLY STORED!'){
+                document.getElementById('dressingack').innerHTML = data['ack'];
+                $("#dressingsave").attr("disabled", true);
+
+              }
+              else if(formurl == 'insertNurTherapy' && data['ack']=='DATA SUCCESSFULLY STORED!'){
+                document.getElementById('therapyack').innerHTML = data['ack'];
+                $("#therapysave").attr("disabled", true);
+
+              }
+            alert(data['ack']);
+            }
+        });
+        e.preventDefault(); // block the traditional submission of the form.
+    });
+  });
+</script>
+
+<div class="col-12">
+  <div id="content">
+    <div style="text-align:center" class="titlebox">{{wname}}
+      <div style="text-align:right;display:inline;border:2px solid #000080;padding:6px;border-radius:3px;"><a href="WardLogin" style="text-decoration:none;color:green;font-size:30px;color:#000080"><img src="static/icon4/home.svg" height="40px" width="40px"></a></div>
+    </div>
+    <div class="row" style="padding-bottom:1px;"></div>
+    <div class="col-12 subtitle">
+      {%for row in pdata%}
+      <div class="col-2"><span class="spnhead">Regno:</span><span class="spndata"> {{row[0]}}</span></div>
+      <div class="col-3"><span class="spnhead">Name:</span><span class="spndata"> {{row[1]}} {{row[2]}} {{row[3]}}</span></div>
+      <div class="col-2"><span class="spnhead">Sex:</span><span class="spndata"> {{row[6]}}</span></div>
+      <div class="col-2"><span class="spnhead">Age:</span><span class="spndata"> {{row[4]}} {{row[5]}}</span></div>
+      <div class="col-3"><span class="spnhead">Admission Date:</span><span class="spndata"> {{row[7].strftime('%d/%m/%Y')}}</span></div>
+      <div class="col-3"><span class="spnhead">Complaint:</span><span class="spndata"> {{row[8]}}</span></div>
+      {%endfor%}
+    </div>
+
+    <div class="row" style="padding-bottom:2px;"></div>
+    <div class="container">
+    	<ul class="tabs">
+        <li class="tab-link current" data-tab="tab-0">Medicine Chart</li>
+        <li class="tab-link" data-tab="tab-1">TPR Chart</li>
+        <li class="tab-link" data-tab="tab-2">Intake Output Chart</li>
+        <li class="tab-link" data-tab="tab-3">Consumable</li>
+        <li class="tab-link" data-tab="tab-4">Sugar Chart</li>
+        <li class="tab-link" data-tab="tab-5">Dressing</li>
+        <li class="tab-link" data-tab="tab-6">Therapy</li>
+      </ul>
+    </div>
+
+<!---------------------- Medicine Chart Starts -------------------------------->
+
+<div id="tab-0" class="tab-content current">
+  <form action="insertWardMedicine" method="POST">
+    <div class="row myrow">
+      <div class="col-2" ></div>
+      <div class="col-2" >
+        &nbsp;<span class="texttule">Date :</span><br>
+        <input type="date" name="mdate" id="mdate" required>
+      </div>
+      <div class="col-3">
+        <span class="texttule">Given By :</span><br>
+        <input type="text" name="givenby" placeholder="Given By" id="givenby" class="alphaonly" required>
+      </div>
+    </div>
+
+    <div class="row myrow"><div class="col-3" ></div></div>
+
+    <div class="row myrow">
+      <div class="col-2" ></div>
+      <div class="col-2"><span class="texttule">Drug Type</span><br>
+        <select name="ddrugtype" id="drugtype" onchange="showDose();" required>
+          <option value="">---Select---</option>
+          <option value="Tablet">Tablet</option>
+          <option value="Capsule">Capsule</option>
+          <option value="Syrup">Syrup</option>
+          <option value="Injection">Injection</option>
+          <option value="Drop">Drop</option>
+          <option value="Ointment">Ointment</option>
+        </select>
+      </div>
+      <div class="col-2">
+        <div class="ui-widget">
+          <span class="texttule">Drug Name</span>
+          <input type="text" name="drugname" id="drugname" placeholder="Medicine Name" onblur="showData(this);" onfocus="resetData();" >
+          <p id="msg" style="color:red;font-weight:bold;"></p>
+        </div>
+      </div>
+
+      <div class="col-1">
+        <span class="texttule">Schedule</span>
+        <select name="dschedule" id="schedule" onchange="ShowDoseUnit()">
+          <option value=" ">---Select---</option>
+          <option value="Immediate">START</option>
+          <option value="ODS">ODS</option>
+          <option value="BDS">BDS</option>
+          <option value="TDS">TDS</option>
+          <option value="QDS">QDS</option>
+          <option value="EAD">EAD</option>
+          <option value="SOS">SOS</option>
+          <option value="HS">HS</option>
+          <option value="5HOURS">5 HOURS</option>
+        </select>
+      </div>
+
+      <div class="col-2" >
+        <div id="doseunitdiv">
+          <!---data coming from javascript-->
+        </div>
+      </div>
+
+        <div class="col-1" style="text-align:left;">
+          <span class="texttule" >ADD</span><br>
+          <div class="add-row" id="add-row-med"  style="display:inline;border:1px solid black;padding:4px 25px 5px 25px;background-color:#8FBC8F;"><img src="../static/icon4/plus.png" title="Insert"></div>
+        </div>
+        &nbsp;&nbsp;
+        <div class="col-1" style="text-align:left;">
+          <span class="texttule">Remove</span><br>
+          <div class="delete-row" id="delete-row-med"  style="display:inline;border:1px solid black;padding:4px 25px 5px 25px;background-color:#8FBC8F;"><img src="../static/icon4/minus.png" title="Remove"></div>
+        </div>
+      </div>
+        <div class="row">
+          <div class="col-12">
+              <div style="display:none;">
+                <input type="text" name="wardid" id="wardid" value="{{wardid}}">
+                <input type="text" name="wrd_id" id="wrd_id" value="{{wmid}}">
+                <input type="text" name="dmeddet_id" id="meddet_id">
+                <input type="text" name="duprice" id="uprice">
+                <input type="text" name="dhqty" id="hqty">
+                <input type="text" name="dschno" id="schno">
+              </div>
+              <div class="col-12">
+              <table id="wardmedicine">
+                  <thead>
+                      <tr >
+                          <th style="width:5px;padding:0px;"></th>
+                          <th style="width:5px;">DrugType</th>
+                          <th style='width:300px;'>Drug Name</th>
+                          <th style='width:80px;'>Schedule</th>
+                          <th>Time Dose Unit</th>
+                      </tr>
+                  </thead>
+
+                  <tbody>
+                  </tbody>
+              </table>
+            </div>
+            </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="col-5"></div>
+            <input type="submit" value="Save" id='wmsave' style="width:100px;height:40px;font-weight:bold;">
+          </form>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-5"></div>
+          <div class="col-3"><p id="wmack" style="font-weight:bold;color:green;display:inline;"></p></div>
+        </div>
+  </div>
+
+
+<script>
+// GET DRUG NAMES BY AJAX FOR MEDICINE
+$(document).ready(function(){
+        $("#drugname").autocomplete({
+            source: function(request,response)
+            {
+              var drugname=document.getElementById('drugname').value;
+              medtype=$('#drugtype').val();
+              wardid=$('#wardid').val();
+
+              if(medtype ==''){
+                alert("Please Select Drug Type!");
+                $('#drugname').val('');
+                $('#drugtype').focus();
+                return false;
+              }
+                $.ajax({
+                    type:"POST",
+                    url: "getMedicineWard",
+                    data:{"drugname":drugname,"medtype":medtype,"wardid":wardid},
+                    success: function( data )
+                    {
+                      //alert(data['d'][2]);
+                      if (data=="")
+                        $("#msg").text('Requested '+medtype+' Is Not Issued To You Or Quantity Is Zero.');
+                      else{
+                          response(data);
+                          $("#msg").text(' ');
+                      }
+                    }
+                });
+            },
+        });
+    });
+
+function showDose(){
+  $('#wmack').text(' ');
+  $("#doseunitdiv").empty();
+  var dtype=$("#drugtype").val();
+  var sel1="<select id='drugdose'><option value=''>Select</option>"
+  var head="<span class='texttule'>Dose/Unit &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>";
+  for(var i=1;i<=2000;i++)
+    sel1=sel1+"<option value="+i/2+">"+i/2+"</option>";
+  if(dtype=='Tablet')
+    txtbox = "<input type='text' id='doseunit' size=3 value='TAB'>";
+  else if (dtype=='Capsule')
+    txtbox = "<input type='text' id='doseunit' size=3 value='CAP'>";
+  else if(dtype=='Syrup' || dtype=='Injection'|| dtype=='Drop')
+    txtbox = "<input type='text' id='doseunit' size=3 value='ML'>";
+  else if(dtype=='Ointment')
+    txtbox = "<input type='text' id='doseunit' size=3 value='PC'>";
+    sel2=sel1+"</select>";
+  $("#doseunitdiv").append(head);
+  $("#doseunitdiv").append(sel2);
+  $("#doseunitdiv").append(txtbox);
+}
+var c=0;
+$(document).ready(function(){
+    $("#add-row-med").click(function(){
+      var count="";
+      var dtype = $("#drugtype").val();
+      var dname = $("#drugname").val();
+      var schedule = $("#schedule").val();
+      var dose = $("#drugdose").val();
+      var dunit = $("#doseunit").val();
+      var mid = $("#meddet_id").val();
+      var uprice = $("#uprice").val();
+      var hqty = $("#hqty").val();
+
+      if(dtype==" "){
+        alert("Please Select Drug Type");
+        return false;
+      }
+      if(dname.length==0){
+        alert("Please Enter Drug Name");
+        return false;
+      }
+      if(schedule==" "){
+        alert("Please Select schedule");
+        return false;
+      }
+      if(dose==0.0){
+        alert("Please Select Drug Dose");
+        return false;none
+      }
+      if(dunit==" "){
+        alert("Please Select Dose Unit");
+        return false;
+      }
+      var totqty=0;
+      if(schedule=='Immediate' || schedule=='ODS'){
+        $("#schno").val(1);
+        count=1;
+        totqty = count*parseFloat(dose);
+      }
+      else if(schedule=='BDS'){
+        $("#schno").val(2);
+        count=2;
+        totqty = count*parseFloat(dose);
+      }
+      else if(schedule=='TDS'){
+        $("#schno").val(3);
+        count=3;
+        totqty = count*parseFloat(dose);
+      }
+      else if(schedule=='QDS'){
+        $("#schno").val(4);
+        count=4;
+        totqty = count*parseFloat(dose);
+      }
+      if (dtype=="Tablet"){
+        if(totqty>hqty){
+          alert("You Have Only "+hqty+" Tables You Are Entering "+totqty);
+          return false;
+        }
+      }
+      if(dtype=="Capsule"){
+        if(totqty>hqty){
+          alert("You Have Only "+hqty+" Capsule You Are Entering "+totqty);
+          return false;
+        }
+      }
+      var remqty = hqty-totqty;
+      var schno = $("#schno").val();
+        mark = "";
+        var chk = "<tr><td><input type='checkbox' name='record' style='width:30px;height:30px;'></td>";
+        mark = mark + chk
+        var dtype = "<td><input type='text' name='drugtype' value='"+dtype+"' style='width:100px;' readonly></td>";
+        mark = mark + dtype;
+        var dname = "<td><input type='text' name='drugname' value='"+dname+"' style='width:300px;' readonly></td>";
+        mark = mark + dname;
+        var schedule = "<td><input type='text' name='schedule' value='"+schedule+"' style='width:80px;' readonly></td>";
+        mark = mark + schedule;
+        var schedule = "<td>";
+        var tdata = '';
+        for(var i=0;i<count;i++){
+        var tdata =tdata+"<div style='border:2px solid grey;display: inline;height:40px;padding:7px 1px 7px 1px;'><input type='time' name='mtime' value='"+schedule+"' required> <input type='text' name='drugdose' value='"+dose+"' style='width:40px;'> <input name='doseunit' value='"+dunit+"' style='width:40px;'></div>&nbsp;";
+        }
+        schedule=schedule+tdata+"</td>";
+        mark = mark + schedule;
+        var mid = "<td style='display:none;'><input type='text' name='mid' value='"+mid+"' style='width:80px;' readonly></td>";
+        mark = mark + mid;
+        var uprice = "<td style='display:none;'><input type='text' name='unitprice' value='"+uprice+"' style='width:80px;' readonly></td>";
+        mark = mark + uprice;
+        var hqty = "<td style='display:none;'><input type='text' name='handqty' value='"+hqty+"' style='width:80px;' readonly></td>";
+        mark = mark + hqty;
+        var schno = "<td style='display:none;'><input type='text' name='schno' value='"+schno+"' style='width:80px;' readonly></td>";
+        mark = mark + schno;
+        var tq = "<td style='display:none;'><input type='text' name='remqty' value='"+remqty+"' style='width:80px;' readonly></td></tr>";
+        mark = mark + tq;
+        $("#wardmedicine tbody").append(mark);
+        c=c+1;
+        $("#drugtype").prop('selectedIndex',0);
+        $("#drugname").val('');
+        $("#schedule").prop('selectedIndex',0);
+        $("#drugdose").prop('selectedIndex',0);
+        $("#doseunit").prop('selectedIndex',0);
+
+    });
+
+    // Find and remove selected table rows
+    $("#delete-row-med").click(function(){
+        $("#wardmedicine tbody").find('input[name="record"]').each(function(){
+          if($(this).is(":checked")){
+                $(this).parents("tr").remove();
+                c=c-1;
+            }
+        });
+    });
+});
+function showData(idval)
+{
+  var idval = idval.value;
+  console.log(idval);
+  var arr = idval.split(">");
+  $('#drugname').val(arr[0]);
+  $('#hqty').val(arr[2]);
+  $('#uprice').val(arr[3]);
+  $('#meddet_id').val(arr[4]);
+  if($("#meddet_id").val()==''){
+      $("#drugname").css("background-color", "red");
+  }
+}
+function resetData(){
+  $("#drugname").val('');
+  $("#drugname").css("background-color", "white");
+  $('#msg').text('');
+
+}
+</script>
+
+<!------------------------- Medicine Chart Ends ------------------------------->
+
+<!------------------------ TPR CHART STARTS ----------------------------------->
+
+<div id="tab-1" class="tab-content">
+  <form action="InsertNurTPR" method="POST">
+    <input type="text" name="wardid" id="wardid" value="{{wardid}}" style="display:none;">
+    <input type="text" name="wrd_id" id="wrd_id" value="{{wmid}}" style="display:none;">
+
+  <div class="row myrow">
+    <div class="col-2" ></div>
+    <div class="col-2" >
+      <span class="texttule">Date :</span>
+      <input type="date" name="tpr_date" required>
+    </div>
+
+    <div class="col-3">
+      <span class="texttule">Registered By :</span>
+      <input type="text" name="tpr_givenby" placeholder="Registered By" class="alphaonly" required>
+    </div>
+  </div><!-- row -->
+  <br>
+  <div class="row myrow" >
+    <div class="col-1"></div>
+
+    <div class="col-1" >
+      <span class="texttule">Time :</span>
+      <input type="time" name="time" id="tpr_time">
+    </div>
+
+      <div class="col-1" style="margin-left:10px">
+        <span class="texttule">Temperature</span>
+        <input type="text" name="temp" id="tpr_temp" placeholder="Temperature" style="width:90px;" class="spalphanum">
+      </div>
+
+      <div class="col-1" style="margin-left:20px">
+
+        <span class="texttule">Respiration</span>
+        <input type="text" name="respiration" id="tpr_respiration" placeholder="Respiration" style="width:90px;" class="numeric">
+      </div>
+
+
+      <div class="col-2" style="margin-left:30px">
+        <span class="texttule">Urine Passed</span><br>
+        <select name="urine" id="tpr_urine">
+          <option value="">--Select--</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+
+
+        <div class="col-2" style="margin-left:-80px">
+        <span class="texttule">Stool Passed</span><br>
+        <select name="stool" id="tpr_stool">
+          <option value="">--Select--</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+
+
+
+      <div class="col-2" style="margin-left:-80px">
+        <span class="texttule">SPO<sub>2</sub></span><br>
+        <input type="text" name="spo2" id="tpr_spo2" placeholder="SPO2" class="numeric" style="width:90px;">
+      </div>
+
+      <div class="col-2" style="margin-left:-80px;">
+        <span class="texttule">Weight</span><br>
+        <input type="text" name="weight" id="tpr_weight" placeholder="Weight" style="width:100px;" class="numeric">
+      </div>
+
+      <div class="col-1" style="text-align:center;margin-left:-130px;">
+        <span class="texttule" >ADD</span>
+        <div class="add-row" id="add-row-tpr" style="display:inline;border:1px solid black;padding:4px 25px 5px 25px;background-color:#8FBC8F;"><img src="../static/icon4/plus.png" title="Insert"></div>
+      </div>
+
+      <div class="col-1" style="text-align:center;margin-left:-40px;">
+        <span class="texttule">Remove</span>
+        <div class="delete-row" id="delete-row-tpr" style="display:inline;border:1px solid black;padding:4px 25px 5px 25px;background-color:#8FBC8F;"><img src="../static/icon4/minus.png" title="Remove"></div>
+      </div>
+  </div>
+
+  <div class="row"><div class="col-3" ></div></div>
+      <div class="row">
+        <div class="col-12">
+          <table id="wardtpr">
+            <thead>
+                <tr>
+                    <th style="width:5px;padding:0px;"></th>
+                    <th>Time</th>
+                    <th>Temperature</th>
+                    <th>Respiration</th>
+                    <th>Urine Passed</th>
+                    <th>Stool Passed</th>
+                    <th>SPO-2</th>
+                    <th>Weight</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="col-5"></div>
+          <input type="submit" value="Save" id="tprSubmit" style="width:100px;height:40px;font-weight:bold;">
+        </div>
+        <p id="tprack" style="font-weight:bold;color:green;display:inline;"></p>
+      </div>
+  </form>
+</div>
+
+<script>
+
+  $(document).ready(function(){
+    $("#add-row-tpr").click(function(){
+      var time = $("#tpr_time").val();
+      var temp = $("#tpr_temp").val();
+      var respiration = $("#tpr_respiration").val();
+      var urine = $("#tpr_urine").val();
+      var stool = $("#tpr_stool").val();
+      var spo2 = $("#tpr_spo2").val();
+      var weight = $("#tpr_weight").val();
+
+      mark = "";
+
+      var chk = "<tr><td><input type='checkbox' name='record' style='width:30px;height:30px;'></td>";
+      mark = mark + chk;
+
+      var time = "<td><input type='time' name='tpr_time' value='"+time+"' style='max-width:100px' readonly></td>";
+      mark = mark + time;
+
+      var temp = "<td><input type='text' name='tpr_temp' value='"+temp+"' style='max-width:100px' readonly></td>";
+      mark = mark + temp;
+
+      var respiration = "<td><input type='text' name='tpr_respiration' value='"+respiration+"' style='max-width:100px' readonly></td>";
+      mark = mark + respiration;
+
+      var urine = "<td><input type='text' name='tpr_urine' value='"+urine+"' style='max-width:100px' readonly></td>";
+      mark = mark + urine;
+
+      var stool = "<td><input type='text' name='tpr_stool' value='"+stool+"'  style='max-width:100px' readonly></td>";
+      mark = mark + stool;
+
+      var spo2 = "<td><input type='text' name='tpr_spo2' value='"+spo2+"'  style='max-width:100px' readonly></td>";
+      mark = mark + spo2;
+
+      var weight = "<td><input type='text' name='tpr_weight' value='"+weight+"'  style='max-width:100px' readonly></td>";
+      mark = mark + weight;
+
+      $("#wardtpr tbody").append(mark);
+      $("#tpr_time").val(' ');
+      $("#tpr_temp").val(' ');
+      $("#tpr_respiration").val(' ');
+      $("#tpr_urine").val(' ');
+      $("#tpr_stool").val(' ');
+      $("#tpr_spo2").val(' ');
+      $("#tpr_weight").val(' ');
+    });
+
+// Find and remove selected table rows
+$("#delete-row-tpr").click(function(){
+  $("#wardtpr tbody").find('input[name="record"]').each(function(){
+    if($(this).is(":checked")){
+      $(this).parents("tr").remove();
+    }
+  });
+});
+});
+
+</script>
+
+<!------------------------ TPR Chart Ends ------------------------------------->
+
+
+
+
+
+
+<!----------------------- Intake Output Chart Starts -------------------------->
+<script>
+// GET DRUG NAMES BY AJAX FOR IVF
+$(document).ready(function(){
+$(function(){
+  $("#intakename").autocomplete({
+      source: function(request,response )
+        {
+          var intake=document.getElementById('intakename').value;
+          wardid=$("#wardid").val();
+            $.ajax({
+                type:"POST",
+                url:"getMedicineWardIntake",
+                data:{"intake":intake,"wardid":wardid},
+                success: function(data)
+                {
+                  if (data=="")
+                    $("#imsg").text('Requested Intake Is Not Issued To You Or Quantity Is Zero.');
+                  else{
+                      response(data);
+                      $("#imsg").text(' ');
+                    }
+                }
+              });
+          },
+    });
+});
+});
+
+function showIntake(idval)
+{
+  var idval = idval.value;
+  console.log(idval);
+  if(idval=="URINE COLLECTED" || idval=="DRAIN COLLECTED" || idval == "N.G.S. COLLECTED" || idval == "MILK")
+  {
+    $('#med_id').val(0);
+    $('#iuprice').val(0);
+  }
+  else{
+    var arr = idval.split(">");
+    $('#intakename').val(arr[0]);
+    $('#med_id').val(arr[4]);
+    $('#iuprice').val(arr[3]);
+    $('#Ihqty').val(arr[2]);
+  }
+}
+
+function resetIntake(intakeid)
+{
+  var intakeid = intakeid.id;
+  $("#"+intakeid).val('');
+  $("#imsg").text('');
+}
+
+</script>
+
+<div id="tab-2" class="tab-content" >
+  <form action="InsertWardIntake" method="POST">
+          <div class="row myrow">
+            <div class="col-3"></div>
+            <div class="col-2" >
+              <span class="texttule">Date:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+              <input type="date" name="idate" id="indate" required>
+            </div>
+            <div class="col-2">
+              <span class="texttule">Given By:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+              <input type="text" name="igivenby" placeholder="Given By" class="alphaonly" required>
+            </div>
+            <div class="col-2">
+              <span class="texttule">Select Intake:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+              <select name="iintakechart" id="intakechart" onchange="changeIntake()">
+                <option value=" ">--Select--</option>
+                <option value="IVF">I.V.F</option>
+                <option value="Milk">Milk</option>
+                <option value="Urine">Urine</option>
+                <option value="Drain">Drain</option>
+                <option value="NGS">N.G.S</option>
+              </select>
+            </div>
+          </div>
+
+          <!--- CHART FOR I.V.F --->
+          <div class="row myrow" id="ivf" style="display:none;">
+            <div class="col-3"></div>
+            <div class="col-2">
+              <span class="texttule">Time:</span><br>
+              <input type="time" name="itime" id="intime">
+            </div>
+
+            <div class="col-2" >
+              <div class="ui-widget">
+                <span class="texttule" id="intakenamespn1" >Intake Name:</span><input type="hidden" size="5" id="intaketype">
+                <input type="text" name="dintakeout" id="intakename">
+                <p id="imsg" style="color:red;font-weight:bold;"></p>
+              </div>
+            </div>
+            <div class="col-2" style="width:12%">
+              <span class="texttule">Dose/Unit:</span>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <select id="idose" >
+                <option value="">Select</option>
+                {%for i in range(1,1001,1)%}
+                  <option value="{{i}}">{{i}}</option>
+                {%endfor%}
+              </select>
+              <input type="text" id="unit" value="ML" size=2>
+            </div>
+            <div class="col-1">
+              <span class="texttule">Quantity:</span>
+              <input type="text"  id="Iqty" size=5 >
+            </div>
+            <div class="col-1" style="text-align:center;">
+              <span class="texttule" >ADD</span><br>
+              <div class="add-row" id="add-row-inout"  style="display:inline;border:1px solid black;padding:4px 25px 5px 25px;background-color:#8FBC8F;"><img src="../static/icon4/plus.png" title="Insert"></div>
+            </div>
+            &nbsp;&nbsp;
+            <div class="col-1" style="text-align:center;">
+              <span class="texttule">Remove</span><br>
+              <div class="delete-row" id="delete-row-inout"  style="display:inline;border:1px solid black;padding:4px 25px 5px 25px;background-color:#8FBC8F;"><img src="../static/icon4/minus.png" title="Remove"></div>
+            </div>
+          </div>
+
+          <!---CHART END--->
+
+          <!--- CHART FOR MILK AND OTHERS --->
+          <div class="row myrow" id="milk" style="display:none;">
+            <div class="col-3"></div>
+            <div class="col-2">
+              <span class="texttule">Time:</span><br>
+              <input type="time" name="itime" id="intime1">
+            </div>
+
+            <div class="col-2" >
+              <div class="ui-widget">
+                <span class="texttule" id="intakenamespn2" >Intake Name:</span><input type="hidden" size="5" id="intaketype">
+                <input type="text" name="dintakeout" id="intakename" onblur="showIntake(this);"onfocus="resetIntakeintakenamespn2(this)">
+                <p id="imsg" style="color:red;font-weight:bold;"></p>
+              </div>
+            </div>
+            <div class="col-2" style="width:12%">
+              <span class="texttule">Dose/Unit:</span>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <select id="idose1" >
+                <option value="">Select</option>
+                {%for i in range(1,1001,1)%}
+                  <option value="{{i}}">{{i}}</option>
+                {%endfor%}
+              </select>
+              <input type="text" id="unit1" value="ML" size=2>
+            </div>
+
+            <div class="col-1" style="text-align:center;">
+              <span class="texttule" >ADD</span><br>
+              <div class="add-row" id="add-row-inout-milk"  style="display:inline;border:1px solid black;padding:4px 25px 5px 25px;background-color:#8FBC8F;"><img src="../static/icon4/plus.png" title="Insert"></div>
+            </div>
+            &nbsp;&nbsp;
+            <div class="col-1" style="text-align:center;">
+              <span class="texttule">Remove</span><br>
+              <div class="delete-row" id="delete-row-inout-milk"  style="display:inline;border:1px solid black;padding:4px 25px 5px 25px;background-color:#8FBC8F;"><img src="../static/icon4/minus.png" title="Remove"></div>
+            </div>
+          </div>
+
+          <!---CHART END--->
+
+          <div style="display:none;">
+            WARD MAIN ID:<input type="text" name="wrd_id" id="wrd_id" value="{{wmid}}">
+            MEDDET_ID:<input type="text"  id="med_id">
+            PRICE:<input type="text"  id="iuprice">
+            HandQty:<input type="text"  id="Ihqty">
+          </div>
+
+          <div class="row"><div class="col-3" ></div></div>
+          <div class="row">
+            <div class="col-12">
+              <table id="intakeouputchart">
+                  <thead>
+                      <tr>
+                          <th style="width:5px;"></th>
+                          <th>Time</th>
+                          <th>Intake Type</th>
+                          <th>Intake Name</th>
+                          <th>Dose/Quantity</th>
+                          <th>Unit</th>
+                          <th style="display:none;"></th>
+                          <th style="display:none;"></th>
+                      </tr>
+                  </thead>
+
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+          </div>
+          <div class="row">
+            <div class="col-5"></div>
+            <input type="submit" value="Save" id="insubmit" style="width:100px;height:40px;font-weight:bold;">
+          </div>
+          <div class="row">
+            <div class="col-5"></div>
+            <p id="inack" style="font-weight:bold;color:green;display:inline;"></p>
+          </div>
+</form>
+</div>
+
+<script>
+function changeIntake()
+{
+  var intake = $("#intakechart").val();
+  if(intake==' '){
+    $("#ivf").hide();
+    $('#intaketype').val('');
+  }
+  else if(intake=='IVF'){
+    $("#ivf").show();
+    $("#intakenamespn").html("I.V.F.:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+    $("#intakename").val('');
+    $('#intaketype').val('I.V.F.');
+    $("#milk").hide();
+  }
+  else if(intake=='Milk'){
+    $("#milk").show();
+    $("#intakenamespn").html("Milk:");
+    $("#intakename").val('Milk');
+    $('#intaketype').val('MILK');
+    $('#med_id').val(0);
+    $('#iuprice').val(0);
+    $("#ivf").hide();
+  }
+  else if(intake=='Urine'){
+    $("#milk").show();
+    $("#intakenamespn").html("Urine:");
+    $("#intakename").val("URINE COLLECTED");
+    $('#intaketype').val('URINE');
+    $('#med_id').val(0);
+    $('#iuprice').val(0);
+    $("#ivf").hide();
+  }
+  else if(intake=='Drain'){
+    $("#milk").show();
+    $("#intakenamespn").html("Drain:");
+    $("#intakename").val("DRAIN COLLECTED");
+    $('#intaketype').val('DRAIN');
+    $('#med_id').val(0);
+    $('#iuprice').val(0);
+    $("#ivf").hide();
+  }
+  else if(intake=='NGS'){
+    $("#milk").show();
+    $("#intakenamespn").html("N.G.S:");
+    $("#intakename").val("N.G.S. COLLECTED");
+    $('#intaketype').val('N.G.S.');
+    $('#med_id').val(0);
+    $('#iuprice').val(0);
+    $("#ivf").hide();
+  }
+
+}
+
+$(document).ready(function(){
+  $("#add-row-inout").click(function(){
+
+    var intime = $("#intime").val();
+    var intaketype = $("#intaketype").val();
+    var intakename = $("#intakename").val();
+    var idose = $("#idose").val();
+    var iunit = $("#unit").val();
+    var med_id = $("#med_id").val();
+    var iuprice = $("#iuprice").val();
+    var remqty = parseFloat($("#Ihqty").val())-parseFloat($("#Iqty").val());
+
+
+      mark = "";
+      var chk = "<tr><td><input type='checkbox' name='record' style='width:30px;height:30px;'></td>";
+      mark = mark + chk
+
+      var intime = "<td><input type='time' name='intime' value='"+intime+"' readonly></td>";
+      mark = mark + intime;
+      var intaketype = "<td><input type='text' name='intaketype' value='"+intaketype+"'  readonly></td>";
+      mark = mark + intaketype;
+      var intakename = "<td><input type='text' name='intakename' value='"+intakename+"'  readonly></td>";
+      mark = mark + intakename;
+      var idose = "<td><input type='text' name='idose' value='"+idose+"' readonly></td>";
+      mark = mark + idose;
+      var iunit = "<td><input type='text' name='iunit' value='"+iunit+"'  readonly></td>";
+      mark = mark + iunit;
+      var med_id = "<td style='display:none;'><input type='text' name='med_id' value='"+med_id+"' size=3 readonly></td>";
+      mark = mark + med_id;
+      var iuprice = "<td style='display:none;'><input type='text' name='iamount' value='"+iuprice+"' size=4 readonly></td>";
+      mark = mark + iuprice;
+      var remqty = "<td style='display:none;'><input type='text' name='remqty' value='"+remqty+"' size=4 readonly></td></tr>";
+      mark = mark + remqty;
+
+      $("#intakeouputchart tbody").append(mark);
+      $("#intime").val(' ');
+      $("#intakename").val(' ');
+      $("#amnt").val(' ');
+  });
+
+$("#delete-row-inout").click(function(){
+      $("#intakeouputchart tbody").find('input[name="record"]').each(function(){
+        if($(this).is(":checked")){
+              $(this).parents("tr").remove();
+          }
+      });
+  });
+});
+
+$(document).ready(function(){
+  $("#add-row-inout-milk").click(function(){
+
+    var intime = $("#intime1").val();
+    var intaketype = $("#intaketype").val();
+    var intakename = $("#intakename").val();
+    var idose = $("#idose1").val();
+    var iunit = $("#unit1").val();
+    var med_id = $("#med_id").val();
+    var iuprice = $("#iuprice").val();
+    var remqty = parseFloat($("#Ihqty").val())-parseFloat($("#Iqty").val());
+
+
+      mark = "";
+      var chk = "<tr><td><input type='checkbox' name='record' style='width:30px;height:30px;'></td>";
+      mark = mark + chk
+
+      var intime = "<td><input type='time' name='intime' value='"+intime+"' readonly></td>";
+      mark = mark + intime;
+      var intaketype = "<td><input type='text' name='intaketype' value='"+intaketype+"'  readonly></td>";
+      mark = mark + intaketype;
+      var intakename = "<td><input type='text' name='intakename' value='"+intakename+"'  readonly></td>";
+      mark = mark + intakename;
+      var idose = "<td><input type='text' name='idose' value='"+idose+"' readonly></td>";
+      mark = mark + idose;
+      var iunit = "<td><input type='text' name='iunit' value='"+iunit+"'  readonly></td>";
+      mark = mark + iunit;
+      var med_id = "<td style='display:none;'><input type='text' name='med_id' value='"+med_id+"' size=3 readonly></td>";
+      mark = mark + med_id;
+      var iuprice = "<td style='display:none;'><input type='text' name='iamount' value='"+iuprice+"' size=4 readonly></td>";
+      mark = mark + iuprice;
+      var remqty = "<td style='display:none;'><input type='text' name='remqty' value='"+remqty+"' size=4 readonly></td></tr>";
+      mark = mark + remqty;
+
+      $("#intakeouputchart tbody").append(mark);
+      $("#intime").val(' ');
+      $("#intakename").val(' ');
+      $("#amnt").val(' ');
+  });
+
+$("#delete-row-inout-milk").click(function(){
+      $("#intakeouputchart tbody").find('input[name="record"]').each(function(){
+        if($(this).is(":checked")){
+              $(this).parents("tr").remove();
+          }
+      });
+  });
+});
+
+
+</script>
+<!--------------------- Intake Output Chart Ends ------------------------------>
+
+
+<!---------------------- Consumable charts starts ----------------------------->
+<script>
+// GET DRUG NAMES BY AJAX FOR consume
+$(document).ready(function(){
+$(function(){
+  $("#consume").autocomplete({
+      source: function(request,response )
+        {
+          var consume=document.getElementById('consume').value;
+          var wardid=$("#wardid").val();
+            $.ajax({
+                type:"POST",
+                url:"getMedicineWardConsume",
+                data:{"consume":consume,"wardid":wardid},
+                success: function(data)
+                {
+                  if (data=="")
+                    $("#cmsg").text('Requested Consumable Is Not Issued To You Or Quantity Is Zero.');
+                    else{
+                      $("#cmsg").text(' ');
+                      response(data);
+                    }
+                }
+              });
+          },
+    });
+});
+});
+
+function showConsume(idval)
+{
+  var idval = idval.value;
+  var arr = idval.split(">");
+  $('#consume').val(arr[0]);
+  $('#cmed_id').val(arr[4]);
+  $('#cprice').val(arr[3]);
+  $('#chqty').val(arr[2]);
+  }
+
+  function resetConsume(conid)
+  {
+    var conid = conid.id;
+    $("#"+conid).val('');
+    $("#cmsg").text('');
+  }
+</script>
+
+
+
+<div id="tab-3" class="tab-content">
+  <form action="insertWardConsume" method="POST">
+    <input type="text" name="wrd_id" id="wrd_id" value="{{wmid}}" style="display:none;">
+  <div class="row myrow">
+    <div class="col-3"></div>
+    <div class="col-2">
+      <span class="texttule">Date:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+      <input type="date" name="cdate" id="cdate" placeholder="Date" required>
+    </div>
+
+    <div class="col-2">
+      <span class="texttule">Given By :</span>
+      <input type="text" name="cgivenby"  placeholder="Given By" class="alphaonly" required>
+    </div>
+  </div>
+  <div class="row myrow">
+    <div class="col-3"></div>
+    <div class="col-1">
+      <span class="texttule">Time:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+      <input type="time"  id="ctime" placeholder="Time" required>
+    </div>
+    <div class="col-2" >
+      <div class="ui-widget">
+        <span class="texttule">Consumable Service:</span>
+        <input type="text"  id="consume" placeholder="consume" onblur="showConsume(this)" onfocus="resetConsume(this)">
+          <p id="cmsg" style="color:red;font-weight:bold;"></p>
+      </div>
+    </div>
+
+    <div class="col-1">
+      <span class="texttule">Quantity:</span>
+      <input type="text"  id="cqty" size=5 >
+    </div>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <div class="col-1" style="text-align:center;">
+      <span class="texttule">ADD</span>
+      <div class="add-row" id="add-row-con"  style="display:inline;border:1px solid black;padding:4px 25px 5px 25px;background-color:#8FBC8F;"><img src="../static/icon4/plus.png" title="Insert"></div>
+    </div>
+    &nbsp;&nbsp;
+    <div class="col-1" style="text-align:center;">
+      <span class="texttule">Remove</span>
+      <div class="delete-row" id="delete-row-con"  style="display:inline;border:1px solid black;padding:4px 25px 5px 25px;background-color:#8FBC8F;"><img src="../static/icon4/minus.png" title="Remove"></div>
+    </div>
+  </div>
+    <div class="row myrow">
+      <div class="col-5"></div>
+      <div class="col-1"><p id="pack" style="font-weight:bold;color:green;display:inline;"></p></div>
+    </div>
+    <input type="text"  id="cmed_id" style="display:none;">
+    <input type="text"  id="cprice" style="display:none;">
+    <input type="text"  id="chqty" style="display:none;">
+
+    <div class="row"><div class="col-3" ></div></div>
+    <div class="row">
+      <div class="col-12">
+        <table id="conchart">
+            <thead>
+                <tr>
+                    <th style="width:5px;"></th>
+                    <th>Time</th>
+                    <th>Consumable Service Name</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+    </div>
+    <div class="row">
+      <div class="col-5"></div>
+      <input type="submit" value="Save" id="csubmit" style="width:100px;height:40px;font-weight:bold;">
+    </div>
+    <div class="row">
+      <div class="col-5"></div>
+      <p id="cack" style="font-weight:bold;color:green;display:inline;"></p>
+    </div>
+</form>
+</div>
+<script>
+$(document).ready(function(){
+  $("#add-row-con").click(function(){
+    var ctime = $("#ctime").val();
+    var consume= $("#consume").val();
+    var cqty = parseFloat($("#cqty").val());
+    var cmed_id = $("#cmed_id").val();
+    var cprice = $("#cprice").val();
+    var chqty = parseFloat($("#chqty").val());
+    var remqty = chqty-cqty;
+    if(cqty>chqty)
+    {
+        alert("You Have Only "+chqty+" Consumable You Are Entering "+cqty);
+        return false;
+    }
+      mark = "";
+      var chk = "<tr><td><input type='checkbox' name='record' style='width:30px;height:30px;'></td>";
+      mark = mark + chk
+
+      var ctime = "<td><input type='time' name='contime' value='"+ctime+"' readonly></td>";
+      mark = mark + ctime;
+
+      var consume = "<td><input type='text' name='consume' value='"+consume+"'  readonly></td>";
+      mark = mark + consume;
+
+      var qty = "<td><input type='text' name='conqty' value='"+cqty+"'  readonly></td>";
+      mark = mark + qty;
+
+      var med_id = "<td style='display:none;'><input type='text' name='conmed_id' value='"+cmed_id+"' size=3 readonly></td>";
+      mark = mark + med_id;
+      var iuprice = "<td style='display:none;'><input type='text' name='conprice' value='"+cprice+"' size=4 readonly></td>";
+      mark = mark + iuprice;
+      var remqty = "<td style='display:none;'><input type='text' name='remqty' value='"+remqty+"' size=4 readonly></td></tr>";
+      mark = mark + remqty;
+      $("#conchart tbody").append(mark);
+
+      $("#ctime").val('');
+      $("#consume").val('');
+      $("#cqty").val('');
+  });
+
+$("#delete-row-con").click(function(){
+      $("#conchart tbody").find('input[name="record"]').each(function(){
+        if($(this).is(":checked")){
+              $(this).parents("tr").remove();
+          }
+      });
+  });
+});
+
+</script>
+
+<!-------------------- Consumable chart Ends ---------------------------------->
+
+<!--------------------- Sugar Chart starts ------------------------------------>
+<div id="tab-4" class="tab-content">
+  <form action="insertWardSugar" method="POST">
+    <div class="row myrow">
+      <div class="col-2" ></div>
+        <div class="col-2" >
+          &nbsp;&nbsp;<span class="texttule">Sugar Level :</span>
+          <input type="text" name="sugarlevel" id="sugarlevel" placeholder="Sugar Level" class="numeric" required>
+        </div>
+        <div class="col-2" >
+          <div class="ui-widget">
+            <span class="texttule">Medicine Name:</span>
+            <input type="text" name="insuline" id="insuline" placeholder="Medicine Name" onblur="showSugar(this);"onfocus="resetSugar(this);">
+            <p id="smsg" style="color:red;font-weight:bold;"></p>
+          </div>
+        </div>
+
+          <div class="col-2" >
+            <span class="texttule">Dose/Unit:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <select name="sdose" id="sdose">
+              <option value="">Select</option>
+              {%for i in range(1,1001,1)%}
+                <option value="{{i}}">{{i}}</option>
+              {%endfor%}
+            </select>
+            <input type="text" name="sunit" size=3 value="ML">
+          </div>
+
+          <div class="col-1" >
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="texttule">Quantity:</span>
+            <input type="text" id="suqty" onblur="calQty()">
+        </div>
+      </div> <!-- row -->
+
+      <div class="row myrow">
+        <div class="col-2" ></div>
+      <div class="col-2" >
+        <span class="texttule">Date:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <input type="date" name="sdate" id="sdate" required>
+      </div>
+
+      <div class="col-1" >
+        <span class="texttule">Time:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <input type="time" name="stime" id="stime" required>
+      </div>
+      <div class="col-2" >
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="texttule">Given By :</span>
+        <input type="text" name="givenby" name="sgivenby" placeholder="Given By" class="alphaonly" required>
+      </div>
+    </div><!-- row -->
+    <br>
+
+      <input type="text" name="remqty" id="cremqty" style="display:none;">
+      <input type="text" name="wrd_id" id="wrd_id" value="{{wmid}}" style="display:none;">
+      <input type="text" name="med_id" id="smed_id" style="display:none;">
+      <input type="text" name="sprice" id="sprice" style="display:none;">
+      <input type="text" name="hqty" id="hcqty" style="display:none;">
+
+    <div class="row myrow">
+      <div class="col-11"style="text-align:center;">
+        <input type="submit" value="Save" id="ssave" style="width:100px;height:40px;font-weight:bold;">
+      </div>
+      <br>
+      <br>
+      <div class="col-1"><p id="sack" style="font-weight:bold;color:green;display:inline;"></p>
+      </div>
+    </div><!-- row -->
+
+  </form>
+  </div> <!-- tab -->
+
+
+
+
+<script>
+// GET DRUG NAMES BY AJAX FOR Sugar
+$(document).ready(function(){
+$(function(){
+  $("#insuline").autocomplete({
+      source: function(request,response )
+        {
+          var insuline=document.getElementById('insuline').value;
+          wardid=$("#wardid").val();
+            $.ajax({
+                type:"POST",
+                url:"getMedicineWardSugar",
+                data:{"insuline":insuline,"wardid":wardid},
+                success: function(data)
+                {
+                  if (data=="")
+                    $("#smsg").text('Requested Medicine Is Not Issued To You Or Quantity Is Zero.');
+                    else{
+                      response(data);
+                      $("#smsg").text('');
+                    }
+                }
+              });
+          },
+    });
+});
+});
+
+function calQty(){
+  qty = parseFloat($('#suqty').val());
+  hcqty=parseFloat($('#hcqty').val());
+  if(qty>hcqty){
+    alert("You Have "+qty+" You Are Entering "+hcqty);
+    return false;
+  }
+  else {
+    $("#cremqty").val(hcqty-qty);
+  }
+}
+
+function showSugar(idval)
+{
+  var idval = idval.value;
+  console.log(idval);
+    var arr = idval.split(">");
+    $('#insuline').val(arr[0]);
+    $('#smed_id').val(arr[4]);
+    $('#sprice').val(arr[3]);
+    $('#hcqty').val(arr[2]);
+  }
+
+  function resetSugar(suid)
+  {
+    var suid = suid.id;
+    $("#"+suid).val('');
+    $("#smsg").text('');
+  }
+</script>
+
+<!------------------------- Sugar Chart Ends ---------------------------------->
+
+
+<!----------------------- DRESSING charts starts ------------------------------>
+<div id="tab-5" class="tab-content">
+
+  <form action="insertWardDressing" method="POST">
+    <input type="text" name="wardid" id="wardid" value="{{wardid}}" style="display:none;">
+    <input type="text" name="wrd_id" id="wrd_id" value="{{wmid}}" style="display:none;">
+
+    <div class="row myrow">
+      <div class="col-3"></div>
+      <div class="col-2"><span class="texttule">Date:</span><br>
+        <input type="date" name="dressing_date" style="max-width:68%" required>
+      </div>
+
+      <div class="col-2" style="margin-left:-30px;"><span class="texttule">Type of Dressing:</span><br>
+        <select  id='drsname' name="dname" onchange="getAllDressingName()" required>
+          <option value="">--Select--</option>
+          {%for row in ds2%}
+          <option value="{{row[0]}}">{{row[1]}}</option>
+          {%endfor%}
+        </select>
+      </div>
+
+      <div class="col-2" style="margin-left:-50px;"><span class="texttule">Done By:</span>
+        <input type="text" name="dressing_doneby" placeholder="Done By" class="alphaonly" required>
+      </div>
+    </div><!-- row -->
+
+
+    <div class="row myrow" style="display:none;">
+      <div class="col-3"></div>
+      <div class="col-1"><span class="texttule">Amount:</span><br>
+        <input type="text" name="dressing_amount" style="max-width:60px" id="amount" readonly>
+      </div>
+    </div><!-- row -->
+
+    <br>
+    <div class="row myrow">
+      <div class="col-11" style="text-align:center;">
+        <input type="submit" value="Save" id="dressingsave" style="width:100px;height:40px;font-weight:bold;">
+        <br>
+        <br>
+        <p id="dressingack" style="font-weight:bold;color:green;display:inline;"></p>
+      </div>
+      </div><!-- row -->
+    </form>
+  </div><!-- tab -->
+
+
+<script>
+function getAllDressingName()
+{
+  var val = $("#drsname").val();
+  $.ajax({
+    type: "POST",
+    url: "/getDressing",
+    data:"dname=" + val,
+    success: function(string){
+      var data = JSON.parse(string)['data'];
+      $("#amount").val(data[0]);
+    }
+  });
+};
+</script>
+
+
+
+<!------------------------- DRESSING Chart Ends ------------------------------->
+
+
+<!----------------------- Therapy Starts -------------------------------------->
+
+<script>
+function CalTime()
+{
+  var tim1=$("#therapy_starttime").val();
+  var tim2=$("#therapy_endtime").val();
+
+  var w= isNaN(tim1);
+  console.log(w);
+  var t= isNaN(tim2);
+  console.log(t);
+
+  if (w == true && t == true)
+  {
+    var ary1=tim1.split(':');
+    var ary2=tim2.split(':');
+    var minsdiff=parseInt(ary2[0],10)*60+parseInt(ary2[1],10)-parseInt(ary1[0],10)*60-parseInt(ary1[1],10);
+    var x = (String(100+Math.floor(minsdiff/60)).substr(1)+':'+String(100+minsdiff%60).substr(1));
+    var a = x.split(":");
+    var minut=(parseInt(a[0])*60)+parseInt(a[1]);
+    $("#therapy_duration").val(minut);
+  }
+}
+
+function getAllTherapyName()
+{
+  var val = $("#adm_therapyname").val();
+  $.ajax({
+    type: "POST",
+    url: "/getTherapy",
+    data:"tname=" + val,
+    success: function(string){
+      var data = JSON.parse(string)['data'];
+      $("#tamount").val(data[0]);
+    }
+  });
+};
+
+function CalcTotalAmount()
+{
+  var a = $("#tamount").val();
+  var b = $("#therapy_duration").val();
+  var c = a * b;
+  $("#therapy_amount").val(c);
+}
+</script>
+
+<div id="tab-6" class="tab-content">
+  <form action = "insertNurTherapy" method = "POST">
+
+    <input type="text" name="wardid" id="wardid" value="{{wardid}}" style="display:none;">
+
+    <input type="text" name="wrd_id" id="wrd_id" value="{{wmid}}" style="display:none;">
+
+    <div class="row myrow">
+
+      <div class="col-3"></div>
+
+      <div class = "col-2"><span class="texttule">Date:</span><br>
+        <input type="date" name="therapy_date" required>
+      </div>
+
+      <div class = "col-2"><span class="texttule">Given By:</span>
+        <input type="text" name="therapy_givenby" placeholder="Given By" class="alphaonly" required>
+      </div>
+
+      </div><!-- row -->
+
+      <br>
+
+
+      <div class="row myrow">
+
+        <div class="col-3"></div>
+
+        <div class = "col-2"><span class="texttule">Therapy Name:</span>
+        <br>
+        <select  id='adm_therapyname' name="tname" onchange="getAllTherapyName()" required>
+          <option value="">--Select--</option>
+          {%for row in ds3%}
+          <option value="{{row[0]}}">{{row[1]}}</option>
+          {%endfor%}
+        </select>
+      </div>
+
+      <div class = "col-2" style="margin-left:-80px;">
+        <span class="texttule">Start Time:</span><br>
+        <input type="time" name="therapy_starttime" id="therapy_starttime" onblur="CalTime()">
+      </div>
+
+      <div class = "col-2" style="margin-left:-100px;">
+        <span class="texttule">End Time:</span><br>
+        <input type="time" name="therapy_endtime" id="therapy_endtime" onblur="CalTime()">
+      </div>
+
+      <div class = "col-2" style="margin-left:-100px;"><span class="texttule">Duration/Unit:</span><br>
+        <input type="text" name="therapy_duration" style="max-width:60px;" id="therapy_duration" onblur="CalcTotalAmount()" placeholder="Duration" readonly>
+        <input type="text" name="therapy_unit" size=4 value="Mins" style="font-weight:bold;" readonly>
+      </div>
+    </div> <!-- row -->
+
+    <div class="row myrow">
+
+      <div class="col-3"></div>
+
+      <div class = "col-2" style="display:none;"><span class="texttule">Amount (Rs/Mins):</span>
+        <br>
+        <input type="text" style="max-width:60px;" name="tamount" id="tamount" onblur="CalcTotalAmount()" readonly>
+      </div>
+      <div class = "col-2" style="display:none;"><span class="texttule">Total Amount (Rs/Hr):</span>
+        <br>
+        <input type="text" style="max-width:60px;"name="therapy_amount" id="therapy_amount" onblur="CalcTotalAmount()" readonly>
+        </div>
+    </div> <!-- row -->
+
+
+
+    <br>
+    <div class="row myrow">
+      <div class="col-11" style="text-align:center;">
+        <input type="submit" value="Save" id="therapysave" style="width:100px;height:40px;font-weight:bold;">
+        <br>
+        <br>
+        <p id="therapyack" style="font-weight:bold;color:green;display:inline;"></p>
+      </div>
+    </div> <!-- row -->
+
+  </form>
+</div> <!-- tab -->
+
+
+
+<!------------------------- Therapy Ends -------------------------------------->
+
+    </div><!-- container -->
+  </div> <!--- Content --->
+</div><!--- col-12 --->
+
+{% endblock %}

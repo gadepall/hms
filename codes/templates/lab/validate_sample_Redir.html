@@ -1,0 +1,108 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+<style>
+#todaysample td, #todaysample th {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align:center
+}
+</style>
+<div class="col12">
+  <div id="content">
+    <div class="titlebox">Validate Sample</div>
+    <br>
+
+    <form action="/validate_sample" method="POST">
+    <div class="row myrow">
+        <div class="col-4">
+            <span class="texttule">Accession No:</span>
+            <input type="text" name="accession_no" style="width:120px;" class="alphanumeric" required>
+            <input type="submit" value="Search">
+        </div>
+    </form>
+    <div class="col-3">{{ack1}}</div>
+
+  </div>
+  </div> <!--- Content --->
+</div><!--- col-12 --->
+      <div class="col-12">
+        <h4>Number Of Sample Validated Today :<b> {{acno|length}}</b></h4>
+        <table id="todaysample" style="width:100%;">
+          <tr style="font-weight:bold;">
+            <td style="padding:0px;">Edit</td>
+            <td style="padding:0px;">Print</td>
+            <td>AccessionNo</td>
+            <td>Regno</td>
+            <td>Name</td>
+            <td>Age</td>
+            <td>Sample Date</td>
+            <td>Test(s) Values</td>
+            <td>Validation Date</td>
+            <td>Patient From</td>
+          </tr>
+          {%for row in acno%}
+          <tr>
+            <td><form action="validate_sample" method="POST"><button name="accession_no" value="{{row[0]}}">Edit</button><input type="hidden" value="Spage" name="page"></form></td>
+            <td><form action="printLabReport" method="POST"><button name="acno" value="{{row[0]}}">Print</button></form></td>
+            <td>{{row[0]}}</td>
+            <td>{{row[1]}}</td>
+            <td>{{row[2]}} {{row[3]}} {{row[4]}}</td>
+            <td>{{row[5]}} {{row[6]}}</td>
+            <td>{{row[7].strftime('%d/%m/%Y')}}</td>
+            <td>
+            {%for trow in vdata%}
+              {%if row[0]==trow[0]%}
+              {{trow[1]}}-<b>{{trow[2]}}</b>
+                {%if vdata|length != loop.index%}
+                ,
+                {%endif%}
+              {%endif%}
+            {%endfor%}
+          </td>
+          <td>{{row[8].strftime('%d/%m/%Y')}}</td>
+          <td>{{row[9]}}</td>
+          </tr>
+          {%endfor%}
+        </table>
+      </div>
+
+      <div class="col-12">
+        <h4><b>NOT</b> Validated Sample(s):<b> {{notval|length}}</b></h4>
+        <table id="todaysample" style="width:100%;">
+          <tr style="font-weight:bold;">
+            <td style="padding:0px;">Validate</td>
+            <td>AccessionNo</td>
+            <td>Regno</td>
+            <td>Name</td>
+            <td>Age</td>
+            <td>Sample Date</td>
+            <td>Test(s) Values</td>
+            <td>Validation Date</td>
+            <td>Patient From</td>
+          </tr>
+          {%for row in notval%}
+          <tr>
+            <td><form action="validate_sample" method="POST"><button name="accession_no" value="{{row[0]}}">Validate</button><input type="hidden" value="Spage" name="page"></form></td>
+            <td>{{row[0]}}</td>
+            <td>{{row[1]}}</td>
+            <td>{{row[2]}} {{row[3]}} {{row[4]}}</td>
+            <td>{{row[5]}} {{row[6]}}</td>
+            <td>{{row[7]}}</td>
+            <td>
+            {%for trow in nvaltest%}
+              {%if row[0]==trow[0]%}
+              {{trow[1]}}
+                {%if nvaltest|length != loop.index%}
+                ,
+                {%endif%}
+              {%endif%}
+            {%endfor%}
+          </td>
+          <td>{{row[8]}}</td>
+          <td>{{row[9]}}</td>
+          </tr>
+          {%endfor%}
+        </table>
+      </div>
+
+{% endblock %}

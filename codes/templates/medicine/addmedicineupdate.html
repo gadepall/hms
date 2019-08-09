@@ -1,0 +1,114 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+<script>
+	$(function()
+	  {
+	      $("#drugname").autocomplete
+	      ({
+	          source: function(request,response )
+	          {
+	            var drugname=document.getElementById('drugname').value;
+	              $.ajax
+	              ({
+	                  type:"POST",
+	                  url: "UpdateMedicineAdmin",
+	                  data:'drugname='+drugname,
+	                  success: function( data )
+	                  {
+											$("#drugtype").val(data[2]);
+
+	                    //alert(data['d'][2]);
+	                    response(data);
+
+
+	                  }
+	              });
+	          },
+	      });
+	  });
+
+function reset(sel)
+{
+	sel.val='';
+
+$('option:selected', sel).removeAttr('selected');
+}
+function showData(idval)
+{
+var idval = idval.value;
+var arr = idval.split(">");
+$('#drugname').val(arr[0]);
+temp=arr[1];
+$('#drugtype').prepend("<option value='"+temp.substring(2,temp.length-2)+"' selected='selected'>"+temp.substring(2,temp.length-2)+"</option>");
+temp = arr[2];
+//$("#drugtype").prepend(new Option(temp.substring(2,temp.length-2), temp.substring(2,temp.length-2)));
+$("#min_value").val(temp.substring(11,temp.length-1));
+//$("#drugtype").val(temp.substring(2,temp.length-2), temp.substring(2,temp.length-2));
+temp = arr[3];
+$('#max_value').val(temp.substring(11,temp.length));
+temp = arr[4];
+
+$('#medicineid').val(temp.substring(7,temp.length));
+}
+</script>
+<div class="col-12">
+<div id="content">
+    <div class="titlebox">EDIT DRUG NAME</div>
+     <br>
+     <form action="UpdateMedicineNameMedtype" method="POST">
+		 <input type="text" name="medicineid" id="medicineid" style="display:none;">
+
+		  <div class="row myrow">
+
+		<div class="col-3">
+		<div class="ui-widget">
+       <span class="texttule">Drug Name:</span>
+       <input type="text" name="drugname" id="drugname" class="alphanumeric" onblur="showData(this)" onfocus="showDrugtype(this)">
+       </div>
+       </div>
+
+
+		 <div class="col-3">
+			<span class="texttule">Drug Type:</span>
+           <select name="drugtype" id="drugtype" >
+						<option value="">--Select--</option>
+            {%for row in getdata1%}
+         <option value="{{row[0]}}">{{row[0]}}</option>
+         {%endfor%}
+         </select>
+
+
+          </div>
+
+         <div class="col-3">
+          <span class="texttule">Minimum Value:</span>
+          <input type="text" name="min_value" class="numeric" id="min_value">
+        </div>
+
+        <div class="col-3">
+          <span class="texttule">Maximum Value:</span>
+          <input type="text" name="max_value" class="numeric" id="max_value">
+        </div>
+        </div>
+
+        <br>
+        <br>
+        <br>
+
+          <div class="row myrow">
+        <div class="col-5"></div>
+        <div class="col-3">
+          <input type="submit" class="button" id='btnsave' value="UPDATE" style="height:40px;width:100px;background-color:#A9A9A9;font-weight:bold">
+          </div> </div>
+        <br><br>
+        <div class="col=5"><p><b> {{ack}}</b></p></div>
+</form>
+
+
+
+</div>
+
+</div>
+
+
+{% endblock %}

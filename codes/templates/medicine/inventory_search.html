@@ -1,0 +1,300 @@
+{% extends "Frame/inventoryFrame.html" %}
+{% block content %}
+<style>
+#mainTable {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#mainTable td, #mainTable th {
+  padding: 8px;
+}
+
+#mainTable td{
+  padding: 8px;
+  font-size: 15px;
+}
+#mainTable tr:nth-child(even){background-color: #f2f2f2;}
+
+#mainTable tr:hover {background-color: #ddd;}
+
+#mainTable thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+}
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+#mainTable thead,th {
+  background-color:#778899;
+}
+</style>
+<script>
+
+
+  $(function()
+    {
+        $("#drugname").autocomplete
+        ({
+            source: function(request,response )
+            {
+              var drugname=document.getElementById('drugname').value;
+                $.ajax
+                ({
+                    type:"POST",
+                    url: "getAllDrugname",
+                    data:'drugname='+drugname,
+                    success: function( data )
+                    {
+                      //alert(data['d'][2]);
+                      response(data);
+                    }
+                });
+            },
+        });
+    });
+</script>
+<div class="col-12">
+  <div id="content">
+    <div class="titlebox">INVENTORY SEARCH</div>
+     <br>
+
+     <form action ="ViewFullDetails" method="POST">
+     <div class="row myrow">
+     <div class="col-3">
+ 	 <span class="texttule">View Current Stock:</span>
+   <input type="submit" class="button"  value="SHOW" style="height:30px;width:100px;background-color:#A9A9A9;font-weight:bold">
+   {%if ack4 == 'Excel Sheet Generated Successfully'%}
+   <a href="static/MedicineUploads/InventoryFullStockSearch.xlsx" download>
+   <img src="static/icon4/excel6.png" width="40px" height="40px"></a>
+     {%endif%}
+     <p style="inline"><b> {{ack4}}</b></p>
+    </div>
+
+
+
+     </div>
+     </form>
+
+     <div class="col-12"></div>
+
+     <form action ="ViewByEntryDate" method="POST">
+     <div class="row myrow">
+     <div class="col-3">
+ 	 <span class="texttule">Entry Date From:</span>
+ 	 <td><input  type="date" id="entrydatefrom"  name= "entrydatefrom" required></td>
+    </div>
+      <div class="col-3">
+    <span class="texttule">Entry Date To:</span>
+    <td><input  type="date" id="entrydateto"  name= "entrydateto" required></td>
+    </div>
+    <div class="col-2">
+    <input type="submit" class="button"  value="SEARCH" style="height:30px;width:100px;background-color:#A9A9A9;font-weight:bold">
+
+    {%if ack1 == 'Excel Sheet Generated Successfully'%}
+    <a href="static/MedicineUploads/InventoryEntryDateSearch.xlsx" download>
+    <img src="static/icon4/excel6.png" width="40px" height="40px"></a>
+      {%endif%}
+      <p style="inline"><b> {{ack1}}</b></p>
+    </div>
+     </div>
+     </form>
+
+
+    <form action ="ViewByExpiry" method="POST">
+    <div class="row myrow">
+    <div class="col-3">
+	 <span class="texttule">Expiry From:</span>
+	 <td><input  type="date" id="expiryfrom"  name= "expiryfrom" required></td>
+   </div>
+     <div class="col-3">
+   <span class="texttule">Expiry To:</span>
+   <td><input  type="date" id="expiryto"  name= "expiryto" required></td>
+   </div>
+   <div class="col-2">
+   <input type="submit" class="button" id='btnsave' value="SEARCH" style="height:30px;width:100px;background-color:#A9A9A9;font-weight:bold">
+   {%if ack2 == 'Excel Sheet Generated Successfully'%}
+   <a href="static/MedicineUploads/InventoryExpirySearch.xlsx" download>
+   <img src="static/icon4/excel6.png" width="30px" height="30px"></a>
+   {%endif%}
+   <p style="inline"><b> {{ack2}}</b></p>
+
+   </div>
+    </div>
+    </form>
+
+    <form action ="ViewByDeptNameExpiry" method="POST">
+    <div class="row myrow">
+    <div class="col-3">
+	 <span class="texttule">Department Name :</span>
+   <!--{{result}}-->
+   <select id="drugdept"  name= "ddrugdept" required>
+     <option value="">--Select--</option>
+     {%for row in result%}
+      <option value="{{row[0]}}">{{row[0]}}</option>
+      {%endfor%}
+      </select>
+ </div>
+   <div class="col-3">
+  <span class="texttule">Expiry From:</span>
+  <td><input  type="date" id="expiryFrom"  name= "expiryFrom" required></td>
+  </div>
+  <div class="col-3">
+  <span class="texttule">Expiry To:</span>
+  <td><input  type="date" id="expiryTo"  name= "expiryTo" required></td>
+  </div>
+
+  </form>
+
+   <div class="col-3">
+   <input type="submit" class="button" id='btnsave' value="SEARCH" style="height:30px;width:100px;background-color:#A9A9A9;font-weight:bold">
+   {%if ack3 == 'Excel Sheet Generated Successfully'%}
+   <a href="static/MedicineUploads/InventoryDeptnamExpirySearch.xlsx" download>
+   <img src="static/icon4/excel6.png" width="30px" height="30px"></a>
+   {%endif%}
+   <p style="inline"><b>{{ack3}}</b></p>
+
+
+    </div>
+    <div style="width:100%;max-height:400px;line-height:1em;overflow:scroll;">
+      <div id="tablecontainer"></div>
+      {%if flag1==1%}
+
+      <table border=1 id="mainTable">
+            <thead >
+                <tr>
+                    <th>Drug Name</th>
+                    <th>Drug Type</th>
+                    <th>Drug Issued To Department</th>
+                    <!--<th>WardName</th>-->
+                    <th>Batch Number</th>
+                    <th>HSN Code</th>
+                    <th>PackQuantity</th>
+                    <th>TotalStrip</th>
+                    <th>Current Quantity In Store</th>
+                    <th>Rate</th>
+                    <th>PerMRP</th>
+                    <th>Unit Price</th>
+                    <th>Expiry Date</th>
+                    <th>Manufacturing Date</th>
+                  <!--  <th>Quantity(Ml/Mg)</th>-->
+                    <th>Discount</th>
+                    <th>Free Medicine</th>
+                    <th>Taxable Amount</th>
+                    <th>CGST %</th>
+                    <th>SGST %</th>
+                    <th>Amount</th>
+                    <th>Rack Number</th>
+                    <th>Remark</th>
+                    <th>Distributor Name</th>
+
+                    </tr>
+            </thead>
+
+              {%for row in getdata%}
+                <form action="ViewDetailsByGeneralSearchInventory" method="post">
+            	  <tr>
+                <input type="text" name="inventoryid" value="{{row[0]}}" style="display:none;">
+                <td>{{row[1]}}</td>
+                <td>{{row[2]}}</td>
+                <td>{{row[3]}}</td>
+                <!--<td>{{row[4]}}</td>-->
+                <td>{{row[4]}}</td>
+                <td>{{row[5]}}</td>
+                <td>{{row[6]}}</td>
+                <td>{{row[7]}}</td>
+                <td>{{row[21]}}</td>
+                <td>{{row[8]}}</td>
+                <td>{{row[9]}}</td>
+                <td>{{row[10]}}</td>
+                <td>{{row[11]}}</td>
+                <td>{{row[12]}}</td>
+                <td>{{row[13]}}</td>
+                <td>{{row[14]}}</td>
+                <td>{{row[15]}}</td>
+                <td>{{row[16]}}</td>
+                <td>{{row[17]}}</td>
+                <td>{{row[18]}}</td>
+                <td>{{row[19]}}</td>
+                <td>{{row[20]}}</td>
+                <td>{{row[22]}}</td>
+
+            		</tr>
+                </form>
+                {%endfor%}
+              </table>
+                {%elif flag1==2%}
+                <table border=1 id="mainTable">
+                      <thead >
+                          <tr>
+                              <th>Drug Name</th>
+                              <th>Drug Type</th>
+                              <th>Drug Issued To Department</th>
+                              <!--<th>WardName</th>-->
+                              <th>Batch Number</th>
+                              <th>HSN Code</th>
+                              <th>PackQuantity</th>
+                              <th>TotalStrip</th>
+                              <th>Current Quantity In Store</th>
+                              <th>Rate</th>
+                              <th>PerMRP</th>
+                              <th>Unit Price</th>
+                              <th>Expiry Date</th>
+                              <th>Manufacturing Date</th>
+                            <!--  <th>Quantity(Ml/Mg)</th>-->
+                              <th>Discount</th>
+                              <th>Free Medicine</th>
+                              <th>Taxable Amount</th>
+                              <th>CGST %</th>
+                              <th>SGST %</th>
+                              <th>Amount</th>
+                              <th>Rack Number</th>
+                              <th>Remark</th>
+                              </tr>
+                      </thead>
+
+                        {%for row in getdata%}
+                          <form action="ViewDetailsByGeneralSearchInventory" method="post">
+                          <tr>
+                          <input type="text" name="inventoryid" value="{{row[0]}}" style="display:none;">
+                          <td>{{row[1]}}</td>
+                          <td>{{row[2]}}</td>
+                          <td>{{row[3]}}</td>
+                          <!--<td>{{row[4]}}</td>-->
+                          <td>{{row[4]}}</td>
+                          <td>{{row[5]}}</td>
+                          <td>{{row[6]}}</td>
+                          <td>{{row[7]}}</td>
+                          <td>{{row[21]}}</td>
+                          <td>{{row[8]}}</td>
+                          <td>{{row[9]}}</td>
+                          <td>{{row[10]}}</td>
+                          <td>{{row[11]}}</td>
+                          <td>{{row[12]}}</td>
+                          <td>{{row[13]}}</td>
+                          <td>{{row[14]}}</td>
+                          <td>{{row[15]}}</td>
+                          <td>{{row[16]}}</td>
+                          <td>{{row[17]}}</td>
+                          <td>{{row[18]}}</td>
+                          <td>{{row[19]}}</td>
+                          <td>{{row[20]}}</td>
+                          </tr>
+                          </form>
+                          {%endfor%}
+                          {%endif%}
+                          </table>
+
+
+
+
+                        </div>
+                        </div>
+                        </div>
+{% endblock %}

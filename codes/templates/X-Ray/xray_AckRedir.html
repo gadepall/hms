@@ -1,0 +1,294 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+<style>
+.subtitle
+{
+background-color:#F0E68C;
+width: 100%;
+padding-left: 1.5%;
+}
+.spnhead{
+  font-size: 18px;
+  font-weight: bold;
+}
+.spndata{
+  font-size: 20px;
+}
+
+#Framecontent{
+    border:2px solid #2F4F4F	;
+    padding:10px;
+    margin-top: 15px;
+
+}
+
+.Frametitlebox{
+    font-weight: bold;
+    font-size: 16px;
+    float:left;
+    padding:0 15px 0 15px;
+    margin:-20px 0 0 3px;
+    color: black;
+    background:#B0C4DE;
+    border-radius:3px;
+    border:1px solid #0000CD;
+}
+
+/* GENERAL CODE */
+#mainTable {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  height: 200px;
+
+}
+
+#mainTable td, #mainTable th {
+  padding: 8px;
+}
+
+#mainTable td{
+  padding: 8px;
+  font-size: 20px;
+}
+#mainTable tr:nth-child(even){background-color: #f2f2f2;}
+
+#mainTable tr:hover {background-color: #ddd;}
+
+#mainTable thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+}
+
+tbody {
+    height: 100px;       /* Just for the demo          */
+    overflow-y: auto;    /* Trigger vertical scroll    */
+    overflow-x: hidden;  /* Hide the horizontal scroll */
+}
+
+
+#mainTable th,td {
+  text-align: center;
+
+}
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+#mainTable thead,th {
+  background-color:#778899;
+}
+/* SEPERATE CODE */
+
+
+
+</style>
+
+<div class="col-12">
+  <div id="content">
+    <div class="titlebox" style="text-align:center">Acknowledgement Of Patient Visit</div>
+    <div class="row myrow">
+      <div class="col-1"></div>
+      <div class="row">
+        <div class="col-4">
+          <div id="Framecontent">
+            <div class="Frametitlebox">Pick Any Registration Number</div>
+            <br>
+            <form action="getXrayDetails" method="POST">
+              <span class="texttule">Registration No.</span>
+              <input type="text" name="regno" class="alphanumeric" required>&nbsp;
+              <input type="submit" value="Search" style="height:40px;width:100px;">
+            </form>
+          </div>
+        </div>
+        <div class="col-4">
+          <div id="Framecontent">
+            <div class="Frametitlebox">Pick Any Date</div>
+            <form action="getXrayAcknowledgeByDate" method="POST">
+              <span class="texttule">Date</span>
+              <input type="date" name="filldate" required>
+              &nbsp;&nbsp;
+              <input type="submit" value="Search" style="height:40px;width:100px;">
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="row myrow">
+        <div class="col-1"></div>
+        <div class="col-5">
+          <div id="Framecontent">
+            <div class="Frametitlebox">Pick Range of Date</div>
+            <br>
+            <form action="getXrayPatientDetails" method="POST">
+              <span class="texttule">From:</span>
+              <input type="date" name="Fdate" required>
+              <span class="texttule">To:</span>
+              <input type="date" name="Tdate" required>
+              <input type="submit" value="Search" style="height:40px;width:100px;">
+            </form>
+          </div>
+        </div>
+        <div class="col-5">
+          <div id="Framecontent">
+            <div class="Frametitlebox">Pick Range of Date</div>
+            <br>
+            <form action="getXrayAckRange" method="POST">
+              <span class="texttule">From:</span>
+              <input type="date" name="fdate" required>
+              <span class="texttule">To:</span>
+              <input type="date" name="tdate" required>
+              <input type="submit" value="Search" style="height:40px;width:100px;">
+              {%if msg == 'Excel Sheet Generated Successfully'%}
+              <a href="static/XrayExcel/monthlyxray.xlsx" download>
+                <img src="static/icon4/excel6.png" width="50px" height="50px"></a>
+                {%endif%}
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-12" style="text-align: center;"><span class="texttule">{{msg}}</span></div>
+<div class="row" style="padding-bottom:3px;"></div>
+{% for row in ds1%}
+<div class="col-12 subtitle">
+  <div class="col-2"><span class="spnhead">Regno:</span><span class="spndata">{{row[0]}}</span></div>
+  <div class="col-3"><span class="spnhead">Name:</span><span class="spndata">{{row[1]}} {{row[2]}} {{row[3]}}</span></div>
+  <div class="col-2"><span class="spnhead">Sex:</span><span class="spndata">{{row[4]}}</span></div>
+  <div class="col-2"><span class="spnhead">Age:</span><span class="spndata">{{row[5]}}{{row[6]}}</span></div>
+</div>
+{%endfor%}
+<br>
+{%if flag1==1%}
+
+<div class="col-12">
+  <div style="width:100%;height:500px;line-height:1em;overflow:scroll;">
+
+  <table border=1 id="mainTable" style="height:20px">
+    <thead>
+      <th>Date</th>
+      <th>Xray Type</th>
+      <th>SubType</th>
+      <th>Amount</th>
+      <th>Xray Image</th>
+      <th>Patient From</th>
+    </thead>
+    {% for row in ds2 %}
+    <input type="text" id="regno" name="regno" value="{{row[0]}}" style="display:none;">
+    <input type="text" id="location" name="location" style="display:none;">
+    <tr>
+      <td>{{row[0].strftime('%d/%m/%Y')}}</td>
+      <td>{{row[2]}}</td>
+      <td>{{row[4]}}</td>
+      <td>{{row[5]}}</td>
+      <td style="width: 10px;"><a href="/static/XrayUploads/{{row[6]}}" target="_blank"><img src="/static/XrayUploads/{{row[6]}}" alt={{row[6]}} height="100px"></a></td>
+      <td>{{row[7]}}</td>
+    </tr>
+    {%endfor%}
+  </table>
+  </div>
+</div>
+
+{%elif flag2==1%}
+{% for row in ds4 %}
+<div class="col-2"><span class="texttule">Total No. Of Pateint:</span></div>
+<div class="col-3"><input type="text"  name="tpatient" value="{{row[0]}}" style="text-align:center;" readonly></div>
+<div class="col-2"><span class="texttule">Total Amount:</span></div>
+<div class="col-5"><input type="text"  name="tamount" value="{{row[1]}}" style="text-align:center;" readonly></div>
+{%endfor%}
+<div class="col-12">
+  <div style="width:100%;height:500px;line-height:1em;overflow:scroll;">
+    <table border=1 id="mainTable" style="height:5px";>
+      <thead>
+        <th>Registration No</th>
+        <th>Patient Name</th>
+        <th>Sex</th>
+        <th>Age</th>
+        <th>Patient From</th>
+        <th>Date Of Xray</th>
+        <th>Xray Name</th>
+        <th>SubName</th>
+        <th>Amount</th>
+      </thead>
+      {% for row in ds3 %}
+      <tr>
+        <td>{{row[0]}}</td>
+        <td>{{row[1]}} {{row[2]}} {{row[3]}}</td>
+        <td>{{row[4]}}</td>
+        <td>{{row[5]}}{{row[6]}}</td>
+        <td>{{row[7]}}</td>
+        <td>{{row[8].strftime('%d/%m/%Y')}}</td>
+        <td>{{row[10]}}</td>
+        <td>{{row[12]}}</td>
+        <td>{{row[13]}}</td>
+      </tr>
+      {%endfor%}
+    </table>
+  </div>
+</div>
+
+{%elif flag3==1%}
+<div class="col-12">
+  <table border=1 id="mainTable" >
+    <thead>
+      <tr>
+        <th>MonthName</th>
+        {%for row in allx%}
+        <th>{{row[1]}}</th>
+        {%endfor%}
+        <th>Total</th>
+      </tr>
+    </thead>
+    {% for rows in ackdata %}
+    <tr>
+      <td>{{rows[0]}}</td>
+      {%for i in range(1,count+2)%}
+      {%if i==count+1%}
+      <td><b>{{rows[i]}}</b></td>
+      {%else%}
+      <td>{{rows[i]}}</td>
+      {%endif%}
+      {%endfor%}
+    </tr>
+    {%endfor%}
+  </table>
+</div>
+
+{%elif flag4==1%}
+<div class="col-12">
+  <div style="width:100%;height:500px;line-height:1em;overflow:scroll;">
+    <table border=1 id="mainTable" style="height:10px">
+      <thead>
+        <th>Registration No</th>
+        <th>Patient Name</th>
+        <th>Sex</th>
+        <th>Age</th>
+        <th>Patient From</th>
+        <th>Date Of Xray</th>
+        <th>Xray Name</th>
+        <th>SubName</th>
+        <th>Amount</th>
+      </thead>
+      {% for row in ds5 %}
+      <tr>
+        <td>{{row[0]}}</td>
+        <td>{{row[1]}} {{row[2]}} {{row[3]}}</td>
+        <td>{{row[4]}}</td>
+        <td>{{row[5]}}{{row[6]}}</td>
+        <td>{{row[7]}}</td>
+        <td>{{row[8].strftime('%d/%m/%Y')}}</td>
+        <td>{{row[10]}}</td>
+        <td>{{row[12]}}</td>
+        <td>{{row[13]}}</td>
+      </tr>
+      {%endfor%}
+    </table>
+    {%endif%}
+  </div>
+</div>
+{% endblock %}

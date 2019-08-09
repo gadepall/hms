@@ -1,0 +1,200 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+<style>
+
+#mainTable {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#mainTable td, #mainTable th {
+  padding: 8px;
+}
+
+#mainTable td{
+  padding: 8px;
+  font-size: 15px;
+}
+#mainTable tr:nth-child(even){background-color: #f2f2f2;}
+
+#mainTable tr:hover {background-color: #ddd;}
+
+#mainTable thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+}
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+#mainTable thead,th {
+  background-color:#778899;
+}
+/* SEPERATE CODE */
+
+.subtitle
+{
+background-color:#F0E68C;
+}
+.spnhead{
+  font-size: 20px;
+  font-weight: bold;
+}
+.spndata{
+  font-size: 18px;
+  font-weight: bold;
+}
+</style>
+
+<script>
+  function deactive() {
+  var conf = confirm("Are you sure you want to Deactivate this Registration No from ANC?");
+  if (conf==true)
+  	return true;
+  else
+  	return false;
+
+ }
+
+ function reactive() {
+ var conf = confirm("Are you sure you want to reactivate this Registration No for ANC?");
+ if (conf==true)
+   return true;
+ else
+   return false;
+
+}
+
+function display_c(){
+var refresh=1000; // Refresh rate in milli seconds
+mytime=setTimeout('display_ct()',refresh)
+}
+
+function display_ct(){
+var today = new Date();
+var h = today.getHours();
+var m = today.getMinutes();
+var s = today.getSeconds();
+var dd = today.getDate();
+var mm = today.getUTCMonth()+1;
+var yy = today.getFullYear();
+m = checkTime(m);
+s = checkTime(s);
+
+dd = checkTime(dd);
+mm = checkTime(mm);
+
+
+
+document.getElementById('anc_date').value = yy + "-" + mm + "-" + dd;
+tt=display_c();
+}
+
+</script>
+
+<div class="col12">
+  <div id="content">
+    <div class="titlebox" style="text-align: center;">ANTE NATAL CARE VISIT</div>
+    <br>
+{%if ds1 != ''%}
+<div class="row" style="padding-bottom:2px;"></div>
+{% for row in ds1%}
+<div class="row myrow subtitle">
+  <div class="col-2"><span class="spnhead">Regno:</span><span class="spndata">{{row[0]}}</span></div>
+  <div class="col-3"><span class="spnhead">Name:</span><span class="spndata">{{row[1]}} {{row[2]}} {{row[3]}}</span></div>
+  <div class="col-2"><span class="spnhead">Sex:</span><span class="spndata">{{row[7]}}</span></div>
+  <div class="col-2"><span class="spnhead">Age:</span><span class="spndata">{{row[5]}} {{row[6]}}</span></div>
+  <div class="col-2"><span class="spnhead">Reg Date:</span><span class="spndata">{{row[4]}}</span></div>
+  <div class="col-2"><span class="spnhead">Education:</span><span class="spndata">{{row[8]}}</span></div>
+  {%endfor%}
+
+</div>
+<br>
+{%else%}
+
+  <div class="row myrow">
+    <div class="col-3">{{ack1}}</div>
+  </div>
+
+{%endif%}
+{%if ds1!='' and ds2 !=''%}
+	<table id="mainTable" >
+    <thead>
+      <th>Action</th>
+      <th>Visit Date</th>
+      <th>Patient History</th>
+      <th>Gravida History</th>
+      <th>First Visit</th>
+      <th>Follow Up Visit</th>
+      <th>Lab Check Up </th>
+      <th>USG Report</th>
+      <th>Status</th>
+      <th>Action</th>
+  </thead>
+
+    <form action="ANCMain" method="POST">
+      {%for rows in ds1%}
+      <input type="text" name="regno" value="{{rows[0]}}" style="display:none;">
+      {%endfor%}
+      {%for row in gd%}
+      <tr>
+        <input type="text" name="anc_id" value="{{row[0]}}" style="display:none;">
+    <!--This will activate the START VISIT Button when anc_status=1 and vice versa--->
+    {%if row[9] ==1%}
+		<td><input type="submit" value="START VISIT" ></td>
+    </form>
+    {%else%}
+		<td></td>
+    {%endif%}
+    <td>{{row[2]}}</td>
+
+    {%if row[3]==1%}
+    <td>Done</td>
+    {%else%}
+    <td>Not Done</td>
+    {%endif%}
+
+    {%if row[4]>0%}
+    <td>Done</td>
+    {%else%}
+    <td>Not Done</td>
+    {%endif%}
+
+    {%if row[5]==1%}
+    <td>Done</td>
+    {%else%}
+    <td>Not Done</td>
+    {%endif%}
+
+    <td>{{row[6]}}</td>
+    <td>{{row[7]}}</td>
+    <td>{{row[8]}}</td>
+
+    <!--This will activate the Deactivate Button when anc_status=1 and vice versa--->
+
+    {%if row[9] == 1%}
+		<td>Active</td>
+    <form action="ANCIdDeactivate" method="POST">
+    <input type="text" name="anc_id" value="{{row[0]}}" style="display:none;">
+		<td><input type="submit" value="DEACTIVATE" onclick="return deactive()"></td>
+    </form>
+	{%else%}
+		<td>Deactived </td>
+
+  {%endif%}
+
+  </tr>
+  {%endfor%}
+
+  </table>
+
+
+  </div>
+</div>
+{%endif%}
+{%endblock%}

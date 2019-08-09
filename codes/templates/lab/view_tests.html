@@ -1,0 +1,114 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+<style>
+#test td, #test th {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align:center
+}
+</style>
+<script>
+function getData() {
+  var val = $("#sampleid").val();
+  $.ajax({
+  type: "POST",
+  url: "/getPanelInfo",
+
+  data:"sname=" + val,
+  success: function(string){
+    var data = JSON.parse(string)['data']
+    $("#panelid").html(htmlify(data));
+  }
+  });
+};
+
+function htmlify( val ) {
+  Data = '<option value="0">--Select--</option>';
+  for (var index = 0; index < val.length; ++index) {
+      var entry = val[index];
+      Data = Data + "<option value='"+entry[0]+"'>"+entry[2]+"</option>";
+
+    };
+    return Data;
+};
+
+</script>
+<div class="col-12">
+  <div id="content">
+    <div id="content">
+      <div class="titlebox" style="text-align:center">
+        <span style="text-align:center">Edit Test Name</span>
+        <div style="text-align:right;display:inline;border:2px solid #000080;padding:6px;border-radius:3px;"><a href="labadmin" style="text-decoration:none;color:green;font-size:30px;color:#000080"><img src="static/icon4/home.svg" height="40px" width="40px"></a></div>
+      </div>
+<div class="row myrow">
+  <div class="col-3"></div>
+  <form action="ViewtestByFilter" method="POST">
+  <div class="col-2">
+    <span class="texttule">Samples:</span>
+    <select name="sampleid" id="sampleid" onclick="getData()" required>
+      <option value="">--Select--</option>
+      {%for row in sdata%}
+      <option value="{{row[0]}}">{{row[1]}}</option>
+      {%endfor%}
+    </select>
+  </div>
+  <div class="col-3">
+    <span class="texttule">Panel:</span>
+    <select name="panelid" id="panelid">
+      <option value="0">--Select--</option>
+    </select>
+  </div>
+  <div class="col-2">
+    <input type="submit" value="Search">
+  </div>
+</div>
+
+<div class="row myrow">
+  <div class="col-12">
+    <div class="col-1"></div>
+    <table id="test">
+    <thead>
+    <tr>
+        <th>Sample Name</th>
+        <th>Panel Name</th>
+        <th>Test name</th>
+        <th>Male Range Min</th>
+        <th>Male Range Max</th>
+        <th>Female Range Min</th>
+        <th>Female Range Max</th>
+        <th>Unit</th>
+        <th>Amount</th>
+        <th>Edit</th>
+    </tr>
+    </thead>
+    <tbody>
+        {% for row in data %}
+            <tr>
+                <td>{{row[11]}}</td>
+                {%if pid!='0'%}
+                  <td>{{row[12]}}</td>
+                {%else%}
+                  <td>No Panel</td>
+                {%endif%}
+                <td>{{row[3]}}</td>
+                <td>{{row[4]}}</td>
+                <td>{{row[5]}}</td>
+                <td>{{row[6]}}</td>
+                <td>{{row[7]}}</td>
+                <td>{{row[8]}}</td>
+                <td>{{row[9]}}</td>
+                {%if pid!='0'%}
+                  <td><a href="{{url_for('Updatetest',tid=row[0],pid='')}}">Edit</a></td>
+                {%else%}
+                  <td><a href="{{url_for('Updatetest',tid=row[0],pid=0)}}">Edit</a></td>
+                {%endif%}
+
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+{% endblock %}

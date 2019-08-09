@@ -1,0 +1,102 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+
+<style>
+.subtitle
+{
+background-color:#F0E68C;
+width: 100%;
+}
+.spnhead
+{
+  font-size: 20px;
+  font-weight: bold;
+}
+.spndata{
+  font-size: 18px;
+  font-weight: bold;
+}
+
+
+		.container{
+			width: 100%;
+      padding-right: 0px;
+      padding-left: 0px;
+      margin-right: auto;
+      margin-left: auto;
+		}
+
+		ul.tabs{
+			margin: 0px;
+			padding: 0px;
+			list-style: none;
+		}
+		ul.tabs li{
+			background: none;
+			display: inline-block;
+			padding: 8px 15px;
+      padding-right:100px;
+      cursor: pointer;
+      color: #222;
+      font-size: 18px;
+		}
+
+		ul.tabs li.current{
+			background: #F0FFFF;
+			color: #222;
+      font-weight: bold;
+		}
+
+		.tab-content{
+			display: none;
+			background: #F0FFFF;
+			padding: 15px;
+		}
+
+		.tab-content.current{
+			display: inherit;
+		}
+</style>
+
+<div class="col12">
+  <div id="content">
+    {%if flag1==1%}
+    <form action="delivery" method="POST">
+      <div class="titlebox" style="text-align:center">
+        <span style="text-align:center">Delivery Ward</span>
+        <div style="text-align:right;display:inline;border:2px solid #000080;padding:6px;border-radius:3px;"><a href="GetdeliveryRedir" style="text-decoration:none;color:green;font-size:30px;color:#000080"><img src="static/icon4/home.svg" height="40px" width="40px"></a></div>
+      </div>
+      <div class="row" style="padding-bottom:1px;"></div>
+      <div class="row myrow">
+        <div class="col-12">
+          <div align="center">
+          <span class="texttule">Enter RegNo :</span>
+          <input type="text" name="regno" class="alphanumeric">
+          <input type="submit" value="Search">
+          <p style="display:inline;color:green;"><b>{{ack1}}</b></p>
+        </div>
+        </div>
+      </div>
+    </form>
+    {%endif%}
+
+
+{%if flag2==1%}
+{%for row in ds1%}
+    <form action="deliveryPrintPage" method="POST">
+      <div class="row myrow">
+        <div class="col-12">
+          <div align="center">
+            <input type="submit" value="Print" style="height:40px;width:100px;background-color:#A9A9A9;font-weight:bold">
+            <input type="text" name="delivery_id" value="{{row[0]}}"  style="display:none;">
+          </div>
+        </div>
+      </div>
+    </form>
+    {%endfor%}
+    {%endif%}
+  </div>
+</div>
+
+
+{% endblock %}

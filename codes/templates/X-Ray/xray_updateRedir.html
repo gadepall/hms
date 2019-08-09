@@ -1,0 +1,28 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+
+<div class="col12">
+	<div id="content">
+		<form action ="/getxrayupdate" method="POST">
+			<div class="titlebox" style="text-align:center">Edit X-ray Details</div>
+			<div class="row" style="padding-bottom:1px;"></div>
+			<div class="row myrow">
+				<div class="col-12">
+					<div align="center">
+						<span class="texttule">Enter RegNo :</span>
+						<input type="text" name="regno" class="alphanumeric">
+	          <span class="texttule">Pateint From:</span>
+	          <select id="loc" name="location" required>
+							<option value="">--Select--</option>
+	            <option value="OPD">OPD</option>
+	            <option value="WARD">WARD</option>
+						</select>
+						<input type="submit" value="Search"><br>
+						<p style="display:inline;color:green;"><b>{{ack1}}</b></p>
+	        </div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+<style>
+#backgrnd{
+ opacity:0.2;
+ color:white;
+}
+</style>
+<script>
+function resetmsg()
+{
+  $('#msg').text('');
+}
+</script>
+<div class="col-12">
+  <div id="content">
+    <div class="titlebox" align="center">Patient Portal</div>
+    <form action="patientPortal" method="POST">
+    <div class="row myrow" >
+      <div class="col-5"></div>
+        <div class="col-3">
+            <span class="texttule">RegNo:</span>
+            <input type="text" name="regno" style="width:120px;" onfocus="resetmsg()">
+            <input type="submit" value="Search">
+        </div>
+    </form>
+  </div>
+  {%if ack=='DISCHARGED'%}
+    {%for row in disinfo%}
+      <div class="row myrow" >
+        <div class="col-4"></div>
+          <p id="msg" style="font-weight:bold;color:green;">{{row[1]}} {{row[2]}} {{row[3]}} ({{row[0]}}) IS DISCHARGED ON {{row[4].strftime('%d/%m/%Y')}}.</p>
+        </div>
+      </div>
+    {%endfor%}
+  {%endif%}
+  </div> <!--- Content --->
+</div><!--- col-12 --->
+
+
+<div  style="margin-left:33%;">
+  <img id="backgrnd" src="static/icon4/slogo.jpg" height="70%" width="50%">
+</div>
+{%endblock%}

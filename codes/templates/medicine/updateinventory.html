@@ -1,0 +1,274 @@
+{% extends "Frame/inventoryFrame.html" %}
+{% block content %}
+
+<style>
+#mainTable {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#mainTable td, #mainTable th {
+  padding: 8px;
+}
+
+#mainTable td{
+  padding: 8px;
+  font-size: 15px;
+}
+#mainTable tr:nth-child(even){background-color: #f2f2f2;}
+
+#mainTable tr:hover {background-color: #ddd;}
+
+#mainTable thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+}
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+#mainTable thead,th {
+  background-color:#778899;
+}
+/* SEPERATE CODE */
+
+
+
+#inventory {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#inventory td, #inventory th {
+  padding: 8px;
+}
+
+#inventory td{
+  padding: 8px;
+  font-size: 15px;
+}
+#inventory tr:nth-child(even){background-color: #f2f2f2;}
+
+#inventory tr:hover {background-color: #ddd;}
+
+#inventory thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+}
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+#inventory thead,th {
+  background-color:#778899;
+}
+/* SEPERATE CODE */
+
+
+
+
+.subtitle
+{
+background-color:#F0E68C;
+}
+.spnhead{
+  font-size: 20px;
+  font-weight: bold;
+}
+.spndata{
+  font-size: 18px;
+  font-weight: bold;
+}
+</style>
+  <script>
+function getDistName()
+{
+  var val = $("#dis_type").val();
+  $.ajax({
+  type: "POST",
+  url: "/getDistributorName",
+  data:"dist_type_id=" + val,
+  success: function(string){
+    var data = JSON.parse(string)['data'];
+	 $("#dis_id").html(htmlify(data));
+  }
+  });
+};
+function htmlify(val)
+{
+  var Data = "<option value=''>--Select--</option>";
+  for (var index = 0; index < val.length; ++index) {
+      var entry = val[index];
+    Data = Data + "<option value='"+entry[0]+"'>"+entry[1]+"</option>";
+    };
+    return Data;
+};
+$(function()
+  {
+      $("#drugname").autocomplete
+      ({
+          source: function(request,response )
+          {
+            var drugname=document.getElementById('drugname').value;
+              $.ajax
+              ({
+                  type:"POST",
+                  url: "getAllDrugname",
+                  data:'drugname='+drugname,
+                  success: function( data )
+                  {
+                    //alert(data['d'][2]);
+                    response(data);
+                  }
+              });
+          },
+      });
+  });
+function bring()
+{
+
+	var valu = document.getElementById('drugname').value;
+	$.ajax({
+                  type:"POST",
+                  url: "getSelectedDrug",
+                  data:'drugtype='+valu,
+                  success: function( string )
+                  {
+					var data = JSON.parse(string)['drugdata'];
+
+					$('#drug_id').val(data[0]);
+					$('#drugname').val(data[1]);
+					$('#drugtype').val(data[2]);
+                  }
+              });
+          }
+
+
+</script>
+<div class="col-12">
+  <div id="content">
+    <div class="titlebox"> EDIT INVENTORY DETAILS</div>
+     <br>
+	<form action ="getUpdateInventory" method="POST">
+
+		<div class="row myrow">
+
+		<div class="col-3">
+		<span class="texttule">Select Entry Date:</span>
+		<td><input  type="date"   name= "entrydate" id="date" required></td>
+		</div>
+
+		<div class="col-3">
+        <span class="texttule">Distributor Type:</span>
+        <select name="dist_type_id" id="dis_type" onchange="getDistName()" required>
+        <option value="">--Select--</option>
+        {%for row in disdata%}
+         <option value="{{row[0]}}">{{row[1]}}</option>
+         {%endfor%}
+         </select>
+		</div>
+
+
+        <div class="col-3">
+        <span class="texttule">Distributors:</span>
+        <select name="dist_type_name"  id="dis_id" onchange="getenabledtext(this.value)" required>
+        <option value=''>--Select--</option>
+        </select>
+        </div>
+
+        <div class="col-2">
+          <input type="submit" class="button"  value="Enter" onclick="getDistName()" style="height:30px;width:100px;background-color:#A9A9A9;font-weight:bold">
+          </div>
+        </div>
+  </form>
+  		 <div style="width:100%;max-height:400px;line-height:1em;overflow:scroll;">
+			  <br>
+			  <br>
+{%if getdata != ' '%}
+		<table border=1 id="mainTable">
+        <thead >
+            <tr>
+				<th>Edit</th>
+                <th>Drug Name</th>
+                <th>Drug Type</th>
+                <th>Distributor Type</th>
+                <th>Distributor Name</th>
+                <th>Entry date</th>
+                <th>Drug Issued To Department</th>
+                <th>Batch Number</th>
+                <th>HSN Code</th>
+                <th>TotalStrip</th>
+                <th>TotalQuantity</th>
+                <th>Rate</th>
+                <th>Unit Price</th>
+                <th>ExpiryDate</th>
+                <th>Manufacturing Date</th>
+                <th>Discount</th>
+                <th>Free Medicine</th>
+                <th>PerMRP</th>
+                <th>PackQuantity</th>
+                <th>Taxable Amount</th>
+                <th>CGST</th>
+                <th>SGST</th>
+                <th>Amount</th>
+                <th>Rack Number</th>
+                <th>Remark</th>
+             </tr>
+        </thead>
+
+		</div>  <!--div  closed for hiding table and text contents-->
+       </div>
+      </div>
+
+
+
+{%for row in getdata%}
+<tr>
+	<form action="ViewUpdateInventory" method="post">
+	<td><input type="submit" class="button" id='btnsave' value="Edit"   onchange="getDistName()" style="height:30px;width:100px;background-color:#A9A9A9;font-weight:bold"></td>
+	<input type="text" name="inventoryid" value="{{row[0]}}" style="display:none;">
+	<td>{{row[3]}}</td>
+    <td>{{row[4]}}</td>
+    <td>{{row[1]}}</td>
+    <td>{{row[2]}}</td>
+    <td>{{row[22]}}</td>
+    <td>{{row[20]}}</td>
+    <td>{{row[8]}}</td>
+    <td>{{row[5]}}</td>
+    <td>{{row[14]}}</td>
+    <td>{{row[6]}}</td>
+    <td>{{row[7]}}</td>
+    <td>{{row[24]}}</td>
+    <td>{{row[9]}}</td>
+    <td>{{row[10]}}</td>
+    <td>{{row[11]}}</td>
+    <td>{{row[12]}}</td>
+    <td>{{row[13]}}</td>
+    <td>{{row[14]}}</td>
+    <td>{{row[15]}}</td>
+    <td>{{row[16]}}</td>
+    <td>{{row[17]}}</td>
+    <td>{{row[18]}}</td>
+    <td>{{row[19]}}</td>
+    <td>{{row[21]}}</td>
+
+
+  </form>
+  </tr>
+  {%endfor%}
+   </table>
+   {%endif%}
+<div class="col=5"><p><b> {{ack}}</b></p></div>
+        </div>
+
+{% endblock %}

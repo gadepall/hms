@@ -1,0 +1,37 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+<style>
+#lab td, #lab th {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align:center
+}
+</style>
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-5">
+<table id="lab" style="width:100%">
+  <tr>
+    <td colspan="2" style="color:green;background-color:pink"><b>LAB ADMINISTRATION</b></td>
+  </tr>
+  <tr>
+    <td><b>Add</b></td>
+    <td><b>View/Edit</b></td>
+  </tr>
+  <tr>
+    <td><a href="{{ url_for('Insertnewsample') }}"> Add Sample</a></td>
+    <td><a href="{{ url_for('Viewsample') }}"> View Samples</a></td>
+  </tr>
+  <tr>
+    <td><a href="{{ url_for('Insertnewpanel') }}">Add Panel</a></td>
+    <td><a href="{{ url_for('Viewpanel') }}">View Panels</a></td>
+  <tr>
+    <td><a href="{{ url_for('Insertnewtest') }}">Add Test</a></td>
+    <td><a href="{{ url_for('Viewtest') }}">View Tests</a></td>
+  </tr>
+</table>
+</div>
+</div>
+
+
+{% endblock %}

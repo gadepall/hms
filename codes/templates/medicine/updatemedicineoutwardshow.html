@@ -1,0 +1,135 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+
+<script>
+	$(function()
+	  {
+	      $("#drugname").autocomplete
+	      ({
+	          source: function(request,response )
+	          {
+
+	            var drugname=document.getElementById('drugname').value;
+	              $.ajax
+	              ({
+	                  type:"POST",
+	                  url: "getMedDetailsOutwardUpdate",
+	                  data:'drugname='+drugname,
+	                  success: function(data)
+	                  {
+											console.log(data);
+	                    response(data);
+	                  }
+	              });
+	          },
+	      });
+	  });
+function showData(idval)
+{
+	var idval = idval.value;
+	var arr = idval.split(">");
+	$('#inv_id').val(arr[0]);
+	$('#drugname').val(arr[1]);
+	temp = arr[2];
+	$('#drugtype').val(temp.substring(2,temp.length-2));
+	temp = arr[3];
+	$('#batchno').val(temp.substring(11,temp.length-2));
+	temp = arr[4];
+	$('#expirydate').val(temp.substring(14,temp.length-1));
+	temp = arr[5];
+	$('#mfgdate').val(temp.substring(11,temp.length));
+
+}
+</script>
+
+<div class="col-12">
+  <div id="content">
+    <div class="titlebox">Medicine Outward Update</div>
+     <br>
+
+		{%for rows in getdata%}
+
+		<form action="UpdateOutwardMedicine" method="POST">
+		<div class="row myrow">
+		<input type="text" name="outwardid" id="outwardid" value="{{rows[0]}}" style="display:none;">
+		<input type="text" name="meddet_id" id="meddet_id" value="{{rows[12]}}"  style="display:none;">
+		<input type="text" name="inv_id" id="inv_id" value="{{rows[13]}}" style="display:none;">
+		</div>
+
+
+		<div class="row myrow">
+
+		<div class="col-2">
+        <span class="texttule">Issued date:</span>
+        <input type="date" name="issueddate"  size="8" value="{{rows[1]}}">
+		</div>
+
+
+		 <div class="col-2">
+        <span class="texttule">Time:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <input type="time" name="time" value="{{rows[2]}}">
+        </div>
+
+        <div class="col-2">
+		<span class="texttule">Issued To:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+		<select name="wardid" id="">
+			<option value="{{rows[8]}}">{{rows[9]}}</option>
+			<option value="">--Select--</option>
+            {%for row in result%}
+            <option value="{{row[0]}}">{{row[1]}}</option>
+            {%endfor%}
+          </select>
+					<input type="text" name="wardid"  style="display:none;">
+		</div>
+
+		<div class="col-2">
+         <span class="texttule">Person name:</span>
+         <input type="text" name="personname" id="personname"  class="alphaonly" value="{{rows[11]}}" required>
+		 </div>
+
+         <div class="col-2">
+         <span class="texttule">Quantity:</span>
+         <input type="text" name="fix_issued_qty" id="fix_issued_qty" class="numeric" value="{{rows[10]}}" required>
+		 </div>
+
+
+
+		</div>
+		<div class="row myrow">
+		 <div class="col-2">
+        <span class="texttule">Drug Name:</span>
+        <div class="ui-widget">
+        <input type="text" name="drugname" id="drugname" class="alphanumeric"  value="{{rows[3]}}" onblur="showData(this);" >
+        </div>
+        </div>
+
+		<div class="col-2">
+        <span class="texttule">Drug Type:</span>
+        <input type="text" name="drugtype" id="drugtype" value="{{rows[4]}}" readonly>
+        </div>
+
+		          <div class="col-2">
+        <span class="texttule">Batch Number:</span>
+        <input type="text" name="batchno" id="batchno" value="{{rows[5]}}" readonly>
+        </div>
+
+        <div class="col-2">
+        <span class="texttule">Expiry Date:</span>
+        <input type="text" name="expirydate" id="expirydate" value="{{rows[6]}}" readonly >
+        </div>
+
+        <div class="col-2">
+        <span class="texttule">Manufacturing Date:</span>
+        <input type="text" name="mfgdate" id="mfgdate"  value="{{rows[7]}}" readonly>
+        </div>
+		 {% endfor %}
+		 		<br>
+				<div class="row myrow">
+        <div class="col-5"></div>
+        <div class="col-3">
+          <input type="submit" class="button"  value="UPDATE" style="height:40px;width:100px;background-color:#A9A9A9;font-weight:bold">
+          </div> </div>
+        <div class="col-3"><p>{{ack}}</p></div>
+
+
+{% endblock %}

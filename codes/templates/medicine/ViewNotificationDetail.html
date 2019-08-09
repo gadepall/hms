@@ -1,0 +1,180 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+<style>
+#mainTable td, #mainTable th {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align:center
+
+}
+</style>
+
+<div class="col-12">
+  <div class="titlebox">DETAIL NOTIFICATIONS OF MEDICINES</div>
+  {%if ack1 == 'Excel Sheet Generated Successfully'%}
+  <a href="static/MedicineUploads/NotExpirySearchList.xlsx" download>
+    <img src="static/icon4/excel6.png" width="40px" height="40px"></a>
+    {%endif%}
+    <p style="inline"><b> {{ack1}}</b></p>
+
+
+    {%if ack2 == 'Excel Sheet Generated Successfully'%}
+    <a href="static/MedicineUploads/MedicneStoreExpirySearchList.xlsx" download>
+      <img src="static/icon4/excel6.png" width="40px" height="40px"></a>
+      {%endif%}
+      <p style="inline"><b> {{ack2}}</b></p>
+
+    {%if ack3 == 'Excel Sheet Generated Successfully'%}
+    <a href="static/MedicineUploads/NotMinValueSearchList.xlsx" download>
+      <img src="static/icon4/excel6.png" width="40px" height="40px"></a>
+      {%endif%}
+      <p style="inline"><b> {{ack3}}</b></p>
+
+    {%if ack4 == 'Excel Sheet Generated Successfully'%}
+      <a href="static/MedicineUploads/NotMaxValueSearchList.xlsx" download>
+        <img src="static/icon4/excel6.png" width="40px" height="40px"></a>
+        {%endif%}
+        <p style="inline"><b> {{ack4}}</b></p>
+
+        <br>
+        {%if flag1==1%}
+
+        <table border=1 id="mainTable" style="width:100%">
+          <thead>
+            <tr>
+              <th>S.No.</th>
+               <th>Drug Name</th>
+               <th>Drug Type</th>
+               <th>Batch No</th>
+               <th>Manufacturing Date</th>
+               <th>Expiry Date</th>
+               <th>Current Quantity In Store</th>
+               <th>Rack Number</th>
+               {%for row in allward%}
+              <th>{{row[1]}}</th>
+               {%endfor%}
+               <th>Total Quantity</th>
+
+            </tr>
+          </thead>
+          {%for row in getdata%}
+          <tr>
+            <td>{{loop.index}}</td>
+            <td>{{row[0]}}</td>
+            <td>{{row[1]}}</td>
+            <td>{{row[2]}}</td>
+            <td><b>{{row[3]}}</b></td>
+            <td><b>{{row[4]}}</b></td>
+            <td>{{row[5]}}</td>
+            <td><b><u><i>{{row[6]}}</i></u></b></td>
+            {%for i in range(0,(allward|length)+1)%}
+            {%if i!=(allward|length)%}
+            <td>{{row[7+i]}}</td>
+            {%else%}
+            <td><b>{{row[7+i]}}</b></td>
+            {%endif%}
+            {%endfor%}
+          </tr>
+          {%endfor%}
+        </table>
+
+
+          {%elif flag1==2%}
+        <table border=1 id="mainTable" style="width:100%">
+          <thead>
+            <tr>
+              <th>S.No.</th>
+              <th>Drug Name</th>
+              <th>Drug Type</th>
+              <th>Batch No</th>
+              <th>Manufacturing Date</th>
+              <th>Expiry Date</th>
+              <th>Current Quantity In Store</th>
+              <th>Rack Number</th>
+            </tr>
+          </thead>
+          {%for row in getdata%}
+          <tr>
+            <td>{{loop.index}}</td>
+            <td>{{row[0]}}</td>
+            <td>{{row[1]}}</td>
+            <td>{{row[2]}}</td>
+            <td><b>{{row[3]}}</b></td>
+            <td><b>{{row[4]}}</b></td>
+            <td>{{row[5]}}</td>
+            <td><b><u><i>{{row[6]}}</i></u></b></td>
+          </tr>
+          {%endfor%}
+        </table>
+
+        {%elif flag1==3%}
+      <table border=1 id="mainTable" style="width:100%">
+        <thead>
+          <tr>
+            <th>S.No.</th>
+            <th>Drug Name</th>
+            <th>Drug Type</th>
+            <th>Batch No</th>
+            <th>Manufacturing Date</th>
+            <th>Expiry Date</th>
+            <th>Rack Number</th>
+            <th>Current Quantity In Store</th>
+            <th>Minimum Value</th>
+
+          </tr>
+        </thead>
+        {%for row in getdata%}
+        <tr>
+          <td>{{loop.index}}</td>
+          <td>{{row[0]}}</td>
+          <td>{{row[1]}}</td>
+          <td>{{row[2]}}</td>
+          <td><b>{{row[3]}}</b></td>
+          <td><b>{{row[4]}}</b></td>
+          <td><b><u><i>{{row[5]}}</i></u></b></td>
+          <td>{{row[6]}}</td>
+          <td>{{row[7]}}</td>
+        </tr>
+        {%endfor%}
+      </table>
+
+      {%elif flag1==4%}
+      <table border=1 id="mainTable" style="width:100%">
+      <thead>
+        <tr>
+          <th>S.No.</th>
+          <th>Drug Name</th>
+          <th>Drug Type</th>
+          <th>Batch No</th>
+          <th>Manufacturing Date</th>
+          <th>Expiry Date</th>
+          <th>Rack Number</th>
+          <th>Current Quantity In Store</th>
+          <th>Maximum Value</th>
+
+        </tr>
+      </thead>
+      {%for row in getdata%}
+      <tr>
+        <td>{{loop.index}}</td>
+        <td>{{row[0]}}</td>
+        <td>{{row[1]}}</td>
+        <td>{{row[2]}}</td>
+        <td><b>{{row[3]}}</b></td>
+        <td><b>{{row[4]}}</b></td>
+        <td><b><u><i>{{row[5]}}</i></u></b></td>
+        <td>{{row[6]}}</td>
+        <td>{{row[7]}}</td>
+      </tr>
+      {%endfor%}
+      </table>
+
+
+
+
+        {%endif%}
+      </div>
+
+
+
+{%endblock%}

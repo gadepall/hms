@@ -1,0 +1,43 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+
+
+<div class="col12">
+  <div id="content">
+    <div class="titlebox">
+      <span style="text-align:center">Add New Panel</span>
+      <div style="text-align:right;display:inline;border:2px solid #000080;padding:6px;border-radius:3px;"><a href="labadmin" style="text-decoration:none;color:green;font-size:30px;color:#000080"><img src="static/icon4/home.svg" height="40px" width="40px"></a></div>
+    </div>
+     <form action="Insertnewpanel" method="POST">
+
+      <div class="row myrow">
+        <div class="col-4"></div>
+        <div class="col-4">
+        <span class="texttule">Panel Name:</span>
+        <select name="panel" id='panel' required>
+            <option value="">--Select--</option>
+            {% for row in value %}
+                <option value={{ row[0] }}>{{ row[1] }}</option>
+            {% endfor %}
+          </select>
+        <input type="text" name="panel_name" id="panel_name" class="alphanumeric" placeholder="Panel Name" size=29 required>
+      </div>
+      <div class="col-3">
+        <input type="submit" class="button" id='btnsave' value="SAVE" style="height:30px;width:100px;">
+      </div>
+    </div>
+      <div class="row myrow">
+        <div class="col-5"></div>
+        <div class="col-3"><p style="color:#228B22;font-weight:bold">{{ack}}</p></div></div>
+    </form>
+  </div> <!--- Content --->
+</div><!--- col-12 --->
+
+
+
+
+
+
+
+
+{% endblock %}

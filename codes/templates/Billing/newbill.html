@@ -1,0 +1,118 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+<style>
+/* TABLE CSS FOR TPR START */
+
+    /* GENERAL CODE */
+    #docpharmacy {
+      font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+      }
+
+    #docpharmacy td, #docpharmacy th {
+      padding: 8px;
+      }
+
+    #docpharmacy td{
+      padding: 8px;
+      font-size: 18px;
+      text-align: center;
+      }
+    #docpharmacy tr:nth-child(even){background-color: #f2f2f2;}
+
+    #docpharmacy tr:hover {background-color: #ddd;}
+
+    #docpharmacy thead,th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: center;
+      color: white;
+      font-size: 17px;
+      }
+
+    /* GENERAL CODE */
+
+
+    /* SEPERATE CODE */
+    #docpharmacy thead,th {
+        background-color:#778899;
+    }
+    /* SEPERATE CODE */
+
+</style>
+<script>
+function display_c(){
+var refresh=1000; // Refresh rate in milli seconds
+mytime=setTimeout('display_ct()',refresh)
+}
+
+function display_ct(){
+
+var today = new Date();
+var h = today.getHours();
+var m = today.getMinutes();
+var s = today.getSeconds();
+var dd = today.getDate();
+var mm = today.getUTCMonth()+1;
+var yy = today.getFullYear();
+m = checkTime(m);
+s = checkTime(s);
+
+dd = checkTime(dd);
+mm = checkTime(mm);
+
+
+document.getElementById('mdate').value = yy + "-" + mm + "-" + dd;
+tt=display_c();
+}
+</script>
+<div class="col-12">
+  <div id="content">
+    <div class="titlebox" align="center">Medicine Billing</div>
+    <div class="row myrow"><div class="col-5"></div></div>
+    <form action="getPatientDetailBilling" method="POST">
+     <div class="row myrow">
+       <div class="col-5"></div>
+       <div class="col-2" style="width:13.5%;">
+       <span class="texttule">RegNo:</span>
+       <input type="text" name="regno" id="regno" placeholder="Regno" size=12  class="alphanumeric" required>
+       <input type="date" name="mdate" id="mdate" style="display:none;">
+       <input type="hidden"   name="user" value="pharmacy">
+     </div>
+     <div class="col-1">
+       <input type="submit" class="button" value="Search">
+     </div>
+     <div class="col-2"><p  style="color:red;font-size:18px;">{{ack}}</p></div>
+   </div>
+   <div class="row myrow"><div class="col-5"></div></div>
+   </form>
+  <div class="row myrow">
+    <div class="col-11" style="width:98.9%;">
+      <h3>Filled By Doctor</h3>
+      <table id="docpharmacy">
+        <thead>
+          <th style="width:1%;">Action</th>
+          <th>Regno</th>
+          <th>Name</th>
+          <th>Visit Date</th>
+        </thead>
+        {%for row in data%}
+        <tr>
+          <form action="getPatientDetailBilling" method="POST">
+          <td><input type="submit" value="Generate BIll"><input type="hidden" name="bmid" value="{{row[0]}}"><input type="hidden" name="regno" value="{{row[1]}}"><input type="hidden" name="user" value="doctor"></td>
+        </form>
+          <td>{{row[1]}}</td>
+          <td>{{row[2]}} {{row[3]}} {{row[4]}}</td>
+          <td>{{row[5]}}</td>
+        </tr>
+        {%endfor%}
+      </table>
+    </div>
+  </div>
+  </div>
+</div>
+
+
+
+{% endblock %}

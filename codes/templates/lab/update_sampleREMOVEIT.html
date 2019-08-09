@@ -1,0 +1,37 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+
+<div class="col12">
+  <div id="content">
+    <div class="titlebox">Update Sample Name</div>
+     <br>
+     <form action="{{ url_for('Updatesample2') }}" method="POST">
+
+      <div class="row myrow">
+        <div class="col-3">
+
+        <span class="texttule">Sample Details:</span>
+        {% for row in data %}
+        <input type="text" name="sample_name_1" class="alphaonly" id="sample_name_1" value="{{row[1]}}">
+        <input type="hidden" name="sample_id_1" id="sample_id_1" value="{{row[0]}}" readonly>
+        {% endfor %}
+      </div>
+
+        <div class="col-3">
+          <input type="submit" class="button" id='btnsave' value="UPDATE" style="height:40px;width:150px;">
+        </div>
+      </div>
+      <br>
+      <div class="row myrow"><div class="col-3"><p>{{ack}}</p></div></div>
+    </form>
+  </div> <!--- Content --->
+</div><!--- col-12 --->
+
+
+
+
+
+
+
+
+{% endblock %}

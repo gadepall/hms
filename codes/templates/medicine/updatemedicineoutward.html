@@ -1,0 +1,254 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+<style>
+	#tab {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#tab td, #mainTable th {
+  padding: 8px;
+}
+
+#tab td{
+  padding: 8px;
+  font-size: 15px;
+}
+#tab tr:nth-child(even){background-color: #f2f2f2;}
+
+#tab tr:hover {background-color: #ddd;}
+
+#tab thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+}
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+#tab thead,th {
+  background-color:#778899;
+}
+/* SEPERATE CODE */
+
+
+
+#tab2 {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#tab2 td, #inventory th {
+  padding: 8px;
+}
+
+#tab2 td{
+  padding: 8px;
+  font-size: 15px;
+}
+#tab2 tr:nth-child(even){background-color: #f2f2f2;}
+
+#tab2 tr:hover {background-color: #ddd;}
+
+#tab2 thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+}
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+#tab2 thead,th {
+  background-color:#778899;
+}
+/* SEPERATE CODE */
+
+
+
+
+.subtitle
+{
+background-color:#F0E68C;
+}
+.spnhead{
+  font-size: 20px;
+  font-weight: bold;
+}
+.spndata{
+  font-size: 18px;
+  font-weight: bold;
+}
+
+
+</style>
+
+<script>
+$(function()
+  {
+      $("#drugname").autocomplete
+      ({
+          source: function(request,response )
+          {
+            var drugname=document.getElementById('drugname').value;
+              $.ajax
+              ({
+                  type:"POST",
+                  url: "getAllDrugname",
+                  data:'drugname='+drugname,
+                  success: function( data )
+                  {
+                    //alert(data['d'][2]);
+                    response(data);
+                  }
+              });
+          },
+      });
+  });
+
+</script>
+</head>
+<body>
+
+
+<div class="col12">
+<div class="titlebox">EDIT MEDICINE OUTWARD DETAILS</div>
+
+<form action="ViewUpdateOutwardByDate" method="post">
+<div class="row myrow">
+
+<div class="col-3">
+<span class="texttule">Issued To Date:</span>
+<input type="date" name="issued_dateto" required>
+</div>
+
+<div class="col-3">
+<span class="texttule">Issued From Date:</span>
+<input type="date" name="issued_datefrom" required >
+</div>
+
+<div class="col-3">
+  <input type="submit" class="button" id='btnsave' value="Enter" style="height:30px;width:100px;background-color:#A9A9A9;font-weight:bold">
+</div>
+</div>
+</form>
+
+<form action="ViewUpdateOutwardByWard" method="post">
+<div class="row myrow">
+
+<div class="col-3">
+<span class="texttule">Issued To Date:</span>
+<input type="date" name="issued_dateto" required>
+</div>
+
+<div class="col-3">
+<span class="texttule">Issued From Date:</span>
+<input type="date" name="issued_datefrom" required>
+</div>
+
+
+<div class="col-2">
+   <span class="texttule">Issued To:</span>
+    <select name="Wardname" id="" required>
+     <option value="">--Select--</option>
+            {%for row in result%}
+            <option value="{{row[0]}}">{{row[1]}}</option>
+            {%endfor%}
+          </select>
+
+   </div>
+
+<div class="col-3">
+  <input type="submit" class="button" value="Enter" style="height:30px;width:100px;background-color:#A9A9A9;font-weight:bold;">
+</div>
+</div>
+</form>
+
+<form action="ViewUpdateOutwardByDrugname" method="post">
+<div class="row myrow">
+	<div class="ui-widget">
+		<div class="col-3">
+       <span class="texttule">Drug Name:</span>
+       <input type="text" name="drugname" id="drugname"  placeholder="Drug Name" onkeypress="showDrugList(this);" required>
+      </div>
+     </div>
+     <div class="col-1">
+  <input type="submit" class="button" id='btnsave' value="Enter" style="height:30px;width:100px;background-color:#A9A9A9;font-weight:bold;margin-left:-20px">
+</div>
+</div>
+</form>
+
+<div style="width:100%;max-height:400px;line-height:1em;overflow:scroll;">
+<br>
+<br>
+<br>
+<br>
+
+<div id="tablecontainer"></div>
+<table border=3 id="tab">
+	<thead>
+     <tr>
+	  <th>Edit</th>
+	  <th>Issued  Date</th>
+	  <th>Time</th>
+      <th>Drug Name</th>
+      <th>Drug Type</th>
+      <!--<th>Quantity(Ml/Mg)</th>-->
+      <th>Batch Number</th>
+      <th>Expiry Date</th>
+      <th>Manufacturing Date</th>
+      <th>WardName</th>
+      <th>Issued QTY</th>
+      <!--<th>Remaining QTY</th>-->
+      <th>Person Name</th>
+    </tr>
+    </thead>
+
+
+
+{%for row in getdata%}
+
+	<form action="ViewUpdateOutward" method="post">
+	<tr>
+<td><input type="submit" class="button" id='btnsave' value="Edit" style="height:30px;width:80px;background-color:#A9A9A9;font-weight:bold"></td>
+<input type="text" name="outwardid" value="{{row[0]}}" style="display:none;">
+	<input type="text" name="meddet_id" id="meddet_id" value="{{row[11]}}" style="display:none;">
+		<td>{{row[1]}}</td>
+    <td>{{row[2]}}</td>
+    <td>{{row[3]}}</td>
+    <td>{{row[4]}}</td>
+  <!--  <td>{{row[5]}}</td>-->
+    <td>{{row[5]}}</td>
+    <td>{{row[6]}}</td>
+    <td>{{row[7]}}</td>
+    <td>{{row[8]}}</td>
+    <td>{{row[9]}}</td>
+    <td>{{row[10]}}</td>
+    <!--<td>{{row[11]}}</td>-->
+	<tr>
+    </form>
+   {%endfor%}
+
+
+   </table>
+
+
+
+
+
+
+
+  </div></div>
+<div class="col=5"><p><b> {{ack}}</b></p></div>
+
+      </div>
+{% endblock %}
