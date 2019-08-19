@@ -1,0 +1,108 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+<style>
+#mainTable {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#mainTable td, #mainTable th {
+  padding: 8px;
+}
+
+#mainTable td{
+  padding: 8px;
+  font-size: 15px;
+}
+#mainTable tr:nth-child(even){background-color: #f2f2f2;}
+
+#mainTable tr:hover {background-color: #ddd;}
+
+#mainTable thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+}
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+#mainTable thead,th {
+  background-color:#778899;
+}
+/* SEPERATE CODE */
+.subtitle
+{
+background-color:#F0E68C;
+}
+.spnhead{
+  font-size: 20px;
+  font-weight: bold;
+}
+.spndata{
+  font-size: 18px;
+  font-weight: bold;
+}
+</style>
+<div class="col12">
+  <div id="content">
+    <div class="titlebox">Patient(s) Requested For Discharge</div>
+    {%if ack!=""%}<p style="color:red;font-weight:bold;">{{ack}}</p>{%endif%}
+    <table id="mainTable" >
+    <thead>
+      <th>Regno</th>
+      <th>Name</th>
+      <th>Admit Date</th>
+      <th>Admit Time</th>
+      <th>Complaint</th>
+      <th>Patient From</th>
+      <th>Category</th>
+      <th>GovScheme</th>
+      <th>Ward Name</th>
+      <th>Bed No</th>
+      <th>Fill Advice</th>
+      <th>Generate Bill</th>
+  </thead>
+{%for row in ddata%}
+<tr>
+<form action="fillAdvice_Redir" method="POST">
+    <td><b>{{row[0]}}</b></td>
+    <td>{{row[1]}} {{row[2]}} {{row[3]}}</td>
+    <td>{{row[4].strftime('%d/%m/%Y')}}</td>
+    <td>{{row[5]}}</td>
+    <td>{{row[6]}}</td>
+    <td>{{row[7]}}</td>
+    <td>{{row[8]}}</td>
+    <td>{{row[9]}}</td>
+    <td><b>{{row[10]}}</b></td>
+    <td>{{row[11]}}</td>
+    <td>
+      {%if row[12]=="1"%}
+      <button name="wmid" value="{{row[13]}}">Advice</button>
+      {%elif row[12]=="2"%}
+        <button name="wmid" value="{{row[13]}}">Edit</button>
+        <img src='/static/icon4/correct.svg' style="height:30px;width:30px;">
+      {%endif%}
+    </td>
+  </form>
+    <td>
+    {%if row[12]=="2"%}
+      <form action="ipdbilling" method="POST">
+        <input type="hidden" name="ipdid" value="{{row[14]}}">
+        <input type="hidden" name="wmid" value="{{row[13]}}">
+        <input type="hidden" name="regno" value="{{row[0]}}">
+        <button>Generate Bill</button>
+      </form>
+    {%endif%}
+    </td>
+</tr>
+{%endfor%}
+</table>
+<div class="row"><div class="col-1"></div></div>
+</div> <!--- Content --->
+</div><!--- col-12 --->
+{%endblock%}

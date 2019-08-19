@@ -1,0 +1,200 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+
+<style>
+/* GENERAL CODE */
+#mainTable {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#mainTable td, #mainTable th {
+  padding: 8px;
+}
+
+#mainTable td{
+  padding: 8px;
+  font-size: 15px;
+}
+#mainTable tr:nth-child(even){background-color: #f2f2f2;}
+
+#mainTable tr:hover {background-color: #ddd;}
+
+#mainTable thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+}
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+#mainTable thead,th {
+  background-color:#778899;
+}
+/* SEPERATE CODE */
+
+</style>
+
+
+<div class="col12">
+  <div id="content">
+    <div class="titlebox">Search InPatient</div>
+    <div class="row myrow">
+
+      <div class="col-1" style="width:10%;">
+        <form action="ipdoldpatientviewToday" method="POST">
+        <span class="texttule">Today:</span>
+        <input type="submit" value="Today">
+      </form>
+      </div>
+
+      <form action="ipdoldpatientviewregno" method="POST">
+      <div class="col-3">
+          <span class="texttule">RegNo:</span>
+        <input type="text" name="regno" class="alphanumeric" style="width:120px;" required>
+        <input type="submit" value="Search">
+      </div>
+    </form>
+
+  <form action="ipdoldpatientviewfname" method="POST">
+    <div class="col-3">
+      <span class="texttule">First Name:</span>
+      <input type="text" name="pfname" class='alphaonly' style="width:120px;" required>
+      <input type="submit" value="Search">
+    </div>
+  </form>
+
+  <form action="ipdoldpatientviewcontact" method="POST">
+    <div class="col-3">
+      <span class="texttule">Contact No:</span>
+      <input type="text" name="contactno" class='numeric' maxlength="10" style="width:120px;">
+      <input type="submit" value="Search">
+    </div>
+  </form>
+
+</div>
+    <div class="row myrow">
+      <div class="col-12"></div>
+
+      <div class="col-6">
+      <form action="ipdoldpatientviewnamedate" method="POST">
+        <span class="texttule">First Name:</span>
+        <input type="text" name="pfname" class='alphaonly' style="width:120px;" required>
+        <span class="texttule">From:</span>
+        <input type="date" name="fdate" required>
+        <span class="texttule">To:</span>
+        <input type="date" name="tdate" required>
+        <input type="submit" value="Search">
+      </form>
+    </div>
+
+    <form action="ipdoldpatientviewAddress" method="POST">
+      <div class="col-5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span class="texttule">Address:</span>
+        <input type="text" name="address" class='alphaonly' style="width:120px;">
+        <input type="submit" value="Search">
+      </div>
+    </form>
+    </div>
+    <div class="col-12"></div>
+    <div class="row myrow">
+      <div class="col-3"></div>
+
+    <div class="col-5">
+    <form action="ipdoldpatientviewdate" method="POST">
+      <span class="texttule">Discharge From:</span>
+      <input type="date" name="fdate" required>
+      <span class="texttule">To:</span>
+      <input type="date" name="tdate" required>
+      <input type="submit" value="Search">
+      {%if msg == 'Excel Sheet Generated Successfully!'%}
+      <a href="static/IpdUploads/ipd.xlsx" download>
+        <img src="static/icon4/excel6.png" width="40px" height="40px"></a>
+        {%endif%}
+    </form>
+    </div>
+    </div>
+
+</div> <!--- Content --->
+</div><!--- col-12 --->
+<div class="col-12" style="text-align:center;color:green;"><span class="texttule">{{msg}}</span></div>
+<div class="col-12" style="text-align:center;color:red;"><span class="texttule">{{msg1}}</span></div>
+<div class="row myrow">
+  <div class="col-10" style="width:100%;height:auto;overflow:scroll;">
+    <table  id="mainTable" >
+    <thead>
+      <th>Print</th>
+      <th style="display:none">IPDid</th>
+      <th>Regno</th>
+      <th>PatientName</th>
+      <th>DischargeDate</th>
+      <th>DischargeTime</th>
+      <th>WardName</th>
+      <th>Diagnosis</th>
+      <th>Sex</th>
+      <th>Age</th>
+      <th>Complaint</th>
+      <th>VisitDate</th>
+      <th>VisitTIme</th>
+      <th>RelativeName</th>
+      <th>PatientCategory</th>
+      <th>Education</th>
+      <th>Occupation</th>
+      <th>ContactNo</th>
+      <th>Post</th>
+      <th>District</th>
+      <th>Tehsil</th>
+      <th>Address</th>
+      <th>Cast</th>
+      <th>RationCard</th>
+      <th>AadharNo</th>
+      <th>GovernmentScheme</th>
+      <th>PatientFrom</th>
+</thead>
+  {%for row in adata%}
+  <tr>
+    <form action="inpatientPrint" method="POST">
+      <td><input type="submit" value="Print" ></td>
+      <input type="text" name="page" value="OLDADMIT" style="display:none;">
+        <input type="text" name="ipdid" value="{{row[25]}}" style="display:none;">
+    </form>
+
+    <td style="display:none">{{row[25]}}</td>  <!--this is opid-->
+    <td><b>{{row[0]}}</b></td>   <!--this is regno-->
+    <td>{{row[1]}} {{row[2]}} {{row[3]}}</td><!--this is PatientName-->
+    <td>{{row[29]}}</td><!--this is discharge date-->
+    <td>{{row[30]}}</td><!--this is discharge time-->
+    <td>{{row[23]}}</td><!-- ward name-->
+    <td>{{row[34]}}</td><!--this is diagnosis -->
+    <td>{{row[12]}}</td><!--this is Sex-->
+    <td>{{row[10]}} {{row[11]}}</td><!--this is Age-->
+    <td>{{row[27]}}</td><!-- complaint-->
+    <td>{{row[8]}}</td><!--this is Visit Date-->
+    <td>{{row[9]}}</td><!--this is Visit TIme-->
+    <td><b>{{row[4]}}:-</b>{{row[5]}} {{row[6]}} {{row[7]}}</td><!--this is RelativeName-->
+    <td>{{row[24]}}</td><!--this is PatientCategory-->
+    <td>{{row[13]}}</td><!--this is Education-->
+    <td>{{row[14]}}</td><!--this is Occupation-->
+    <td>{{row[15]}}</td><!--this is ContactNo-->
+    <td>{{row[16]}}</td><!--this is post-->
+    <td>{{row[18]}}</td><!--this is District-->
+    <td>{{row[17]}}</td><!--this is Tehsil-->
+    <td>{{row[19]}}</td><!--this is Address-->
+    <td>{{row[20]}}</td><!--this is Cast-->
+    <td>{{row[22]}}</td><!--this is RationCard-->
+    <td>{{row[21]}}</td><!--this is AadharNo-->
+    <td>{{row[26]}}</td><!--this is GovernmentScheme-->
+    <td>{{row[28]}}</td><!--this is PatientFrom-->
+
+  </tr>
+  {%endfor%}
+</table>
+</div>
+</div>
+
+{% endblock %}

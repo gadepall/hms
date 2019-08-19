@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Shaheed Hospital</title>
+    <meta name ="viewport" content="width=device-width">
+   <link rel="stylesheet" type="text/css" href="static/css/home.css">
+    <link rel="icon" type="image/jpeg" href="static/img/cross.png">
+
+<style>
+  td{
+  font-size: 14px;
+  font-family: Arial;
+}
+
+</style>
+	<style type="text/css" media="print">
+@media print {
+  @page {margin:0;}
+  body {margin:1.6;}
+}
+
+</style>
+<script language="JavaScript">
+<!--
+function calculateBmi() {
+  alert('i am working');
+var weight = document.getElementById('weight').value
+var height = document.getElementById('height').value
+if(weight > 0 && height > 0){
+var finalBmi = weight/(height/100*height/100)
+document.getElementById('bmi').value = finalBmi
+}
+else{
+alert("Please Fill in everything correctly")
+}
+}
+</script>
+
+<script type="text/javascript">
+
+
+function display_c(){
+var refresh=1000; // Refresh rate in milli seconds
+mytime=setTimeout('display_ct()',refresh)
+}
+
+function display_ct(){
+
+var today = new Date();
+var h = today.getHours();
+var m = today.getMinutes();
+var s = today.getSeconds();
+var dd = today.getDate();
+var mm = today.getMonth();
+var yy = today.getFullYear();
+m = checkTime(m);
+s = checkTime(s);
+
+dd = checkTime(dd);
+mm = checkTime(mm);
+
+document.getElementById('time').value = h + ":" + m + ":" + s;
+document.getElementById('date').value = yy + "." + mm + "." + dd;
+
+tt=display_c();
+}
+function checkTime(i){
+    if(i<10){i = "0" + i};
+    return i;
+}
+
+
+</script>
+
+</head>
+<body onload="display_c();">
+<!-- header -->
+<div  style="margin-left:2%;margin-right:2%;">
+<div class="header">
+    <div class="section-inner">
+        <div class="row center" >
+          <table style="width:100%;" border=0px>
+            <tr>
+              <td style="width:200px;">
+                <img src="static/icon4/slogo.jpg" width="80" height="80">
+              </td>
+              <td>
+                <p style="text-align: center;margin-left:120px;"><font size="6" color="red"><b>शहीद अस्पताल</b></font></p>
+                <p style="text-align: center;margin-left:120px;"><font size="3" font color="green"<b>दल्ली राजहरा , जिला - बालोद  (छत्तीसगढ़)</b></font></p>
+                <p style="text-align: center;margin-left:120px;"><font size="3" font color="green"<b>फ़ोन : (07748)216088</b></font></p>
+              </td>
+              <td>
+                <img src="static/icon4/slogan.jpg" align=right>
+              </td>
+            </tr>
+          </table>
+
+         </div>
+    </div>
+    <!-- /section-inner -->
+</div>
+<!--/header-->
+
+<div style="border:1px solid black;"></div>
+
+<div class="section-inner">
+  <table  border="0" style="width:100%;padding:5px;">
+    {% for row in ds %}
+      <tr>
+
+        <td style="padding-bottom:10px;font-family: Arial;font-weight:bold;font-size:19px;"><b>Date: {{row[0]}}</b></td>
+        <td style="padding-bottom:10px;font-size:19px;"><b>Regno: {{row[1]}}</b></td>
+        <td style="padding-bottom:10px;font-size:19px;"><b>Name: {{row[2]}} {{row[3]}} {{row[4]}}</b></td>
+        <td style="padding-bottom:10px;font-size:19px;"><b>{{row[5]}}: {{row[6]}} {{row[7]}} {{row[8]}}</b></td>
+
+      </tr>
+      <tr>
+        <td style="padding-bottom:10px;font-size:19px;"><b>Age: {{row[9]}} {{row[10]}}</b></td>
+        <td style="padding-bottom:10px;font-size:19px;"><b>Sex: {{ row[11]}}</b></td>
+        <td style="padding-bottom:10px;font-size:19px;"><b>Address: {{ row[12]}}</b></td>
+        <td style="padding-bottom:10px;font-size:19px;"><b>Contact No.: {{ row[15] }}</b></td>
+      </tr>
+      <tr>
+        <td style="padding-bottom:10px;font-size:19px;"><b>Qualification: {{ row[13] }}</b></td>
+        <td style="padding-bottom:10px;font-size:19px;"><b>Occupation: {{ row[14] }}</b></td>
+        <td style="padding-bottom:10px;font-size:19px;"><b>Complaint: {{ row[16] }}</b></td>
+        <td style="padding-bottom:10px;font-weight:bold;font-size:19px;"><b>Visit Time: {{ row[25] }}</b></td>
+
+      </tr>
+
+    </table>
+  <div style="border:1px solid black;"></div>
+  <table>
+    <tr>
+      <td><b>Height:</b><br><input type="text" style="width: 40%; font-size:16px;text-align:center;border:1px solid black;" value="{{ row[17] }}" readonly><b>Cm</b></td>
+      <td><b>Weight:</b><br><input type="text" style="width: 40%; font-size:16px;text-align:center;border:1px solid black;" value="{{ row[18] }}" readonly><b>Kg</b></td>
+      <td><b>BMI:</b><br><input type="text" style="width: 50%; font-size:16px;text-align:center;border:1px solid black;" value="{{ row[19] }}" readonly><b>Kg/m<sup>2</sup></b></td>
+      <td><b>Temp:</b><br><input type="text" style="width: 50%; font-size:16px;text-align:center;border:1px solid black;" value="{{ row[20] }}" readonly><b>&#8457;</b></td>
+      <td><b>Pulse:</b><br><input type="text" style="width: 60%; font-size:16px;text-align:center;border:1px solid black;" value="{{ row[21] }}" readonly><b>ppm</b></td>
+      <td><b>BP:</b><br><input type="text" style="width: 70%; font-size:16px;text-align:center;border:1px solid black;" value="{{row[22]}} / {{row[23]}}" readonly></td>
+      <td><b>RR:</b><br><input type="text" style="width: 50%; font-size:16px;text-align:center;border:1px solid black;" value="{{ row[24] }}" readonly><b>BPM</b></td>
+    </tr>
+    {% endfor %}
+  </table>
+  <br>
+
+  <table border=0>
+  <tr>
+    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    <td><b>History_with_Duration</b></td>
+      <td><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Provisional Diagnosis:</b></td>
+    </tr>
+
+    <tr>
+      <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+      <td><input type="text" style="width: 300px;height:120px;border:1px solid black;"></td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Advice:</b></td>
+    </tr>
+  </table>
+  <br>
+       <div style="font-size:16px;font-weight:bold;margin-bottom:10px;font-family: Arial; width:1200px;padding-left:30px;padding-top:-0px;margin-left:15px;">General</div>
+         <div style="font-size:16px;font-weight:bold;margin-bottom:-10px;padding-left:70px;width:0px;height:200px">
+           <textarea style="font-size:16px;width:305px;height:165px;font-family: Arial;resize:none;margin-left:-22px;border:1px solid black;" readonly>Conscious|Irritated SemiConscious|UnConscious Afebrile|Febrile No_Pallor|Pallor No Iceterus|Iceterus No Oedema|Oedema J.V.P Not raised/raised No_cynosis/cynosis No_Loose_Motion|Loose_Motion No_Dehydration|Dehydration Vomiting|No Vomiting</textarea>
+       </div>
+       
+  <p style="font-size:16px;font-weight:bold;font-family: Arial;margin-bottom:0px;margin-left:-20px;padding-left:27px">GI: <input type="text" style="width: 25.7%; font-size:16px; text-align:center;margin-left:20px; height:110px;padding-left:20px;border:1px solid black;" ></p>
+
+  <p style="font-size:16px;font-weight:bold;font-family: Arial;margin-bottom:0px;margin-left:-20px;padding-left:27px">CVS: <input type="text" style="width: 25.7%; font-size:16px; text-align:center;margin-left:7px; height:110px;padding-left:20px;border:1px solid black;" ></p>
+
+  <p style="font-size:16px;font-weight:bold;font-family: Arial;margin-bottom:0px;margin-left:-20px;padding-left:27px">CNS: <input type="text" style="width: 25.7%; font-size:16px; text-align:center;margin-left:7px; height:110px;padding-left:20px;border:1px solid black;" ></p>
+
+  <p style="font-size:16px;font-weight:bold;font-family: Arial;margin-bottom:0px;margin-left:-20px;padding-left:27px">R.S: <input type="text" style="width: 25.7%; font-size:16px; text-align:center;margin-left:15px; height:110px;padding-left:20px;border:1px solid black;" ></p>
+
+<table>
+<tr>
+  <br>
+  <td ><b>Investigation/Others:</b></td>
+</tr>
+<tr>
+<td style="height:280px;width:500px;border:0px solid;"></td>
+<td style="height:150px;width:500px;border:0px solid;"></td>
+</tr>
+<tr>
+<td ></td>
+</tr>
+
+
+{%if ds[0][16]=='ANC'%}
+
+{% for row in ds3 %}
+<tr style="text-align:center;">
+  <td></td><td></td><td></td><td></td><td></td><td></td>
+<td colspan="8" style="margin-right:50px;">
+  <b>याद रखें : {{row[0]}}</b><br>
+  <b>*** ओ.पी.डी. खुलने का समय सुबह 8:00 बजे से दोपहर 2:00 बजे तक रहेगा तथा मंगलवार को ओ.पी.डी. बंद रहेगा ***
+  </b>
+</td>
+</tr>
+{%endfor%}
+
+{%elif ds[0][16]=='anc'%}
+{% for row in ds3 %}
+<tr style="text-align:center;">
+  <td></td><td></td><td></td><td></td><td></td><td></td>
+<td colspan="8" >
+  <b>याद रखें : {{row[0]}}</b><br>
+  <b>*** ओ.पी.डी. खुलने का समय सुबह 8:00 बजे से दोपहर 2:00 बजे तक रहेगा तथा मंगलवार को ओ.पी.डी. बंद रहेगा ***
+  </b>
+</td>
+</tr>
+{%endfor%}
+
+{%else%}
+
+{% for row in ds2 %}
+<tr style="text-align:center;">
+<td colspan="8" >
+  <b>याद रखें : {{row[0]}}</b><br>
+  <b>*** ओ.पी.डी. खुलने का समय सुबह 8:00 बजे से दोपहर 2:00 बजे तक रहेगा तथा मंगलवार को ओ.पी.डी. बंद रहेगा ***
+  </b>
+</td>
+</tr>
+{%endfor%}
+{%endif%}
+</table>
+</div>
+</div>
+</body>
+</html>

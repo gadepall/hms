@@ -1,0 +1,152 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+<style>
+#lab td, #lab th {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align:center
+}
+</style>
+
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-5">
+<table id="lab" style="width:100%">
+  <tr>
+    <td colspan="2" style="color:green;background-color:pink"><b>INPATIENT ADMINISTRATION</b></td>
+  </tr>
+  <tr>
+    <td><b>Add</b></td>
+    <td><b>View/Edit</b></td>
+  </tr>
+  <tr>
+    <td><a href="{{ url_for('InsertDeathReasonRedir') }}">Add Death Reason</a></td>
+    <td><a href="{{ url_for('ViewDeathReason') }}">View Death Reason</a></td>
+  </tr>
+  <tr>
+    <td><a href="{{ url_for('InsertGovSchemeRedir') }}">Add Government Scheme</a></td>
+    <td><a href="{{ url_for('ViewGovScheme') }}">View Government Scheme</a></td>
+  </tr>
+</table>
+</div>
+</div>
+
+{%if flag==1%}
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-5">
+<table id="lab" style="width:100%">
+  <tr>
+    <td colspan="3" style="color:white;background-color:#008080"><b>INSERT NEW DEATH REASON</b></td>
+  </tr>
+  <tr>
+    <td colspan="3"><b>{{ack}}</b></td>
+  </tr>
+  <tr>
+    <td><b>Death Reason Name</b></td>
+    <td><b>Save</b></td>
+  </tr>
+  <tr>
+    <form action="InsertNewDeathReason" method="POST">
+    <td><input type="text" name="deathreason" class="spalphanum" ></td>
+    <td><input type="submit" value="Save"></td>
+  </form>
+  </tr>
+</table>
+</div>
+</div>
+{%endif%}
+
+{%if flag==2%}
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-5">
+<table id="lab" style="width:100%">
+  <tr>
+    <td colspan="3" style="color:white;background-color:#4169E1"><b>UPDATE DEATH REASON</b></td>
+  </tr>
+  <tr>
+    <td colspan="3"><b>{{ack}}</b></td>
+  </tr>
+  <tr>
+    <td><b>Death Reason Name</b></td>
+    <td><b>Update</b></td>
+  </tr>
+  {%for row in data%}
+  <form action="UpdateDeathReason" method="POST">
+  <tr>
+    <td><input type="text" name="deathreason" class="spalphanum" value="{{row[1]}}"></td>
+    <td><input type="hidden" name="deathid" value="{{row[0]}}"><input type="submit" value="Update"></td>
+  </tr>
+</form>
+  {%endfor%}
+</table>
+</div>
+</div>
+{%endif%}
+
+<!---GOVERNMENT SCHEME-->
+{%if gflag==1%}
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-5">
+<table id="lab" style="width:100%">
+  <tr>
+    <td colspan="3" style="color:white;background-color:#008080"><b>INSERT NEW GOVERNMENT SCHEME</b></td>
+  </tr>
+  <tr>
+    <td colspan="3"><b>{{ack}}</b></td>
+  </tr>
+  <tr>
+    <td><b>Government Scheme Name</b></td>
+    <td><b>Save</b></td>
+  </tr>
+  <tr>
+    <form action="InsertNewGovScheme" method="POST">
+    <td><input type="text" name="gsname" class="alphanumeric"></td>
+    <td><input type="submit" value="Save"></td>
+  </form>
+  </tr>
+</table>
+</div>
+</div>
+{%endif%}
+
+{%if gflag==2%}
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-5">
+<table id="lab" style="width:100%">
+  <tr>
+    <td colspan="3" style="color:white;background-color:#4169E1"><b>UPDATE GOVERNMENT SCHEME</b></td>
+  </tr>
+  <tr>
+    <td colspan="3"><b>{{ack}}</b></td>
+  </tr>
+  <tr>
+    <td><b>Government Scheme Name</b></td>
+    <td><b>Update</b></td>
+    <td><b>Deactivate</b></td>
+
+  </tr>
+  {%for row in data%}
+  <form action="UpdateGovScheme" method="POST">
+  <tr>
+    <td><input type="text" name="gsname" value="{{row[1]}}" class="alphanumeric"></td>
+    <td><input type="hidden" name="gsid" value="{{row[0]}}"><input type="submit" value="Update"></td>
+  </form>
+  <td>
+    <form action="DeactivateGovScheme" method="POST">
+      <input type="hidden" name="gsid" value="{{row[0]}}">
+      <input type="submit" value="Deactivate">
+    </form>
+  </td>
+</tr>
+  {%endfor%}
+</table>
+</div>
+</div>
+{%endif%}
+
+
+{% endblock %}

@@ -1,0 +1,200 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+
+<style>
+
+
+
+
+.subtitle
+{
+background-color:#F0E68C;
+}
+.spnhead{
+  font-size: 20px;
+  font-weight: bold;
+}
+.spndata{
+  font-size: 18px;
+  font-weight: bold;
+}
+</style>
+<script>
+
+function display_c(){
+var refresh=1000; // Refresh rate in milli seconds
+mytime=setTimeout('display_ct()',refresh)
+}
+
+function display_ct(){
+
+var today = new Date();
+var h = today.getHours();
+var m = today.getMinutes();
+var s = today.getSeconds();
+var dd = today.getDate();
+var mm = today.getUTCMonth()+1;
+var yy = today.getFullYear();
+m = checkTime(m);
+s = checkTime(s);
+
+dd = checkTime(dd);
+mm = checkTime(mm);
+
+
+document.getElementById('ipdtime').value = h + ":" + m;
+document.getElementById('ipddate').value = yy + "-" + mm + "-" + dd;
+tt=display_c();
+}
+
+
+function chooseScheme()
+{
+  if(document.getElementById('gscheme').value == 'eligible'){
+    document.getElementById('schemename').style.display='block';
+    document.getElementById('schemename').required=true;
+  }
+  else{
+    document.getElementById('schemename').style.display='none';
+    document.getElementById('schemename').required=false;
+  }
+}
+
+function choosePfrom()
+{
+  if(document.getElementById('pfrom').value == 'Referred'){
+    document.getElementById('referred_details').style.display='block';
+    document.getElementById('hname').required=true;
+    document.getElementById('dname').required=true;
+  }
+  else{
+    document.getElementById('referred_details').style.display='none';
+    document.getElementById('hname').required=false;
+    document.getElementById('dname').required=false;
+  }
+}
+
+function showDreason(dvalue)
+{
+  if(dvalue=='Dead'){
+    $("#deathreason").show();
+    $("#refernote").hide();
+  }
+  else if(dvalue=='Refer'){
+    $("#refernote").show();
+    $("#deathreason").hide();
+  }
+  else{
+    $("#deathreason").hide();
+    $("#refernote").hide();
+  }
+}
+</script>
+
+<div class="col12">
+  <div id="content">
+    <div class="titlebox">Patient Information </div>
+    <div class="row" style="padding-bottom:2px;"></div>
+        {% for row in adata%}
+        <div class="col-12 subtitle">
+        <div class="col-3"><span class="spnhead">Regno:</span><span class="spndata">{{row[0]}}</span></div>
+        <div class="col-3"><span class="spnhead">Name:</span><span class="spndata">{{row[1]}} {{row[2]}} {{row[3]}}</span></div>
+        <div class="col-3"><span class="spnhead">Admission Date:</span><span class="spndata">{{row[4]}}</span></div>
+        <div class="col-3"><span class="spnhead">Admission Time:</span><span class="spndata">{{row[5]}}</span></div>
+        <div class="col-3"><span class="spnhead">Complaint:</span><span class="spndata">{{row[6]}}</span></div>
+        <div class="col-3"><span class="spnhead">Patient From:</span><span class="spndata">{{row[7]}}</span></div>
+        <div class="col-3"><span class="spnhead">Category:</span><span class="spndata">{{row[8]}}</span></div>
+        <div class="col-3"><span class="spnhead">GovScheme:</span><span class="spndata">{{row[9]}}</span></div>
+        <div class="col-3"><span class="spnhead">Ward:</span><span class="spndata">{{row[10]}}</span></div>
+        <div class="col-3"><span class="spnhead">Bed No:</span><span class="spndata">{{row[11]}}</span></div>
+      </div>
+
+    <div class="row" style="padding-bottom:3px;"></div>
+    <form action="insertAdvice" method="POST">
+      <input type="hidden" name="wmid" value="{{adata[0][13]}}">
+
+      <div class="row myrow">
+        <div class="col-4">
+        <span class="spnhead">Patient Status:</span>
+        <select name="patientstatus" onchange="showDreason(this.value)" required>
+          <option value="{{adata[0][17]}}">{{adata[0][17]}}</option>
+          <option value="">--Select--</option>
+          <option value="Cured">Cured</option>
+          <option value="Refer">Refer</option>
+          <option value="Dead">Dead</option>
+        </select>
+        </div>
+        <div class="col-4">
+          <span class="spnhead">Discharge Written By:</span>
+          <input type="text" name="dischargeby" class="alphaonly" style="border:solid black 2px;color:royalblue;font-weight:bold;" required>
+          </div>
+
+
+
+
+      </div>
+      {%if adata[0][17] == "Refer"%}
+        <div class="row myrow" id='refernote'>
+          <div class="col-4"><span class="spnhead">Refer Note:</span>
+            <textarea name="refernote" rows=3 cols=120>{{adata[0][18]}}</textarea>
+          </div>
+        </div>
+      {%elif adata[0][17] == "Dead"%}
+        <div class="row myrow" id='deathreason'>
+          <div class="col-4"><span class="spnhead">Death Reason:</span>
+            <textarea name="dreason" rows=3 cols=120>{{adata[0][18]}}</textarea>
+          </div>
+        </div>
+      {%endif%}
+
+      <div class="row myrow" id='refernote' style="display:none;">
+        <div class="col-4"><span class="spnhead">Refer Note:</span>
+          <textarea name="refernote" rows=3 cols=120></textarea>
+        </div>
+      </div>
+
+      <div class="row myrow" id='deathreason' style="display:none;">
+        <div class="col-4"><span class="spnhead">Death Reason:</span>
+          <textarea name="dreason" rows=3 cols=120></textarea>
+        </div>
+      </div>
+
+    <div class="row myrow">
+      <div class="col-4"><span class="spnhead">History:</span>
+        <textarea name="history" rows=3 cols=120>{{adata[0][14]}}</textarea>
+      </div>
+    </div>
+    <div class="row myrow">
+      <div class="col-4"><span class="spnhead">Diagnosis:</span>
+        <textarea name="diagnosis" rows=3 cols=120>{{adata[0][15]}}</textarea>
+      </div>
+    </div>
+    <div class="row myrow">
+      <div class="col-4"><span class="spnhead">Advice:</span>
+        <textarea name="advice" rows=3 cols=120>{{adata[0][16]}}</textarea>
+      </div>
+    </div>
+    <div class="row myrow">
+      <div class="col-4"><span class="spnhead">Other Note:</span>
+        <textarea name="othernotes" rows=3 cols=120>{{adata[0][19]}}</textarea>
+      </div>
+    </div>
+    <div class="row myrow">
+      <div class="col-5"></div>
+      <div class="col-3"><input type="submit" value="Save" style="width:100px;height:40px;"></div>
+    </div>
+  </form>
+  {%endfor%}
+
+
+  </div> <!--- Content --->
+</div><!--- col-12 --->
+
+
+
+
+
+
+
+
+{% endblock %}

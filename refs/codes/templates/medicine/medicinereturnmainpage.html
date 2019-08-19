@@ -1,0 +1,26 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+
+
+<div class="col-12">
+  <div id="content">
+    <div class="titlebox"  align="center">------- Medicine Return Main Page-------</div>
+    <div class="row" style="padding-bottom:3px;"></div>
+    <div class="col-1"></div>
+    <div align="center">
+      <table style="width:60%;">
+        <tr>
+          <td><br><p><a href="{{url_for('MedicineReturnDetailInsert')}}"><b><input type="Submit" value="Medicine Return By Wards" style="width:80%;height:45px; font-size: 16px;color:red"></a></p></td>
+
+          <td><br><p><a href="{{url_for('medicineReturnSearch')}}"><b><input type="Submit" value="Medicine Return By Wards Search" style="width:80%;height:45px; font-size: 16px;color:#008080"></a></p></td>
+
+
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}

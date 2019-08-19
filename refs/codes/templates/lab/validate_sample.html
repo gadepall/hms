@@ -1,0 +1,144 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+<style>
+  table.collectTest {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table.collectTest td, table.collectTest th {
+  padding: 8px;
+  border-bottom: 1px solid green;
+}
+
+table.collectTest td{
+  padding: 8px;
+  font-size: 15px;
+}
+
+
+table.collectTest thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+}
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+table.collectTest thead,th {
+  background-color:#778899;
+}
+    /* SEPERATE CODE */
+.subtitle
+{
+background-color:#F0E68C;
+}
+.spnhead{
+  font-size: 20px;
+  font-weight: bold;
+}
+.spndata{
+  font-size: 18px;
+  font-weight: bold;
+}
+</style>
+<script>
+$(document).ready(function () {
+$('#vform').submit(function (e) {
+  var formurl = $(this).attr('action');
+        $.ajax({
+            type: "POST",
+            url: $(this).attr('action'), // url to post to, from the forms action
+            data: $(this).serialize(),
+            success: function (data) {
+                $("#vack").text(data['ack']);
+                if (data['ack']=='DATA SUCCESSFULLY UPDATED!')
+                  $("#btnprint").css("display","block");
+                alert(data['ack']);
+            }
+        })
+        e.preventDefault(); // block the traditional submission of the form.
+    });
+  });
+
+</script>
+<div class="col12">
+    <div id="content">
+      <div class="titlebox">Fill Test Values</div>
+{%if ds1 != ''%}
+{%for row in pat_data%}
+<div class="col-12 subtitle">
+<div class="col-2"><span class="spnhead">Accession No:</span><span class="spndata">{{data[0][10]}}</span></div>
+<div class="col-2"><span class="spnhead">Regno:</span><span class="spndata">{{row[0]}}</span></div>
+<div class="col-3"><span class="spnhead">Name:</span><span class="spndata">{{row[1]}} {{row[2]}} {{row[3]}}</span></div>
+
+<div class="col-2"><span class="spnhead">Sex:</span><span class="spndata">{{row[5]}}</span></div>
+<div class="col-2"><span class="spnhead">Age:</span><span class="spndata">{{row[4]}}</span></div>
+<div class="col-2"><span class="spnhead">Date: </span><span class="spndata">{{row[6]}}</span></div>
+<div class="col-2"><span class="spnhead">Source: </span><span class="spndata">{{row[7]}}</span></div>
+
+<form action="/save_test_values" method="POST" id="vform">
+<div class="col-3"><span class="spnhead">Validation Date:</span><input type="date" name="valdate"  value="{{row[9]}}"required></div>
+</div>
+<br>
+
+{%endfor%}
+{%else%}
+
+{%endif%}
+<br>
+<div class="row myrow">
+  <div class="col-3">
+    <p id="vack"></p>
+  </div>
+</div>
+<table class="collectTest">
+    <thead>
+        <th>Sample Name</th>
+        <th>Test Name</th>
+        <th>Test Value</th>
+        <th>Unit</th>
+        <th>Male Min Range</th>
+        <th>Male Max Range</th>
+        <th>Female Min Range</th>
+        <th>Female Max Range</th>
+    </thead>
+    {% for w in data %}
+
+    <tr>
+        <td>{{ w[0] }} </td>
+        <td>{{ w[1] }} </td>
+        <td><input type="text" name="textvalue" placeholder="Enter value for {{ w[1] }}" value = "{{ w[8] }}" required><input type="hidden" name="ltd_id" value = "{{ w[7] }}"><input type="hidden" name="accno" value = "{{ w[10] }}"></td>
+        <td>{{ w[2] }} </td>
+        <td>{{ w[3] }} </td>
+        <td>{{ w[4] }} </td>
+        <td>{{ w[5] }} </td>
+        <td>{{ w[6] }} </td>
+    </tr>
+
+    {% endfor %}
+
+</table>
+<br><br>
+<div class="row myrow">
+    <div class="col-4"></div>
+    <div class="col-2">
+      <input type="submit" class="button" id='btnsave' value="SAVE" style="height:40px;width:150px">
+      </div>
+</form>
+<div class="col-2" id='btnprint' style="display:none;">
+  <form action="printLabReport" method="POST">
+    <input type="hidden" name="acno" value="{{data[0][10]}}">
+    <input type="submit" value="PRINT" style="height:40px;width:150px;">
+  </form>
+</div>
+</div>
+    </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,131 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+<style>
+#mainTable {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+#mainTable td, #mainTable th {
+  padding: 8px;
+}
+
+#mainTable td{
+  padding: 8px;
+  font-size: 15px;
+}
+#mainTable tr:nth-child(even){background-color: #f2f2f2;}
+
+#mainTable tr:hover {background-color: #ddd;}
+
+#mainTable thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+}
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+#mainTable thead,th {
+  background-color:#778899;
+}
+</style>
+<div class="col-12">
+  <div id="content">
+    <div class="titlebox">MEDICINE RETURN SEARCH</div>
+     <br>
+    <form action = "viewByReturnDate" method="POST">
+		<div class="row myrow">
+    <div class="col-3">
+    <span class="texttule">ReturnDateFrom:</span>
+  <td><input  type="date" id="returndatefrom"  name= "returndatefrom" required></td>
+  </div>
+    <div class="col-3">
+  <span class="texttule">ReturnDateTo:</span>
+  <td><input  type="date" id="returndateto"  name="returndateto" required></td>
+  </div>
+
+   <div class="col-2">
+   <input type="submit" class="button" id='btnsave' value="SEARCH" style="height:30px;width:100px;background-color:#A9A9A9;font-weight:bold">
+   {%if ack1 == 'Excel Sheet Generated Successfully'%}
+   <a href="static/MedicineUploads/MedicineReturnDateList.xlsx" download>
+   <img src="static/icon4/excel6.png" width="40px" height="40px"></a>
+     {%endif%}
+     <p style="inline"><b> {{ack1}}</b></p>
+
+    </div>
+    </div>
+    </form>
+
+     <form action ="viewByReturnDateWardName" method="POST">
+		<div class="row myrow">
+      <div class="col-3">
+    <span class="texttule">WardName:</span>
+    <select name="wardname" id="wardname" required>
+     <option value="">--Select--</option>
+     {%for row in result1%}
+     <option value="{{row[0]}}">{{row[1]}}</option>
+     {%endfor%}
+          </select>
+    </div>
+
+   <div class="col-3">
+    <span class="texttule">ReturnDateFrom:</span>
+  <td><input  type="date" id="returndatefrom"  name= "returndatefrom" required></td>
+  </div>
+    <div class="col-3">
+  <span class="texttule">ReturnDateTo:</span>
+  <td><input  type="date" id="returndateto"  name="returndateto" required></td>
+  </div>
+
+   <div class="col-2">
+   <input type="submit" class="button" id='btnsave' value="SEARCH" style="height:30px;width:100px;background-color:#A9A9A9;font-weight:bold">
+   {%if ack2 == 'Excel Sheet Generated Successfully'%}
+   <a href="static/MedicineUploads/MedicineReturnDateWardList.xlsx" download>
+   <img src="static/icon4/excel6.png" width="40px" height="40px"></a>
+     {%endif%}
+     <p style="inline"><b> {{ack2}}</b></p>
+
+    </div>
+    </div>
+    </form>
+
+
+   <div style="width:100%;max-height:400px;line-height:1em;overflow:scroll;">
+      <div id="tablecontainer"></div>
+      <table border=1 id="mainTable">
+            <thead >
+                <tr>
+                    <th>Drug Name</th>
+                    <th>Drug Type</th>
+                    <th>Batch Number</th>
+                    <th>PersonName</th>
+                    <th>WardName</th>
+                    <th>ReturnQuantity</th>
+                    </tr>
+            </thead>
+            <tbody>
+              </div>
+
+              {%for row in result%}
+    <form action="ViewDetailsByGeneralSearchMedicineReturn" method="post">
+            	<tr>
+                <input type="text" name="medret_id" value="{{row[0]}}" style="display:none;">
+                <td>{{row[1]}}</td>
+                <td>{{row[2]}}</td>
+                <td>{{row[3]}}</td>
+                <td>{{row[4]}}</td>
+                <td>{{row[5]}}</td>
+                <td>{{row[6]}}</td>
+
+                </tr>
+
+                </form>
+
+                {%endfor%}
+
+{% endblock %}

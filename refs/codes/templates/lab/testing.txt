@@ -1,0 +1,33 @@
+.panelname {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.panelname td, .panelname th {
+  padding: 8px;
+}
+
+.panelname td{
+  padding: 8px;
+  font-size: 15px;
+}
+.panelname tr:nth-child(even){background-color: #f2f2f2;}
+
+.panelname tr:hover {background-color: #ddd;}
+
+.panelname thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+}
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+.panelname thead,th {
+  background-color:#778899;
+}

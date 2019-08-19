@@ -1,0 +1,173 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+<style>
+#lab td, #lab th {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align:center
+}
+</style>
+
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-5">
+<table id="lab" style="width:100%">
+  <tr>
+    <td colspan="2" style="color:green;background-color:pink"><b>XRAY ADMINISTRATION</b></td>
+  </tr>
+  <tr>
+    <td><b>Add</b></td>
+    <td><b>View/Edit</b></td>
+  </tr>
+
+  <tr>
+    <td><a href="{{ url_for('InsertNewXrayRedir') }}"> Add Xray Name</a></td>
+    <td><a href="{{ url_for('ViewXrayTypeRedir') }}"> View/Update Xray Name</a></td>
+  </tr>
+  <tr>
+    <td><a href="{{ url_for('InsertNewSubXrayRedir') }}"> Add Part Presentation</a></td>
+    <td><a href="{{ url_for('ViewSubXrayRedir') }}"> View/Update Part Presentation</a></td>
+  </tr>
+</table>
+</div>
+</div>
+
+{%if flag1==1%}
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-5">
+    <table id="lab" style="width:100%">
+      <tr>
+        <td colspan="3" style="color:white;background-color:#008080"><b>Insert New Xray</b></td>
+      </tr>
+      <tr>
+        <td colspan="3"><b>{{ack}}</b></td>
+      </tr>
+      <tr>
+        <td><b>Part Type</b></td>
+        <td><b>Save</b></td>
+      </tr>
+      <tr>
+        <form action="InsertPartType" method="POST">
+          <td><input type="text" class="spalphanum" name="xrayname" required></td>
+          <td><input type="submit" value="Save"></td>
+        </form>
+      </tr>
+    </table>
+  </div>
+</div>
+{%endif%}
+
+
+
+{%if flag2==1%}
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-5">
+<table id="lab" style="width:100%">
+  <tr>
+    <td colspan="3" style="color:white;background-color:#4169E1"><b>Update Xray Name</b></td>
+  </tr>
+  <tr>
+    <td colspan="3"><b>{{ack}}</b></td>
+  </tr>
+  <tr>
+    <td><b>Xray Name</b></td>
+    <td><b>Update</b></td>
+  </tr>
+  {%for row in ds1%}
+  <form action="UpdatePartType" method="POST">
+  <tr>
+    <td><input type="text" name="xrayname" class="spalphanum" value="{{row[1]}}" required></td>
+
+    <td><input type="hidden" name="xid" value="{{row[0]}}"><input type="submit" value="Update"></td>
+  </tr>
+</form>
+{%endfor%}
+</table>
+</div>
+</div>
+{%endif%}
+
+
+
+{%if flag3==1%}
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-5">
+    <table id="lab" style="width:100%">
+      <tr>
+        <td colspan="4" style="color:white;background-color:#008080"><b>Add Part Presentation</b></td>
+      </tr>
+      <tr>
+        <td colspan="4"><b>{{ack}}</b></td>
+      </tr>
+      <tr>
+		    <td><b>Xray Name</b></td>
+        <td><b>Part Presentation</b></td>
+        <td><b>Amount</b></td>
+        <td><b>Save</b></td>
+      </tr>
+      <tr>
+        <form action="InsertSubPartType" method="POST">
+			<td>
+        <select name="xid" required="true">
+          <option style="font-weight:bold;font-color:black" value="">--Select--</option>
+          {%for row in ds1 %}
+          <option value="{{row[0]}}">{{row[1]}}</option>
+          {%endfor%}
+        </select>
+      </td>
+      <td><input type="text"  class="spalphanum" name="subxray" required></td>
+      <td><input type="text"  class="numeric" name="amount" required></td>
+      <td><input type="submit" value="Save"></td>
+    </form>
+  </tr>
+</table>
+</div>
+</div>
+{%endif%}
+
+
+
+{%if flag4==1%}
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-5">
+    <table id="lab" style="width:100%">
+      <tr>
+        <td colspan="4" style="color:white;background-color:#4169E1"><b>Update Part Presentation</b></td>
+      </tr>
+      <tr>
+        <td colspan="4"><b>{{ack}}</b></td>
+      </tr>
+      <tr>
+        <td><b>Xray Name</b></td>
+        <td><b>Part Presentation</b></td>
+        <td><b>Amount</b></td>
+        <td><b>Update</b></td>
+      </tr>
+      {%for row in ds2%}
+      <form action="UpdateSubPartType" method="POST">
+        <tr>
+          <td>
+            <select name="xid" required>
+              <option style="font-weight:bold;font-color:black" value="{{row[1]}}">{{row[5]}}</option>
+              <option value="">--Select--</option>
+              {%for row in ds1 %}
+              <option value="{{row[0]}}">{{row[1]}}</option>
+              {%endfor%}
+            </select>
+          </td>
+          <td><input type="text" name="subxray"  class="spalphanum"  value="{{row[2]}}"></td>
+          <td><input type="text" name="amount"  class="numeric"  value="{{row[3]}}"></td>
+          <td><input type="hidden" name="subid" value="{{row[0]}}"><input type="submit" value="Update"></td>
+        </tr>
+      </form>
+      {%endfor%}
+    </table>
+  </div>
+</div>
+{%endif%}
+
+{% endblock %}

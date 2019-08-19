@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Shaheed Hospital</title>
+    <meta name ="viewport" content="width=device-width">
+   <link rel="stylesheet" type="text/css" href="static/css/home.css">
+    <link rel="icon" type="image/jpeg" href="static/img/cross.png">
+
+	<style type="text/css" media="print">
+@media print {
+  @page {margin:0;}
+  body {margin:1.6;}
+}
+</style>
+<script language="JavaScript">
+<!--
+function calculateBmi() {
+  alert('i am working');
+var weight = document.getElementById('weight').value
+var height = document.getElementById('height').value
+if(weight > 0 && height > 0){
+var finalBmi = weight/(height/100*height/100)
+document.getElementById('bmi').value = finalBmi
+}
+else{
+alert("Please Fill in everything correctly")
+}
+}
+</script>
+
+<script type="text/javascript">
+
+
+function display_c(){
+var refresh=1000; // Refresh rate in milli seconds
+mytime=setTimeout('display_ct()',refresh)
+}
+
+function display_ct(){
+
+var today = new Date();
+var h = today.getHours();
+var m = today.getMinutes();
+var s = today.getSeconds();
+var dd = today.getDate();
+var mm = today.getMonth();
+var yy = today.getFullYear();
+m = checkTime(m);
+s = checkTime(s);
+
+dd = checkTime(dd);
+mm = checkTime(mm);
+
+document.getElementById('time').value = h + ":" + m + ":" + s;
+document.getElementById('date').value = yy + "." + mm + "." + dd;
+
+tt=display_c();
+}
+function checkTime(i){
+    if(i<10){i = "0" + i};
+    return i;
+}
+
+
+</script>
+
+<!----rohit code for delivery page---->
+<script language="JavaScript">
+  function del(x)
+  {
+    if(x==0)
+      document.getElementById("delivery").style.display='block';
+    else
+      document.getElementById("delivery").style.display='none';
+      return;
+  }
+</script>
+
+</head>
+<body onload="display_c();">
+<!-- header -->
+<div  style="margin-left:6%;margin-right:2%;">
+<div class="header">
+    <div class="section-inner">
+        <div class="row center" >
+          <table style="width:100%;" border=0px>
+            <tr>
+              <td style="width:200px;">
+                <img src="static/icon4/slogo.jpg" width="80" height="80">
+              </td>
+              <td>
+                <p style="text-align: center;"><font size="6" color="red"><b>शहीद अस्पताल</b></font></p>
+                <p style="text-align: center;"><font color="green"<b>दल्ली राजहरा , जिला - बालोद  (छत्तीसगढ़)</b></font></p>
+                <p style="text-align: center;"><font color="green"<b>फ़ोन : (07748)216088</b></font></p>
+              </td>
+              <td>
+                <img src="static/icon4/slogan.jpg" align=right>
+              </td>
+            </tr>
+            </tr>
+          </table>
+
+         </div>
+    </div>
+    <!-- /section-inner -->
+</div>
+<!--/header-->
+<div style="border:1px solid black;"></div>
+
+<div class="section-inner">
+<table  border="0" style="width:100%;padding:5px;">
+      {% for row in admitdata %}
+
+        <tr>
+          <td style="padding-bottom:10px;font-weight:bold;"><b>Date:</b>{{row[29].strftime('%d/%m/%Y')}}</td>
+          <td style="padding-bottom:10px;"><b>Regno:{{row[1]}}</b></td>
+          <td style="padding-bottom:10px;"><b>Name:</b> {{row[2]}} {{row[3]}} {{row[4]}}</td>
+          <td style="padding-bottom:10px;"><b>{{row[5]}}:</b>{{row[6]}} {{row[7]}} {{row[8]}}</td>
+        </tr>
+
+        <tr>
+          <td style="padding-bottom:10px;"><b>Age:</b>{{row[11]}} {{row[12]}}</td>
+          <td style="padding-bottom:10px;"><b>Sex:</b>{{ row[13]}}</td>
+          <td style="padding-bottom:10px;"><b>Address:</b>{{ row[21]}}</td>
+          <td style="padding-bottom:10px;"><b>Phone:</b>{{row[16] }}</td>
+        </tr>
+
+        <tr>
+          <td style="padding-bottom:10px;"><b>Qualification:</b>{{ row[14] }}btechcddd</td>
+          <td style="padding-bottom:10px;"><b>Occupation:</b>{{ row[15] }}housewife</td>
+          <td style="padding-bottom:10px;"><b>Category:</b>{{row[41] }}</td>
+          <td style="padding-bottom:10px;"><b>Complaint:</b> {{ row[27] }}</td>
+
+        <tr>
+          <td style="padding-bottom:10px;"><b>Ward:</b>{{ row[40] }}</td>
+          <td style="padding-bottom:10px;font-weight:bold;"><b>Visit Time:</b> {{ row[30] }}</td>
+          <td style="padding-bottom:10px;font-weight:bold;">For Delivery?
+              Yes<input type="radio" name="name" onclick="del(0)">
+              No<input type="radio" name="name"  onclick="del(1)" checked>
+          </td>
+
+        </tr>
+
+        </tr>
+        {% endfor %}
+
+      </table>
+
+      <div style="border:1px solid black;"></div>
+  <table width="100%" border=0>
+    <tr>
+      <td><b>Diagnosis:</b></td>
+      <td align="right">
+        <table border=1 style="border-collapse: collapse;">
+        <tr><td colspan=3 style="text-align:center;font-weight:bold;">Advance Money</td></tr>
+          <tr>
+            <td>Date</td>
+            <td>Amount</td>
+            <td>ReceivedBy</td>
+          </tr>
+    {% for row in admitdata %}
+      <tr>
+        <td>{{row[29].strftime('%d/%m/%Y')}}</td>
+        <td>{{row[34]}}</td>
+        <td>{{row[35]}}</td>
+      </tr>
+      {%endfor%}
+      <tr>
+        <td style="height:20px;width:20px;"></td>
+        <td style="height:20px;width:20px;"></td>
+        <td style="height:20px;width:20px;"></td>
+      </tr>
+      <tr>
+        <td style="height:20px;width:20px;"></td>
+        <td style="height:20px;width:20px;"></td>
+        <td style="height:20px;width:20px;"></td>
+      </tr>
+      <tr>
+        <td style="height:20px;width:20px;"></td>
+        <td style="height:20px;width:20px;"></td>
+        <td style="height:20px;width:20px;"></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<div id="delivery" hidden>
+  <p><b>Mode of Delivery:-</b> Normal / Normal-with-tear / Normal with episiotomy / Forceps / LSCS / LSCS with T.T</p>
+<table>
+  <tr>
+    <!--first table started-->
+    <td>
+      <table border=1 style="width:50px;height:100px;border-collapse:collapse;">
+        <tr style="width:100%;height:10%;">
+          <td rowspan="2" style="text-align:center"><b>&nbsp;&nbsp;&nbsp;Date&nbsp;&nbsp;&nbsp;</b></td>
+          <td rowspan="2" style="text-align:center"><b>&nbsp;&nbsp;Time&nbsp;&nbsp;</b></td>
+          <td colspan="3" style="text-align:center"><b>Sex</b></td>
+          <td rowspan="2" style="text-align:center"><b>&nbsp;Weight&nbsp;</b></td>
+        </tr>
+        <tr>
+          <td style="text-align:center"><b>&nbsp;&nbsp;Male&nbsp;&nbsp;</td>
+          <td style="text-align:center"><b>Female</td>
+          <td style="text-align:center"><b>Transgender</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+
+        </tr>
+         <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+
+        </tr>
+      </table>
+    </td>
+    <!--------------- End of first table----------->
+    <!--------------- Second table started----------->
+    <td>
+      <table border="1" style="border-collapse:collapse;margin-left:100px;">
+      <tr style="width:100px;height:10%px;">
+      <td><b>&nbsp;&nbsp;&nbsp;Date&nbsp;&nbsp;&nbsp;</b></td><td><b>OPV-O</b></td><td><b>HEPB-O</b></td><td><b>BCG</b></td>
+      </tr>
+      <tr style="width:0px;height:20px;"><td></td><td></td><td></td><td></td></tr>
+      <tr style="width:0px;height:20px;"><td></td><td></td><td></td><td></td></tr>
+
+      </table>
+    </td>
+    <!--------------- End of second table ----------->
+  </tr>
+</table>
+<!---------------Third Box---------------->
+<P><b>Delivery No :-</b></p>
+<!------------end----------------->
+  <p><b>Placenta Delivered :- </b>Normal / Mannual  <b>PPH:</b> No / Yes &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Mild / Moderate / Severe</p>
+<p><b>Conducted By :-</b></p>
+<P><b>APGAR :-</b></p>
+  <p>
+    <b>Baby Status :-</b> Pre-Term / Term / Post-Term / Asphyxiated / Macerated / Still Born / IUD <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>&#8595;</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Oropheryngeal Suction <span>&#8594;</span> Given / Not Given
+  </p>
+  <p>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    CPR given with Ambu + O<sub>2</sub><span>&#8594;</span> Given / Not Given<br>
+  </p>
+  <p>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Improved / Not Improved
+  </p>
+  <p>
+  	<b>Congenital Anamolies :-</b> Cleft Lip / Cleft Palate / Musculoskeletal / Spina Bifida / Cardiovascular /Respiratory / Imperforate Anus / Other<br>
+  </p>
+</div>
+</div>
+</div>
+</body>
+</html>

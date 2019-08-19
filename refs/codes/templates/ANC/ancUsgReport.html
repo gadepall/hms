@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Shaheed Hospital</title>
+  <meta name ="viewport" content="width=device-width">
+  <link rel="stylesheet" type="text/css" href="static/css/homework.css">
+  <link rel="icon" type="image/jpeg" href="static/img/cross.png">
+
+  <style>
+    #testdata{
+      border-collapse: collapse;
+      border: 1px solid;
+    }
+
+    #testdata th{
+      border: 1px solid;
+      border-right: 0px solid;
+      border-left: 0px solid;
+    }
+
+    #testdata td{
+      padding: 5px;
+    }
+
+    .spnhead{
+      font-size: 18px;
+      font-weight: bold;
+      color:black;
+    }
+
+    .spndata{
+      font-size: 17px;
+      font-weight: normal;
+      color:black;
+    }
+
+    #mainTb td, #mainTb th {
+      border: 1.5px solid #332c18;
+      padding: 10px;
+      text-align:center
+    }
+
+    .subtitlebox{
+        font-weight: bold;
+        font-size: 20px;
+        font-family: Times New Roman;
+        padding:5px;
+        background:#80DFFF;
+        width:101%;
+    }
+
+  </style>
+
+  <style type="text/css" media="print">
+    @media print {
+      @page {margin:0;}
+      body {margin:1.6;}
+    }
+  </style>
+
+  <script language="JavaScript">
+    function display_c(){
+      var refresh=1000; // Refresh rate in milli seconds
+      mytime=setTimeout('display_ct()',refresh)
+    }
+
+    function display_ct(){
+      var today = new Date();
+      var h = today.getHours();
+      var m = today.getMinutes();
+      var s = today.getSeconds();
+      var dd = today.getDate();
+      var mm = today.getMonth();
+      var yy = today.getFullYear();
+      m = checkTime(m);
+      s = checkTime(s);
+      dd = checkTime(dd);
+      mm = checkTime(mm);
+
+      document.getElementById('date').innerHTML = dd + "/" + mm + "/" + yy;
+      document.getElementById('time').innerHTML = h + ":" + m + ":" + s;
+
+      tt=display_c();
+    }
+
+    function checkTime(i){
+      if(i<10){i = "0" + i};
+      return i;
+    }
+  </script>
+</head>
+
+<body onload="display_c();">
+  <div class="border">
+  </div>
+  <br>
+  <div class="row" style="margin-left:7%;">
+    <div class="col-12">
+      <div class="col-1">
+        <img src="static/icon4/slogo.jpg">
+      </div>
+      <div class="col-4" style="text-align:center;margin-left:20%;">
+        <h1>शहीद अस्पताल</h1>
+        <h3>दल्ली राजहरा , जिला-बालोद </h3>
+        <h3>( छत्तीसगढ़ )</h3>
+        <h4>फ़ोन : (07748)216088</h4>
+        <br>
+        <h2 style="color:royalblue;"><u>ANC Report</u></h2>
+      </div>
+      <div class="col-4" style="text-align:right;font-size:20px;">
+        Date:<p id="date" style="display:inline;font-size:20px;"></p>
+        Time:<p id="time" style="display:inline;font-size:20px;"></p>
+      </div>
+
+
+      <div style="margin-left:-4%;margin-right:2%;">
+        <input type="text" name="lc_id" value="{{ds2[0][15]}}" style="display:block;">
+      <div class="col-12">
+        <h2 style="color:seagreen;"><b>Patient Details:</b></h2>
+        <table id="testdata" style="width:98%;" >
+          {%for od in ds2 %}
+          <tr>
+            <td><span class="spnhead">Regno:</span><span class="spndata"><b>{{od[0]}}</b></span></td>
+            <td ><span class="spnhead">Name:</span><span class="spndata"><b>{{od[1]}} {{od[2]}} {{od[3]}}</b></span></td>
+            <td><span class="spnhead">Gender:</span><span class="spndata">{{od[4]}}</span></td>
+            <td><span class="spnhead">Age:</span><span class="spndata">{{od[5]}} {{od[6]}}</span></td>
+          </tr>
+          <tr>
+            <td><span class="spnhead">Date of Registration:<span class="spndata">{{od[7]}}</span></td>
+            <td><span class="spnhead">Phone Number:</span><span class="spndata">{{od[9]}}</span></td>
+            <td><span class="spnhead">Address:</span><span class="spndata">{{od[8]}}</span></td>
+            <td><span class="spnhead">Complaint:</span><span class="spndata">{{od[11]}}</span></td>
+            <td><span class="spnhead">ANC Visit Date:</span><span class="spndata">{{od[14]}}</span></td>
+
+          </tr>
+        </table>
+      </div>
+
+        <input type="text" name="usg_id" value="{{od[15]}}" style="display:block;">
+
+        <div class="row myrow">
+          <div class="col-1"></div>
+          <div class="col-2"><span class="texttule">Date: {{usre[2]}}</span>
+          </div>
+
+          <div class="col-3"><span class="texttule">Test done from: {{usre[3]}}</span>
+          </div>
+
+          <div class="col-2"><span class="texttule">Gravida: {{usre[4]}}</span>
+          </div>
+
+          <div class="col-2"><span class="texttule">LMP: {{usre[5]}}</span>
+          </div>
+
+          <div class="col-2"><span class="texttule">EDD: {{usre[6]}}</span>
+          </div>
+
+        </div> <!-- row -->
+        <br>
+
+        <div class="row myrow">
+          <div class="col-1"></div>
+          <div class="col-2"><span class="texttule">Foetus: {{usre[7]}}</span>
+          </div>
+
+          <div class="col-3"><span class="texttule">Presentation: {{usre[8]}}</span>
+          </div>
+
+          <div class="col-2"><span class="texttule">Placenta: {{usre[9]}}</span>
+          </div>
+
+          <div class="col-2"><span class="texttule">Liquor: {{usre[10]}}</span>
+          </div>
+
+
+        </div> <!-- row -->
+        <br>
+
+        <div class="row myrow">
+          <div class="col-1"></div>
+
+          <div class="col-3"><span class="texttule">CRL: {{usre[11]}}</span>
+          </div>
+
+          <div class="col-3"><span class="texttule">FA: {{usre[12]}}</span>
+          </div>
+
+          <div class="col-3"><span class="texttule">EDD: {{usre[13]}}</span>
+          </div>
+
+        </div> <!-- row -->
+
+        <br>
+
+        <div class="row myrow">
+          <div class="col-1"></div>
+
+          <div class="col-3"><span class="texttule">BPD: {{usre[14]}}</span>
+          </div>
+
+          <div class="col-3"><span class="texttule">FA: {{usre[15]}}</span>
+          </div>
+
+          <div class="col-3"><span class="texttule">EDD: {{usre[16]}}</span>
+          </div>
+
+        </div> <!-- row -->
+
+        <br>
+
+        <div class="row myrow">
+          <div class="col-1"></div>
+            <div class="col-3"><span class="texttule">HC: {{usre[17]}}</span>
+          </div>
+
+          <div class="col-3"><span class="texttule">FA: {{usre[18]}}</span>
+          </div>
+
+          <div class="col-3"><span class="texttule">EDD: {{usre[19]}}</span>
+          </div>
+
+        </div> <!-- row -->
+
+        <br>
+
+        <div class="row myrow">
+          <div class="col-1"></div>
+          <div class="col-3"><span class="texttule">AC: {{usre[20]}}</span>
+          </div>
+
+          <div class="col-3"><span class="texttule">FA: {{usre[21]}}</span>
+          </div>
+
+          <div class="col-3"><span class="texttule">EDD: {{usre[22]}}</span>
+          </div>
+
+        </div> <!-- row -->
+
+        <br>
+
+        <div class="row myrow">
+          <div class="col-1"></div>
+          <div class="col-3"><span class="texttule">FL: {{usre[23]}}</span>
+          </div>
+
+          <div class="col-3"><span class="texttule">FA: {{usre[24]}}</span>
+          </div>
+
+          <div class="col-3"><span class="texttule">EDD: {{usre[25]}}</span>
+          </div>
+
+        </div> <!-- row -->
+
+        <br>
+
+        <div class="row myrow">
+          <div class="col-3"></div>
+
+          <div class="col-3" style="margin-left:45px;color:green;"><span class="texttule">Average FA: {{usre[26]}}</span>
+          </div>
+
+          <div class="col-3" style="margin-left:65px;color:blue;"><span class="texttule">EDD: {{usre[27]}}</span>
+          </div>
+
+        </div> <!-- row -->
+
+        <br>
+
+        <div class="row myrow">
+          <div class="col-1"></div>
+
+          <div class="col-3"><span class="texttule">FHR: {{usre[28]}}</span>
+          </div>
+
+          <div class="col-3"><span class="texttule">FWT: {{usre[29]}}</span>
+          </div>
+
+          <div class="col-4"><span class="texttule">HC/AE: {{usre[30]}}</span>
+            <span class="texttule"> N.Range = 1.05 to 1.21</span>
+          </div>
+
+        </div> <!-- row -->
+          <div class="row myrow">
+          <div class="col-1"></div>
+
+
+        </div> <!-- row -->
+
+        <br>
+
+        <div class="row myrow">
+          <div class="col-1"></div>
+
+            <div class="col-3"><span class="texttule">FL/HE: {{usre[31]}}</span>
+              <span class="texttule"> N.Range = 18.7 to 20.3</span>
+            </div>
+
+              <div class="col-3"><span class="texttule">FL/AE: {{usre[32]}}</span>
+                <span class="texttule"> N.Range = 20.4 to 23</span>
+              </div>
+
+              <div class="col-1"><span class="texttule">Comments: {{usre[33]}}</span>
+              </div>
+
+            </div> <!-- row -->

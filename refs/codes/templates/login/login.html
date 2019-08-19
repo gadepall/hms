@@ -1,0 +1,160 @@
+<html>
+<head>
+  <link rel="stylesheet" href="css/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+  <title>Sign in</title>
+</head>
+
+<style>
+body {
+     background-image: url(/static/icon5/back7.png);
+     font-family: 'Ubuntu', sans-serif;
+     background-size: cover;
+     height:auto;
+     width:auto;
+
+
+
+ }
+
+ .main {
+     background-color: #FFFFFF;
+     width: 400px;
+     height: 400px;
+     margin: 7em auto;
+     border-radius: 1.5em;
+     box-shadow: 0px 11px 35px 2px rgba(0, 0, 0, 0.14);
+ }
+
+ .sign {
+     padding-top: 40px;
+     color: #8C55AA;
+     font-family: 'Ubuntu', sans-serif;
+     font-weight: bold;
+     font-size: 23px;
+ }
+
+ .un {
+ width: 76%;
+ color: rgb(38, 50, 56);
+ font-weight: 700;
+ font-size: 16px;
+ letter-spacing: 1px;
+ background: rgba(136, 126, 126, 0.04);
+ padding: 10px 20px;
+ border: none;
+ border-radius: 20px;
+ outline: none;
+ box-sizing: border-box;
+ border: 2px solid rgba(0, 0, 0, 0.02);
+ margin-bottom: 50px;
+ margin-left: 46px;
+ text-align: center;
+ margin-bottom: 27px;
+ font-family: 'Ubuntu', sans-serif;
+ }
+
+ form.form1 {
+     padding-top: 40px;
+ }
+
+ .pass {
+         width: 76%;
+ color: rgb(38, 50, 56);
+ font-weight: 700;
+ font-size: 16px;
+ letter-spacing: 1px;
+ background: rgba(136, 126, 126, 0.04);
+ padding: 10px 20px;
+ border: none;
+ border-radius: 20px;
+ outline: none;
+ box-sizing: border-box;
+ border: 2px solid rgba(0, 0, 0, 0.02);
+ margin-bottom: 50px;
+ margin-left: 46px;
+ text-align: center;
+ margin-bottom: 27px;
+ font-family: 'Ubuntu', sans-serif;
+ }
+
+
+ .un:focus, .pass:focus {
+     border: 2px solid rgba(0, 0, 0, 0.18) !important;
+
+ }
+ .footer {
+
+        background-color: #3f3f3f;
+          color: #fff;
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          text-align: center;
+          font-size: 13px;
+          padding: 5px;
+      }
+
+
+ .submit {
+   cursor: pointer;
+     border-radius: 5em;
+     color: #fff;
+     background: linear-gradient(to right, #9C27B0, #E040FB);
+     border: 0;
+     padding-left: 40px;
+     padding-right: 40px;
+     padding-bottom: 10px;
+     padding-top: 10px;
+     font-family: 'Ubuntu', sans-serif;
+     margin-left: 35%;
+     font-size: 13px;
+     box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
+ }
+
+input {
+     text-shadow: 0px 0px 3px rgba(117, 117, 117, 0.12);
+     color: #E1BEE7;
+     text-decoration: none
+ }
+
+ media screen and (max-width: 600px) {
+     .main {
+         border-radius: 0px;
+     }
+</style>
+<body>
+  <div class="main">
+    <p class="sign" align="center" style="color:green"><span style="color:red;">Shaheed</span> Hospital</p>
+    <form class="form1" method="post" action="home">
+      <input class="un " name="username" type="text" align="center" placeholder="Username" required>
+      <input class="pass" type="password" name="password" align="center" placeholder="Password" required>
+      <input type="submit" class="submit" value="Login" align="center">
+    </form>
+  </div>
+
+  <div class="row" style="margin-top:80px">
+  			{% if error=='1' %}
+  			<!-- If error code is '1' that means the login credintials is invalid and diplaying correcsponding error message -->
+  			<p style="text-align:center;padding-bottom:10px;color:maroon;font-weight:bold;">{% print('Invalid Username or Password! Try Again!') %}</p>
+  			{% elif error=='2' %}
+  			<!-- If error code is '2' that means there is an error in accessing the database and diplaying correcsponding error message -->
+  			<p style="text-align:center;padding-bottom:10px;color:red;font-weight:bold;">{% print('Database Error!') %}</p>
+  			{% elif error=='3' %}
+  			<!-- If error code is '3' that means the user is logged out and displaying corresponding message -->
+  			<p style="text-align:center;padding-bottom:10px;color:firebrick;font-weight:bold;">{% print('Logged Out Successfully!') %}</p>
+  			{% endif %}
+  </div>
+
+
+  <!--footer -->
+  <div class="footer" style="font-size:15px;font-weight:bold;text-align:center;">
+  &#169;IIT Hyderabad(TLC)&#174;
+  <div class=""></div>
+  </div>
+  <!-- /footer -->
+
+</body>
+</html>

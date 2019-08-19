@@ -1,0 +1,51 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+<style>
+#sample td, #sample th {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align:center
+}
+</style>
+
+<div class="col-12">
+  <div id="content">
+    <div class="titlebox" style="text-align:center">
+      <span style="text-align:center">Edit Sample Name</span>
+      <div style="text-align:right;display:inline;border:2px solid #000080;padding:6px;border-radius:3px;"><a href="labadmin" style="text-decoration:none;color:green;font-size:30px;color:#000080"><img src="static/icon4/home.svg" height="40px" width="40px"></a></div>
+    </div>
+<div class="row">
+  <div class="col-5"></div>
+  <div class="col-3">
+    <table id="sample" style="width:100%;">
+      <tr>
+        <td colspan="2" style="color:green;"><b>{{ack}}</b></td>
+      </tr>
+      <tr>
+        <td colspan="2" style="color:green;background-color:pink"><b>Edit Sample Name</b></td>
+      </tr>
+        <tr>
+          <th>Sample Name</th>
+          <th>Update</th>
+        </tr>
+        {% for row in value %}
+        <form action="Updatesample" method="POST">
+        <tr>
+          <td><input type="text" name="samplename" class="alphaonly" value="{{row[1]}}"></td>
+          <td>
+            <input type="hidden" name = "sid" value="{{row[0]}}">
+            <input type="submit" value="Update">
+          </td>
+        </tr>
+      </form>
+        {% endfor %}
+    </table>
+  </div>
+</div>
+</div>
+</div>
+
+
+
+
+{% endblock %}

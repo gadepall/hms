@@ -1,0 +1,150 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+
+<script>
+function display_c(){
+var refresh=1000; // Refresh rate in milli seconds
+mytime=setTimeout('display_ct()',refresh)
+}
+
+function display_ct(){
+
+var today = new Date();
+var h = today.getHours();
+var m = today.getMinutes();
+var s = today.getSeconds();
+var dd = today.getDate();
+var mm = today.getUTCMonth()+1;
+var yy = today.getFullYear();
+m = checkTime(m);
+s = checkTime(s);
+
+dd = checkTime(dd);
+mm = checkTime(mm);
+
+
+document.getElementById('condate').value = yy + "-" + mm + "-" + dd;
+tt=display_c();
+}
+</script>
+
+<style>
+  #showLabData {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#showLabData td, #showLabData th {
+  padding: 8px;
+}
+
+#showLabData td{
+  padding: 8px;
+  font-size: 15px;
+}
+
+
+#showLabData thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+}
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+#showLabData thead,th {
+  background-color:#778899;
+}
+
+
+    /* SEPERATE CODE */
+.subtitle
+{
+background-color:#F0E68C;
+}
+.spnhead{
+  font-size: 20px;
+  font-weight: bold;
+}
+.spndata{
+  font-size: 18px;
+  font-weight: bold;
+}
+</style>
+<div class="col12">
+  <div id="content">
+  <div class="titlebox">Edit Sample</div>
+  <div class="row myrow">{{ack}}</div>
+  <div class="row myrow">
+  <div class="col-12">
+    <table id="showLabData" border=1>
+      <thead>
+        <th>AccessionNo</th>
+        <th>Regno</th>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Date</th>
+        <th>Patient From</th>
+      </thead>
+      {%for row in ldata%}
+      <tr>
+        <td><input type="hidden" name="acno" value="{{row[0]}}">{{row[0]}}</td>
+        <td>{{row[1]}}</td>
+        <td>{{row[2]}} {{row[3]}} {{row[4]}}</td>
+        <td>{{row[5]}} {{row[6]}}</td>
+        <td>{{row[7]}}</td>
+        <td>{{row[8]}}</td>
+      </tr>
+      {%endfor%}
+    </table>
+  </div>
+  <div class="row">
+  <div class="col-3"></div>
+  <form action="updateSampleCollect" method="POST">
+  <div class="col-6">
+    <h3>Collected Samples</h3>
+    <table id="showLabData" border=1>
+      <thead>
+        <th>Sample Name</th>
+        <th>Current Test Name</th>
+        <th>Test Name(s)</th>
+      </thead>
+      {%for row in tdata%}
+      <tr>
+        <td>{{row[1]}}</td>
+        <td>{{row[3]}}</td>
+        <td>
+          <input type="hidden" name="ltid" value="{{row[4]}}">
+          <select name="testname" style="width:100%;">
+            <option value="{{row[2]}}" style="font-weight:bold;">{{row[3]}}</option>
+            <option value="">--Select--</option>
+            {%for row1 in tname%}
+              {%if row1[1]==row[0]%}
+              <option value="{{row1[0]}}">{{row1[3]}}</option>
+              {%endif%}
+            {%endfor%}
+          </select>
+        </td>
+        </tr>
+      {%endfor%}
+    </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col-5"></div>
+  <div class="col-2">
+    <input type="submit" value="Update">
+  </div>
+</div>
+<input type="hidden" name="pname" value="{{pname}}">
+</form>
+</div> <!--- Content --->
+</div><!--- col-12 --->
+
+
+{% endblock %}

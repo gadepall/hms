@@ -1,0 +1,520 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+
+
+<style>
+
+/* GENERAL CODE */
+#recDiagnosis {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#recDiagnosis td, #recDiagnosis th {
+  padding: 8px;
+}
+
+#recDiagnosis td{
+  padding: 8px;
+  font-size: 15px;
+}
+#recDiagnosis tr:nth-child(even){background-color: #f2f2f2;}
+
+#recDiagnosis tr:hover {background-color: #ddd;}
+
+#recDiagnosis thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+}
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+#recDiagnosis thead,th {
+  background-color:#778899;
+}
+/* SEPERATE CODE */
+
+
+
+/* GENERAL CODE */
+#newDiagnosis {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#newDiagnosis td, #newDiagnosis th {
+  padding: 8px;
+}
+
+#newDiagnosis td{
+  padding: 8px;
+  font-size: 15px;
+}
+#newDiagnosis tr:nth-child(even){background-color: #f2f2f2;}
+
+#newDiagnosis tr:hover {background-color: #ddd;}
+
+#newDiagnosis thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+}
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+#newDiagnosis thead,th {
+  background-color:#778899;
+}
+/* SEPERATE CODE */
+
+
+
+
+.subtitle
+{
+background-color:#F0E68C;
+width: 100%;
+}
+.spnhead{
+  font-size: 20px;
+  font-weight: bold;
+}
+.spndata{
+  font-size: 20px;
+}
+
+
+		.container{
+			width: 100%;
+      padding-right: 0px;
+      padding-left: 0px;
+      margin-right: auto;
+      margin-left: auto;
+		}
+
+
+
+		ul.tabs{
+			margin: 0px;
+			padding: 0px;
+			list-style: none;
+		}
+		ul.tabs li{
+			background: none;
+			display: inline-block;
+			padding: 8px 15px;
+      padding-right:100px;
+      cursor: pointer;
+      color: #222;
+      font-size: 18px;
+		}
+
+		ul.tabs li.current{
+			background: #87CEEB	;
+			color: #222;
+      font-weight: bold;
+      border: 1px ;
+      border-radius: 7px;
+		}
+
+		.tab-content{
+			display: none;
+			background: #FFFAFA;
+			padding: 15px;
+
+		}
+
+		.tab-content.current{
+			display: inherit;
+		}
+</style>
+
+<script>
+$(document).ready(function(){
+	$('ul.tabs li').click(function(){
+		var tab_id = $(this).attr('data-tab');
+
+		$('ul.tabs li').removeClass('current');
+		$('.tab-content').removeClass('current');
+
+		$(this).addClass('current');
+		$("#"+tab_id).addClass('current');
+	});
+});
+
+function changeDoctor()
+{
+  if(document.getElementById('hospital').value=='OutSide'){
+    document.getElementById('shd').style.display='none';
+    document.getElementById('dname').required=false;
+    }
+  else{
+    document.getElementById('shd').style.display='block';
+    document.getElementById('dname').required=true;
+  }
+}
+
+
+function ShowDia(){
+  if($("#insertNewDia").css('display')=='none'){
+    $("#insertNewDia").css('display','block');
+  }
+  else if($("#insertNewDia").css('display')=='block'){
+    $("#insertNewDia").css('display','none');
+  }
+}
+//INSERT NEW DIAGNOSIS
+$(function() {
+    $( "#pdiagno" ).autocomplete({
+        source: function( request, response ) {
+          var pdiagno=document.getElementById('pdiagno').value;
+            $.ajax({
+                type:"POST",
+                url: "getOpdDiagnosis",
+                data:'pdiagno='+pdiagno,
+                success: function( data ) {
+                  response(data);
+                }
+            });
+        },
+    });
+});
+
+// THIS IS A SCRIPT FOR ADDING AND REMOVING DIGNOSIS.
+
+$(document).ready(function(){
+    $("#add-row-dia").click(function(){
+      var valu = document.getElementById('pdiagno').value;
+      var i,did='',dname=valu.split("# ").pop();
+      for(i=0;i<=valu.length;i++)
+      {
+        if(valu[i]=='#')
+          break;
+        else
+          did = did+valu[i];
+      }
+        mark = "";
+        var chk = "<tr><td><input type='checkbox' name='record'></td>";
+        mark = mark + chk
+        var name = "<td><input type='text' name='dianame' value='"+dname+"' placeholder='Name' readonly></td>";
+        mark = mark + name;
+        var dtype = "<td><select name='diagnosisTypenew'><option value='Provisional Diagnosis'>Provisional Diagnosis</option><option value='Final Diagnosis'>Final Diagnosis</option></td>";
+        mark = mark + dtype
+        var did = "<td><input type='text' name='diagnosisIdnew' id='d1' value='"+did+"' placeholder='Name' style='display:none;'></td>";
+        mark = mark + did
+        $("#newDiagnosis tbody").append(mark);
+        document.getElementById('pdiagno').value='';
+    });
+
+    // Find and remove selected table rows
+    $("#delete-row-dia").click(function(){
+        $("#newDiagnosis tbody").find('input[name="record"]').each(function(){
+          if($(this).is(":checked")){
+                $(this).parents("tr").remove();
+            }
+        });
+    });
+});
+
+// INSERT NEW DIAGNOSIS
+$('#upinssave').click(function() {
+  var formurl = $("#addnewform").attr('action');
+        $.ajax({
+            type: "POST",
+            url: $("#addnewform").attr('action'), // url to post to, from the forms action
+            data: $("#addnewform").serialize(),
+            success: function (data) {
+              $("#upinssave").prop('disabled', true);
+              document.getElementById('upinsack').innerHTML = data['ack'];
+              alert(data['ack']);
+            }
+        });
+        e.preventDefault(); // block the traditional submission of the form.
+});
+
+
+
+
+
+
+
+
+
+//AUTOCOMPLETE Diagnosis
+function takedata(e) {
+    $( "#"+e).autocomplete({
+        source: function( request, response ) {
+          var pdiagno=$("#"+e).val();
+            $.ajax({
+                type:"POST",
+                url: "getOpdDiagnosis",
+                data:'pdiagno='+pdiagno,
+                success: function( data ) {
+                  response(data);
+                }
+            });
+        },
+    });
+}
+
+function splitData(dia,index)
+{
+  valu = $("#"+dia).val();
+  pdid = "pdid"+index;
+  console.log(valu);
+  $("#"+dia).blur(function() {
+    var i,did='',dname=valu.split("# ").pop();
+    for(i=0;i<=valu.length;i++)
+    {
+      if(valu[i]=='#')
+        break;
+      else
+        did = did+valu[i];
+    }
+    $("#"+dia).val(dname);
+    $("#"+pdid).val(did);
+  });
+}
+// UPDATE DATA USING AJAX
+$(document).ready(function () {
+$('form').submit(function (e) {
+  var formurl = $(this).attr('action');
+
+        $.ajax({
+            type: "POST",
+            url: $(this).attr('action'), // url to post to, from the forms action
+            data: $(this).serialize(),
+            success: function (data) {
+
+              if (formurl == 'updateOpdConsultHistory' && data['ack']=='DATA SUCCESSFULLY UPDATED!'){
+                $("#ohupdate").prop('disabled', true);
+                document.getElementById('hisack').innerHTML = data['ack'];
+              }
+              else if(formurl == 'updateOpdConsultRefer' && data['ack']=='DATA SUCCESSFULLY UPDATED!'){
+                $("#orupdate").prop('disabled', true);
+                document.getElementById('refack').innerHTML = data['ack'];
+              }
+              else if(formurl == 'updateOpdConsultDiagnosis' && data['ack']=='DATA SUCCESSFULLY UPDATED!'){
+                $("#odupdate").prop('disabled', true);
+                document.getElementById('diaack').innerHTML = data['ack'];
+              }
+            alert(data['ack']);
+            }
+        })
+        e.preventDefault(); // block the traditional submission of the form.
+    });
+  });
+
+function removeMe(did){
+  var r = confirm("Do you Want To Delete This Record");
+  if(r==true){
+    $('#recDiagnosis tr').click(function(){
+      $(this).remove();
+      $.ajax({
+          type: "POST",
+          url: '/deleteDianosis', // url to post to, from the forms action
+          data:"did="+did,
+          success: function (string) {
+              alert("SUCCESSFULLY DELETED");
+          }
+      });
+    });
+  }
+  else {
+    return false;
+  }
+}
+
+
+</script>
+
+<div class="col12">
+  <div id="content">
+    <div class="titlebox">Consultation
+    <span align="right">Update</span>
+    </div>
+    <div class="row" style="padding-bottom:2px;"></div>
+    {% for row in ds1%}
+    <div class="row myrow subtitle">
+      <div class="col-2"><span class="spnhead">Regno:</span><span class="spndata">{{row[1]}}</span></div>
+      <div class="col-3"><span class="spnhead">Name:</span><span class="spndata">{{row[2]}} {{row[4]}} {{row[3]}}</span></div>
+      <div class="col-2"><span class="spnhead">Sex:</span><span class="spndata">{{row[13]}}</span></div>
+      <div class="col-2"><span class="spnhead">Age:</span><span class="spndata">{{row[11]}} {{row[12]}}</span></div>
+    </div>
+    {%endfor%}
+    <div class="row" style="padding-bottom:2px;"></div>
+    <div class="container">
+
+    	<ul class="tabs">
+
+        <li class="tab-link current" data-tab="tab-2 ">History&Clinical</li>
+        <li class="tab-link" data-tab="tab-3">Refer To</li>
+        <li class="tab-link" data-tab="tab-4">Diagnosis</li>
+        <li class="tab-link" data-tab="tab-5">Medicine</li>
+    	</ul>
+
+
+      <div id="tab-2" class="tab-content current"><!---INVESTIGATION TAB   --->
+        <br>
+        <form action="updateOpdConsultHistory" id="formdata">
+          {% for row in chis%}
+          <input type="text" name="hcid" value="{{row[0]}}" style="display:none;">
+          <textarea name="hiscli" class='spalphanum' rows="10" cols="50" required>{{row[2]}}</textarea>
+
+          <div class="col-2"></div>
+          <input type="submit" value="Update" id="ohupdate">
+          {%endfor%}
+        </form>
+        <br>
+        <p id="hisack"></p>
+
+      </div><!---END OF INVESTIGATION TAB   --->
+
+
+    <div id="tab-3" class="tab-content"><!---REFER TAB   --->
+      <br>
+        <form action="updateOpdConsultRefer" id="formdata">
+          {%for row in cref%}
+          <input type="text" name="refid" value="{{row[0]}}" >
+          <div class="col-3" >
+            <span class="texttule">Reason:</span>
+            <input type="text" name="reason" class='spalphanum' placeholder="Reason" value="{{row[2]}}" required>
+          </div>
+          <div class="col-2"><span class="texttule">Hospital:</span>
+            <select name="hname" id="hospital" onchange="changeDoctor()">
+              <option value="{{row[3]}}">{{row[3]}}</option>
+              <option value="">---Select---</option>
+              <option value="SHD">Shaheed Hospital</option>
+              <option value="OutSide">OutSide</option>
+            </select>
+          </div>
+          <input type="text" name="referby" value="101" style="display:none;">
+          <div class="col-2" id="shd" style="display:none;">
+            <span class="texttule">Doctor:</span>
+            <select name="referto" id="dname" required>
+              <option value="{{row[4]}}">{{row[4]}}</option>
+              <option value="">---Select---</option>
+              <option value="102">D1</option>
+              <option value="103">D2</option>
+            </select>
+          </div>
+          <div class="col-2"><input type="submit" id="orupdate" value="Update"></div>
+          </form>
+          {%endfor%}
+          <br>
+          <p id="refack"></p>
+      <br>
+    </div><!--- END OF REFER TAB   --->
+
+
+
+    <div id="tab-4" class="tab-content" ><!---DIAGNOSIS TAB   --->
+      <form action="updateOpdConsultDiagnosis" id="formdata">
+      <div class="row myrow">
+        <div class="col-5">
+          <table border=1 id="recDiagnosis">
+            <thead>
+                    <th style="display:none;">did</th>
+                    <th style="display:none;">diaid</th>
+                    <th>Name</th>
+                    <th>Marked As</th>
+                    <th>Remove</th>
+              </thead>
+                {%for row in cdia%}
+                <tr>
+                  <td style="display:none;"><input type="text"  name ="did" value="{{row[0]}}"></td>
+                  <td style="display:none;"><input type="text" id="pdid{{loop.index}}" name ="diaid" value="{{row[1]}}"></td>
+                  <td>
+                    <div class="ui-widget">
+                      <input type="text" id="pdiagno{{loop.index}}" name ="pdiagno" class='alphaonly' value="{{row[2]}}" onkeypress="takedata(this.id)" onblur="splitData(this.id,{{loop.index}})">
+                    </div>
+                  </td>
+                  <td>
+                    <select name='diagnosisType'>
+                    <option value='{{row[3]}}'>{{row[3]}}</option>
+                    <option value="">---Select---</option>
+                    <option value='Provisional Diagnosis'>Provisional Diagnosis</option>
+                    <option value='Final Diagnosis'>Final Diagnosis</option>
+                  </td>
+                  <td><button onclick='removeMe({{row[0]}})'>DELETE</button></td>
+                </tr>
+                {%endfor%}
+          
+
+            <tbody>
+            </tbody>
+          </table>
+          <div class="col-2"><input type="submit" id="odupdate" value="Update"></div>
+          <p id="diaack"></p>
+        </div>
+      </form>
+      <div class="col-2" onclick="ShowDia()"><img src="/static/icon4/addnew.jpg" height="50px" width="50px" ><b>Insert New Diagnosis</b></div>
+        <div class="col-5" id="insertNewDia" style="display:none;">
+          <div class="col-8" >
+            <span class="texttule">Diagnosis:</span>
+            <div class="ui-widget">
+              <input type="text" id="pdiagno" name ="pdiagno" class='alphaonly' placeholder="DiagnosisName" >
+              <input type="button" class="add-row" id="add-row-dia" value="Add Row" >
+              <input type="button" class="delete-row" id="delete-row-dia"class='alphanum' value="Delete Row">
+            </div>
+          </div>
+
+          <div class="col-8">
+
+            <form action="opdConsultUpInDiagnosis" id="addnewform">
+              <input type="text" name="conid" value="{{cdia[0][4]}}">
+            <table border=1 id="newDiagnosis" >
+                <thead>
+                    <tr>
+                        <th>Select</th>
+                        <th>Name</th>
+                        <th>Marked As</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <div class="col-2"><input type="submit" id="upinssave" value="Save"></div>
+          </div>
+        </form>
+      </div>
+      <div class="row"><div class="col-2"></div><div class="col-2"><p id="upinsack"></p></div></div>
+
+      </div>
+    </div> <!---END OF DIAGNOSIS TAB   --->
+
+
+    <div id="tab-5" class="tab-content"><!---MEDICINE TAB   --->
+      <div class="col-3" style="display:block;">
+        <input type="date" id="meddate" name="refdate" placeholder="Reason" >
+      </div>
+    </div><!---END OF MEDICINE TAB   --->
+
+
+
+
+  </div><!-- container -->
+
+  </div> <!--- Content --->
+</div><!--- col-12 --->
+
+
+
+
+
+
+
+
+{% endblock %}

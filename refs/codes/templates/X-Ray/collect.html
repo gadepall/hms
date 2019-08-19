@@ -1,0 +1,305 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+
+
+
+
+			<head>
+		<style>
+/* GENERAL CODE */
+#mainTable {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#mainTable td, #mainTable th {
+  padding: 8px;
+}
+
+#mainTable td{
+  padding: 8px;
+  font-size: 15px;
+}
+#mainTable tr:nth-child(even){background-color: #f2f2f2;}
+
+#mainTable tr:hover {background-color: #ddd;}
+
+#mainTable thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+}
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+#mainTable thead,th {
+  background-color:#778899;
+}
+/* SEPERATE CODE */
+
+.subtitle
+{
+background-color:#F0E68C;
+}
+.spnhead{
+  font-size: 20px;
+  font-weight: bold;
+}
+.spndata{
+  font-size: 18px;
+  font-weight: bold;
+}
+</style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+</head>
+
+
+
+
+<div class="col12">
+  <div id="content">
+    <div class="titlebox">Patient Vitals</div>
+    <div class="row" style="padding-bottom:3px;"></div>
+    {% for row in ds1%}
+    <div class="col-12 subtitle">
+      <div class="col-2"><span class="spnhead">Regno:</span><span class="spndata">{{row[0]}}</span></div>
+      <div class="col-3"><span class="spnhead">Name:</span><span class="spndata">{{row[1]}} {{row[2]}} {{row[3]}}</span></div>
+      <div class="col-2"><span class="spnhead">Sex:</span><span class="spndata">{{row[4]}}</span></div>
+      <div class="col-2"><span class="spnhead">Age:</span><span class="spndata">{{row[5]}}</span></div>
+      <div class="col-2"><span class="spnhead">Location:</span><span class="spndata">{{loc}}</span></div>
+
+    </div>
+    {%endfor%}
+
+
+
+<!--Add multiple rows-->
+<script type="text/javascript">
+    var c=0;
+    $(document).ready(function(){
+        $(".add-row").click(function(){
+            mark = "";
+            var cdate = "tn"+c;
+            var pid = "tn"+c;
+            var sel = "sel"+c;
+            var sele = "sele"+c;
+            var amount = "tn"+c;
+            var upload = "tn"+c;
+
+
+            var cdateid = document.getElementById('cdate').value;
+            var selid = $("#sel option:selected").html();
+            var seleid =$("#sele option:selected").html();
+            var valselid = document.getElementById('sel').value;
+            var valseleid = document.getElementById('sele').value;
+            var amountid = document.getElementById('amount').value;
+
+
+
+
+            var chk = "<tr><td><input type='checkbox' name='record'  style='width:50px;height: 30px;'></td>";
+            mark = mark + chk
+
+            var cdate = "<td><input type='text' name='xdate' value='"+cdateid+"' required></td>";
+            mark = mark + cdate;
+
+           var sel = "<td><input type='text'  name='xtypename' value='"+selid+"'><input type='text'  name='xtype' value='"+valselid+"' required style='display:none;'></td>";
+            mark = mark + sel;
+
+            var sele = "<td><input type='text'  name='stypename' value='"+seleid+"'><input type='text'  name='stype' value='"+valseleid+"' style='display:none;'></td>";
+            mark = mark + sele;
+
+            var amount = "<td><input type='text'  name='amount' value='"+amountid+"' required></td>";
+            mark = mark + amount;
+
+			      var upload = "<td><input  mutiple type='file' name='upload' id='file'  onchange='loadFile(event,"+c+")' style='display: block;' required ></td>";
+            mark = mark + upload;
+
+            var image = "<td><img id='output"+c+"' width='100' /></td></tr>";
+            mark = mark + image;
+
+
+            $("table tbody").append(mark);
+            c=c+1;
+
+          //autoclear input after pressing add button
+
+            document.getElementById('date').value='';
+            document.getElementById('sel').value='';
+            document.getElementById('sele').value='';
+            document.getElementById('amount').value='';
+        });
+
+
+
+        // Find and remove selected table rows
+        $(".delete-row").click(function(){
+            $("table tbody").find('input[name="record"]').each(function(){
+            	if($(this).is(":checked")){
+                    $(this).parents("tr").remove();
+                }
+            });
+            c=c-1;
+        });
+    });
+</script>
+
+
+<!--upload image preview -->
+<script>
+  var loadFile = function(event,c) {
+    output="output"+c;
+    var image = document.getElementById(output);
+    image.src = URL.createObjectURL(event.target.files[0]);
+    document.getElementById('output')=' ';
+  };
+  </script>
+
+
+<!--Ajax AutoSelect-->
+
+<script>
+      function getAllXray()
+  {
+      var val = $("#sel").val();
+      $.ajax({
+      type: "POST",
+      url: "/getAllXraylist",
+      data:"xraytype=" + val,
+      success: function(string){
+      var data = JSON.parse(string)['data'];
+      $("#sele").html(htmlify(data));
+          }
+       });
+  };
+
+      function htmlify(val)
+  {
+      var Data = "<option value=''>--Select--</option>";
+      for (var index = 0; index < val.length; ++index) {
+      var entry = val[index];
+      Data = Data + "<option value='"+entry[0]+"'>"+entry[1]+"</option>";
+        };
+      return Data;
+  };
+</script>
+
+<!--THis will pick amount on change of subxray------>
+<script>
+      function getAllSubxray()
+
+  {
+      var val = $("#sele").val();
+      $.ajax({
+      type: "POST",
+      url: "/getAllXraySublist",
+      data:"subxray=" + val,
+      success: function(string){
+      var data = JSON.parse(string)['data'];
+      $("#amount").val(data[0]);
+
+          }
+       });
+  };
+
+
+</script>
+
+
+
+
+
+			<div class="col-2"><span class="texttule">Date:</span><br>
+      <input type="date" id="cdate" name="date" placeholder="enter date" required></div>
+     <div class="col-3">
+		 <span class="texttule">X-Ray Type:</span><br>
+
+        <select id='sel' name="xrayname" onchange="getAllXray()" required>
+          <option value="">--Select--</option>
+          {%for xname in xname%}
+            <option value="{{xname[0]}}">{{xname[1]}}</option>
+          {%endfor%}
+		</select>
+		</div>
+
+	<div class="col-3">
+		 <span class="texttule">SubType:</span><br>
+
+        <select  id='sele' name="subxray" onchange="getAllSubxray()" required>
+          <option value="">--Select--</option>
+          {%for subname in subname%}
+            <option value="{{subname[0]}}">{{subname[2]}}</option>
+          {%endfor%}
+		</select>
+		</div>
+
+	  <div class="col-2"><span class="texttule">Amount:</span><br>
+	  <input type="text" id="amount" maxlength="3" name="amount" required style="width:70px;" readonly></div>
+
+		<div class="col-1" style="text-align:left;">
+			<span class="texttule" >Add:</span><br>
+			<div class="add-row"   style="display:inline;border:1px solid black;padding:4px 25px 5px 25px;background-color:#8FBC8F;"><img src="../static/icon4/plus.png" title="Add" ></div>
+		</div>
+		<div class="col-1" style="text-align:left;">
+			<span class="texttule">Remove:</span><br>
+			<div class="delete-row" style="display:inline;border:1px solid black;padding:4px 25px 5px 25px;background-color:#8FBC8F;"><img src="../static/icon4/minus.png" title="Remove"></div>
+		</div>
+
+
+<form action ="/insertXray" method="POST" enctype="multipart/form-data" >
+  {% for row in ds1%}
+  <input type="text" id="regno" name="regno" value="{{row[0]}}" style="display:none;" >
+
+  <input type="text" id="pid" name="pid" value="{{row[7]}}" style="display:none;" >
+  {%endfor%}
+  <input type="text" id="location" name="location" value="{{loc}}" style="display:none;" >
+  <div class="col-12" align="center" >
+		<div style="width:100%;height:auto;line-height:1em;overflow:auto;">
+    <table border=1 id="mainTable" >
+        <thead>
+            <tr>
+                <th>Select</th>
+                <th>Date of Xray</th>
+                <th>Xray Type</th>
+                <th>SubType</th>
+                <th>Amount</th>
+                <th>Upload Xray</th>
+                <th>Xray Preview</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+		</div>
+    </div>
+
+<br>
+ <br>
+ <br>
+<div class="row myrow">
+        <div class="col-5"></div>
+        <div class="col-3">
+          <input type="submit" value="Save"  style="height:40px;width:150px;">
+					<br>
+					<p style="display:inline;color:green;"><b>{{ack1}}</b></p>
+
+        </div>
+    </form>
+
+        </div>
+      </div>
+
+
+
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends "medicine/frame.html" %}
+{% block content %}
+<div class="col-12">
+  <div id="content">
+    <div class="titlebox">DISTRIBUTOR DETAILS</div>
+     <br>
+
+     <form action="new_distributor_Insert" method="POST">
+
+       <div class="row myrow">
+         <div class="col-3">
+          <span class="texttule">Distributor Type:</span>
+           <select name="dist_type_id" required>
+            <option value="">--Select--</option>
+            {%for row in disdata%}
+            <option value="{{row[0]}}">{{row[1]}}</option>
+            {%endfor%}
+          </select>
+          </div>
+      <div class="col-3">
+       <span class="texttule">Name:</span>
+       <input type="text" name="distributor_name" class="alphaonly" placeholder="Distributor Name" required>
+       </div>
+
+         <div class="col-3">
+          <span class="texttule">Address:</span>
+          <input type="text" name="address" class="alphanumeric" placeholder="Address" required>
+        </div>
+
+
+        <div class="col-3">
+         <span class="texttule">Drug License:</span>
+         <input type="text" name="drug_license"  size="8" placeholder="Drug License" required>
+       </div>
+        </div>
+
+      <br>
+      <div class="row myrow">
+
+        <div class="col-3">
+          <span class="texttule">GST Number:</span>
+          <input type="text" name="gst_no" class="alphanumeric"  size="8" placeholder="GST Number" maxlength="15">
+        </div>
+        <div class="col-3">
+          <span class="texttule">Aadhar Number:</span>
+          <input type="text" name="aadhar_no" class="numeric" size="12" placeholder="Aadhar Number" maxlength="12">
+        </div>
+
+
+        <div class="col-3">
+          <span class="texttule">PAN card Number:</span>
+          <input type="text" name="pancard_no" class="alphanumeric" size="12" placeholder="PAN card number" maxlength="10">
+        </div>
+        <div class="col-3">
+          <span class="texttule">Email Id:</span>
+          <input type="text" name="emailid" class="spalphanum" placeholder="Email id">
+        </div>
+
+      </div>
+      <div class="col-12"></div>
+      <div class="row myrow">
+      <div class="col-2">
+        <span class="texttule">Contact Number:</span>
+        <textarea name="contact_no" placeholder="Enter Contact number Here" class="spalphanum" rows="5" cols="20" style="border:2px solid black;font-weight:bold" required></textarea>
+      </div>
+      </div>
+
+
+
+        <br><br><br>
+        <br><br><br>
+        <br>
+        <div class="row myrow">
+        <div class="col-5"></div>
+        <div class="col-3">
+          <input type="submit" class="button"  value="SAVE" style="height:40px;width:100px;background-color:#A9A9A9;font-weight:bold">
+          </div> </div>
+        <br><br>
+        </form>
+        <div class="col=5"><p><b> {{ack}}</b></p></div>
+      </div></div>
+
+
+
+{% endblock %}

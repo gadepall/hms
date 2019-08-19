@@ -1,0 +1,26 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+
+
+<div class="col-12">
+  <div id="content">
+    <div class="titlebox"  align="center">-------Drug Admin Page-------</div>
+    <div class="row" style="padding-bottom:3px;"></div>
+    <div class="col-1"></div>
+    <div align="center">
+      <table style="width:60%;">
+        <tr>
+          <td><br><p><a href="{{url_for('new_med_Redir')}}"><b><input type="Submit" value="Add Drug Name" style="width:80%;height:45px; font-size: 16px;color:red"></a></p></td>
+
+          <td><br><p><a href="{{url_for('UpdateMedicineNameMedtype')}}"><b><input type="Submit" value="Edit Drug Name" style="width:80%;height:45px; font-size: 16px;color:#008080"></a></p></td>
+
+          <td><br><p><a href="{{url_for('ViewAllDrugName')}}"><b><input type="Submit" value="View Drug Name" style="width:80%;height:45px; font-size: 16px;color:green"></a></p></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}

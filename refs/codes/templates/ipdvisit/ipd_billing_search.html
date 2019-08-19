@@ -1,0 +1,116 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+
+<style>
+/* GENERAL CODE */
+#mainTable {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#mainTable td, #mainTable th {
+  padding: 8px;
+}
+
+#mainTable td{
+  padding: 8px;
+  font-size: 15px;
+}
+#mainTable tr:nth-child(even){background-color: #f2f2f2;}
+
+#mainTable tr:hover {background-color: #ddd;}
+
+#mainTable thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+}
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+#mainTable thead,th {
+  background-color:#778899;
+}
+/* SEPERATE CODE */
+
+</style>
+
+
+<div class="col12">
+  <div id="content">
+    <div class="titlebox">Search Zone For IPD BILLING</div>
+    <div class="row myrow">
+
+      <div class="col-2" style="width:10%;">
+        <form action="ipdBillingSearchByToday" method="POST">
+        <span class="texttule">Today:</span>
+        <input type="submit" value="Today">
+      </form>
+      </div>
+
+      <div class="col-5">
+        <form action="ipdBillingSearchByDate" method="POST">
+          <span class="texttule">From:</span>
+          <input type="date" name="fdate" required>
+          <span class="texttule">To:</span>
+          <input type="date" name="tdate" required>
+          <input type="submit" value="Search">
+        </form>
+      </div>
+
+      <div class="col-3">
+        <form action="ipdBillingSearchByRegno" method="POST">
+        <span class="texttule">RegNo:</span>
+        <input type="text" name="regno" class="alphanumeric" style="width:120px;" required>
+        <input type="submit" value="Search">
+      </div>
+    </form>
+
+  </div> <!--- Content --->
+</div><!--- col-12 --->
+
+<div class="row myrow">
+  <div class="col-10" style="width:100%;height:auto;overflow:auto;">
+    <table  id="mainTable" >
+    <thead>
+      <th>Print Discharge</th>
+      <th>Print Normal Bill</th>
+      <th>Print Detail Bill</th>
+      <th>Regno</th>
+      <th>PatientName</th>
+
+      <th>Admission Date</th>
+      <th>Discharge Date</th>
+      <th>Billing Date</th>
+      <th>Net Amount</th>
+      <th>Payment Status</th>
+      <th>Received By</th>
+</thead>
+  {%for row in bdata%}
+  <tr>
+    <td><a href="{{url_for('printDischarge',wmid=row[0],regno=row[2],ipdid=row[1])}}" style="color:black;font-weight:bold;" target="_blank"><button type="button">DISCHARGE SUMMARY</button></a></td>
+    <td><a href="{{url_for('printNormalBill',wmid=row[0],regno=row[2],ipdid=row[1])}}" style="color:black;font-weight:bold;" target="_blank"><button type="button">NORMAL BILL</button></a></td>
+    <td><a href="{{url_for('printDetailBill',wmid=row[0],regno=row[2],ipdid=row[1])}}" style="color:black;font-weight:bold;" target="_blank"><button type="button">DETAILED BILL</button></a></td>
+    <td>{{row[2]}}</td>
+    <td>{{row[3]}} {{row[4]}} {{row[5]}}</td>
+
+    <td>{{row[9].strftime('%d/%m/%Y')}}</td>
+    <td>{{row[10].strftime('%d/%m/%Y')}}</td>
+    <td>{{row[11].strftime('%d/%m/%Y')}}</td>
+    <td>{{row[12]}}</td>
+    <td>{{row[13]}}</td>
+    <td>{{row[14]}}</td>
+
+
+  </tr>
+  {%endfor%}
+</table>
+</div>
+</div>
+
+{% endblock %}

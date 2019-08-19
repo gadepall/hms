@@ -1,0 +1,23 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+
+
+
+
+<div class="col-12">
+  <div id="content">
+    <div class="titlebox">Ipd Print Section</div>
+    <br>
+    <div class="col-3" style="margin-left:3%;"></div>
+    <a href="{{url_for('printDischarge',wmid=wmid,regno=regno,ipdid=ipdid)}}" style="color:black;font-weight:bold;" target="_blank"><button type="button"  style="height:40px;">PRINT DISCHARGE SUMMARY</button></a>
+    <a href="{{url_for('printNormalBill',wmid=wmid,regno=regno,ipdid=ipdid)}}" style="color:black;font-weight:bold;" target="_blank"><button type="button" style="height:40px;">PRINT NORMAL BILL</button></a>
+    <a href="{{url_for('printDetailBill',wmid=wmid,regno=regno,ipdid=ipdid)}}" style="color:black;font-weight:bold;" target="_blank"><button type="button" style="height:40px;">PRINT DETAILED BILL</button></a>
+    <div class="row"><div class="col-1"></div></div>
+
+  </div> <!--- Content --->
+</div><!--- col-12 --->
+
+
+
+
+{% endblock %}

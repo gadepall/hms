@@ -1,0 +1,93 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+<script>
+  $(function()
+	  {
+	      $("#drugname").autocomplete
+	      ({
+	          source: function(request,response )
+	          {
+	            var drugname=document.getElementById('drugname').value;
+	              $.ajax
+	              ({
+	                  type:"POST",
+	                  url: "UpdateMedicineAdmin",
+	                  data:'drugname='+drugname,
+	                  success: function( data )
+	                  {
+											$("#drugtype").val(data[2]);
+
+	                    //alert(data['d'][2]);
+	                    response(data);
+
+
+	                  }
+	              });
+	          },
+	      });
+	  });
+
+    </script>
+<div class="col-12">
+  <div id="content">
+    <div class="titlebox">ADD DRUG NAME</div>
+     <br>
+     <form action="new_med_Insert" method="POST">
+
+     <div class="row myrow">
+      <div class="col-3">
+        <div class="ui-widget">
+        <span class="texttule">Drug Name:</span>
+       <input type="text" name="drugname" id="drugname" class="alphanumeric" placeholder="Drug Name" autocomplete="off" required>
+       </div></div>
+
+       <div class="col-3">
+          <span class="texttule">Drug Type:</span>
+            <select name="drugtype" id="drugtype" required>
+                      <option value="">--Select--</option>
+                      <option value="Capsule">Capsule</option>
+                      <option value="Consumable">Consumable</option>
+                      <option value="Drop">Drop</option>
+                      <option value="General">General</option>
+                      <option value="Injection">Injection</option>
+                      <option value="Ointment">Ointment</option>
+                      <option value="OT">OT</option>
+                      <option value="Saline">Saline</option>
+                      <option value="Syrup">Syrup</option>
+                       <option value="Tablet">Tablet</option>
+                       <option value="Xray">Xray</option>
+                       </select>
+
+          </div>
+
+         <div class="col-3">
+          <span class="texttule">Minimum Value:</span>
+          <input type="text" name="min_value"  placeholder="Minimum Value" class="numeric" autocomplete="off" required>
+        </div>
+        <div class="col-3">
+          <span class="texttule">Maximum Value:</span>
+          <input type="text" name="max_value"  placeholder="Maximum Value" class="numeric" autocomplete="off" required>
+        </div>
+        </div>
+
+        <br>
+        <br>
+        <br>
+
+          <div class="row myrow">
+        <div class="col-5"></div>
+        <div class="col-3">
+          <input type="submit" class="button" id='btnsave' value="Submit" style="height:40px;width:100px;background-color:#A9A9A9;font-weight:bold">
+          </div> </div>
+        <br><br>
+        <div class="col-5"><p><b> {{ack}}</b></p></div>
+
+
+
+
+</div>
+
+</div>
+
+</form>
+{% endblock %}

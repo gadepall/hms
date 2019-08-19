@@ -1,0 +1,485 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+
+<style>
+
+.subtitlebox{
+  font-weight: bold;
+  font-size: 20px;
+  font-family: Times New Roman;
+  padding:5px;
+  background:#80DFFF;
+  width:101%;
+}
+
+.subtitle
+{
+background-color:#F0E68C;
+width: 101%;
+}
+
+.spnhead{
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.spndata{
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.container{
+  width: 100%;
+  padding-right: 0px;
+  padding-left: 0px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+ul.tabs{
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+
+ul.tabs li{
+  background: none;
+  display: inline-block;
+  padding: 8px 15px;
+  padding-right:50px;
+  cursor: pointer;
+  color: #222;
+  font-size: 22px;
+}
+
+ul.tabs li.current{
+  background: #F0FFFF;
+  color: #222;
+  font-weight: bold;
+}
+
+.tab-content{
+  display: none;
+  background: #F0FFFF;
+  padding: 15px;
+}
+
+.tab-content.current{
+  display: inherit;
+}
+
+#mainTable {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#mainTable td, #mainTable th {
+  padding: 8px;
+}
+
+#mainTable td{
+  padding: 8px;
+  font-size: 15px;
+}
+#mainTable tr:nth-child(even){background-color: #f2f2f2;}
+
+#mainTable tr:hover {background-color: #ddd;}
+
+#mainTable thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+}
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+#mainTable thead,th {
+  background-color:#778899;
+}
+/* SEPERATE CODE */
+
+</style>
+
+<script src="jquery-1.12.4.min.js"></script>
+<div class="row" style="padding-bottom:3px;"></div>
+
+<div class="col12">
+  <div id="content">
+    <div class="container">
+
+      <div class="titlebox" style="text-align:center;">ANC SEARCH:</div>
+
+      <div class="row myrow">
+        <div class="col-5" style="color:royalblue;"><span class="texttule"><u>Search By Registration No</u></span>
+        </div>
+        <div class="col-7" style="color:royalblue;"><span class="texttule"><u>Search By Date</u></span>
+        </div>
+      </div> <!-- row -->
+
+      <div class="row myrow">
+
+        <form action="anc_view_gen" method="POST">
+          <div class="col-3"><span class="texttule">Registration No: </span>
+            <input type="text" name="regno" class="alphanumeric">
+          </div>
+          <div class="col-2"><input type="submit" value="Search">
+          </div>
+        </form>
+
+        <form action="anc_view_date" method="POST">
+          <div class="col-2"><span class="texttule">From:</span>
+            <input type="date" name="frmdate">
+          </div>
+          <div class="col-2"><span class="texttule">To:</span>
+            <input type="date" name="todate">
+          </div>
+          <div class="col-2"><input type="submit" value="Search">
+            {%if msg == 'Excel Sheet Generated Successfully'%}
+            <a href="static/ANCUploads/ancgen.xlsx" download>
+              <img src="static/icon4/excel6.png" width="30px" height="30px"></a>
+              {%endif%}
+            </div>
+          </form>
+
+      </div> <!-- row -->
+
+      <br>
+
+      <div class="row myrow">
+        <form action="anc_view_imm" method="POST">
+          <div class="col-3" style="color:royalblue;"><span class="texttule"><u>Search By Immunization Status :</u></span></div>
+        </div> <!-- row -->
+
+        <div class="row myrow">
+          <div class="col-2"><span class="texttule">From:</span>
+            <input type="date" name="frmdate">
+          </div>
+          <div class="col-2"><span class="texttule">To:</span>
+            <input type="date" name="todate">
+          </div>
+          <div class="col-3"><span class="texttule">Immunization Status:</span>
+            <select name="immustatus" id="immustatus" required>
+              <option value="">--Select--</option>
+              <option value="All">All</option>
+              <option value="FirstDose">First Dose</option>
+              <option value="Done">Done</option>
+              <option value="FirstDoseSHD">First Dose SHD</option>
+              <option value="DoneSHD">Done SHD</option>
+              <option value="NotDone">Not Done</option>
+            </select>
+          </div>
+
+          <div class="col-2"><input type="submit" value="Search">
+            {%if msg1 == 'Excel Sheet Generated Successfully'%}
+            <a href="static/ANCUploads/ancimm.xlsx" download>
+              <img src="static/icon4/excel6.png" width="30px" height="30px"></a>
+              {%endif%}
+            </div>
+          </form>
+        </div> <!-- row -->
+
+        <br>
+
+        <div class="row myrow">
+          <div class="col-3" style="color:royalblue;"><span class="texttule"><u>Search By Haemoglobin :</u></span></div>
+        </div> <!-- row -->
+
+        <div class="row myrow">
+          <form action="anc_view_hb" method="POST">
+            <div class="col-2"><span class="texttule">From:</span>
+              <input type="date" name="frmdate">
+            </div>
+            <div class="col-2"><span class="texttule">To:</span>
+              <input type="date" name="todate">
+            </div>
+            <div class="col-1"><span class="texttule">HB:</span>
+              <input type="text" class="numeric" name="hb" style="max-width:60px;font-weight:bold;color:red;text-align:center;" required>
+            </div>
+            <div class="col-1"><span class="texttule">Exact</span>
+              <input type="radio" class="numeric" name="blood" value="Exact">
+            </div>
+            <div class="col-1"><span class="texttule">Above</span>
+              <input type="radio" class="numeric" name="blood" value="Above">
+            </div>
+            <div class="col-1"><span class="texttule">Below</span>
+              <input type="radio" class="numeric" name="blood" value="Below">
+            </div>
+            <div class="col-1"><span class="texttule">All</span>
+              <input type="radio" class="numeric" name="blood" value="All">
+            </div>
+            <div class="col-2"><input type="submit" value="Search">
+              {%if msg2 == 'Excel Sheet Generated Successfully'%}
+              <a href="static/ANCUploads/anchb.xlsx" download>
+                <img src="static/icon4/excel6.png" width="30px" height="30px"></a>
+                {%endif%}
+              </div>
+          </form>
+        </div> <!-- row -->
+
+        <br>
+
+        <div class="row myrow">
+          <div class="col-3" style="color:royalblue;"><span class="texttule"><u>Search By Blood Pressure :</u></span></div>
+        </div> <!-- row -->
+
+        <div class="row myrow">
+          <form action="anc_view_bp" method="POST">
+            <div class="col-2"><span class="texttule">From:</span>
+              <input type="date" name="frmdate" >
+            </div>
+            <div class="col-2"><span class="texttule">To:</span>
+              <input type="date" name="todate" >
+            </div>
+            <div class="col-2"><span class="texttule">Systolic:</span>
+              <input type="text" class="numeric" name="sys" style="max-width:40px;font-weight:bold;color:red;text-align:center;" required>
+            </div>
+            <div class="col-2" style="margin-left:-70px"><span class="texttule">Diastolic:</span>
+              <input type="text" class="numeric" name="dia" style="max-width:40px;font-weight:bold;color:red;text-align:center;" required>
+            </div>
+            <div class="col-1" style="margin-left:-70px"><span class="texttule">Exact</span>
+              <input type="radio" class="numeric" name="pressure" value="Exact">
+            </div>
+            <div class="col-1"><span class="texttule">Above</span>
+              <input type="radio" class="numeric" name="pressure" value="Above">
+            </div>
+            <div class="col-1"><span class="texttule">Below</span>
+              <input type="radio" class="numeric" name="pressure" value="Below">
+            </div>
+            <div class="col-1"><span class="texttule">All</span>
+              <input type="radio" class="numeric" name="pressure" value="All">
+            </div>
+            <div class="col-1"><input type="submit" value="Search">
+              {%if msg3 == 'Excel Sheet Generated Successfully'%}
+              <a href="static/ANCUploads/ancbp.xlsx" download>
+                <img src="static/icon4/excel6.png" width="30px" height="30px"></a>
+                {%endif%}
+              </div>
+          </form>
+        </div> <!-- row -->
+      </div> <!-- container-->
+    </div> <!-- content -->
+</div> <!-- class -->
+
+<!------------------------XXXXXXXXXXXXXXXXXXXXX-------------------------------->
+<div class="row" style="padding-bottom:3px;"></div>
+
+<div class="col-12" style="text-align: center;"><span class="texttule">{{msg}}</span></div>
+<div class="col-12" style="text-align: center;"><span class="texttule">{{msg1}}</span></div>
+<div class="col-12" style="text-align: center;"><span class="texttule">{{msg2}}</span></div>
+<div class="col-12" style="text-align: center;"><span class="texttule">{{msg3}}</span></div>
+
+
+
+{%if flag1==1%}
+<div class="col-12">
+  <div class="row myrow">
+    <div class="col-2"><span class="texttule">Count:{{ds1|length}}</span></div>
+    <div class="col-4"><span class="texttule">Registration No.{{regno}}</span>
+    </div>
+  <div class="row myrow">
+    <div style="width:100%;height:500px;line-height:1em;overflow:scroll;">
+    <table border=1 id="mainTable" style="width:98%;">
+      <thead>
+        <th style="text-align:center;">Registration No.</th>
+        <th style="text-align:center;">Name</th>
+        <th style="text-align:center;">Age</th>
+        <th style="text-align:center;">Registration Date</th>
+        <th style="text-align:center;">ANC Visit Date</th>
+        <th style="text-align:center;">Summary Report</th>
+        <th style="text-align:center;">Print Lab Report</th>
+
+
+      </thead>
+
+      {% for row in ds1 %}
+      <tr>
+        <td style="text-align:center;">{{row[0]}}</td>
+        <td style="text-align:center;">{{row[1]}} {{row[2]}} {{row[3]}}</td>
+        <td style="text-align:center;">{{row[4]}} {{row[5]}}</td>
+        <td style="text-align:center;">{{row[6]}}</td>
+        <td style="text-align:center;">{{row[7]}}</td>
+        {%for row in gd%}
+        <td style="text-align:center;"><a href="{{ url_for('ancReport',anc_id=row[0])}}" target="_blank" style="text-decoration:none;color:green;font-size:20px;color:#000080">
+        <img src="static/icon4/anc.png" height="30px" width="30px">Summary Report</a></td>
+        {%endfor%}
+
+        <td><form action="ANCLabReportPrint" method="POST">
+          <div class="col-12" align="center">
+            <input type="submit" value="Print" style="height:40px;width:100px;background-color:#A9A9A9;font-weight:bold">
+          {%for row in ds1%}
+          <input type="text" name="lc_id" value="{{row[10]}}" style="display:none;">
+          {%endfor%}
+        </div>
+        </form></td>
+
+      </tr>
+      {%endfor%}
+    </table>
+    </div>
+  </div>
+</div>
+
+{%elif flag2==1%}
+<div class="col-12">
+  <div class="row myrow">
+    <div class="col-2"><span class="texttule">Count:{{ds2|length}}</span></div>
+    <div class="col-2"><span class="texttule">From:{{frmdate.strftime('%d/%m/%Y')}}</span></div>
+    <div class="col-2"><span class="texttule">To:{{todate.strftime('%d/%m/%Y')}}</span></div>
+
+  <div class="row myrow">
+    <div style="width:100%;height:500px;line-height:1em;overflow:scroll;">
+    <table border=1 id="mainTable" style="width:98%;">
+      <thead>
+        <th>Registration No.</th>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Registration Date</th>
+        <th>ANC Visit Date</th>
+      </thead>
+
+      {% for row in ds2 %}
+      <tr>
+        <td>{{row[0]}}</td>
+        <td>{{row[1]}} {{row[2]}} {{row[3]}}</td>
+        <td>{{row[4]}} {{row[5]}}</td>
+        <td>{{row[12]}}</td>
+        <td>{{row[14]}}</td>
+      </tr>
+      {%endfor%}
+    </table>
+    </div>
+  </div>
+</div>
+
+{%elif flag3==1%}
+<div class="col-12">
+  <div class="row myrow">
+    <div class="col-2"><span class="texttule">Count:{{ds3|length}}</span></div>
+    <div class="col-2"><span class="texttule">From:{{frmdate.strftime('%d/%m/%Y')}}</span></div>
+    <div class="col-2"><span class="texttule">To:{{todate.strftime('%d/%m/%Y')}}</span></div>
+    <div class="col-4"><span class="texttule">Immunization Status:{{immustatus}}</span></div>
+  </div>
+
+  <div class="row myrow">
+    <div style="width:100%;height:500px;line-height:1em;overflow:scroll;">
+    <table border=1 id="mainTable" style="width:98%;">
+      <thead>
+        <th style="text-align:center;">Registration No.</th>
+        <th style="text-align:center;">Name</th>
+        <th style="text-align:center;">Age</th>
+        <th style="text-align:center;">Registration Date</th>
+        <th style="text-align:center;">ANC Visit Date</th>
+        <th style="text-align:center;">Immunization Status</th>
+      </thead>
+
+      {% for row in ds3 %}
+      <tr>
+        <td>{{row[0]}}</td>
+        <td>{{row[1]}} {{row[2]}} {{row[3]}}</td>
+        <td>{{row[4]}} {{row[5]}}</td>
+        <td>{{row[12]}}</td>
+        <td>{{row[14]}}</td>
+        <td>{{row[19]}}</td>
+      </tr>
+      {%endfor%}
+    </table>
+    </div>
+  </div>
+</div>
+
+{%elif flag4==1%}
+<div class="col-12">
+  <div class="row myrow">
+    <div class="col-2"><span class="texttule">Count:{{ds4|length}}</span></div>
+    <div class="col-2"><span class="texttule">From:{{frmdate.strftime('%d/%m/%Y')}}</span></div>
+      <div class="col-2"><span class="texttule">To:{{todate.strftime('%d/%m/%Y')}}</span></div>
+      <div class="col-2"><span class="texttule">Haemoglobin:{{hb}}</span></div>
+      <div class="col-2"><span class="texttule">Filter:{{blood}}</span></div>
+    </div>
+
+
+  <div class="row myrow">
+    <div style="width:100%;height:500px;line-height:1em;overflow:scroll;">
+    <table border=1 id="mainTable" style="width:98%;">
+      <thead>
+        <th style="text-align:center;">Registration No.</th>
+        <th style="text-align:center;">Name</th>
+        <th style="text-align:center;">Age</th>
+        <th style="text-align:center;">Registration Date</th>
+        <th style="text-align:center;">ANC Visit Date</th>
+        <th style="text-align:center;">Haemoglobin</th>
+        <th style="text-align:center;">Blood Group</th>
+        <th style="text-align:center;">Sickling</th>
+      </thead>
+
+      {% for row in ds4 %}
+      <tr>
+        <td>{{row[0]}}</td>
+        <td>{{row[1]}} {{row[2]}} {{row[3]}}</td>
+        <td>{{row[4]}} {{row[5]}}</td>
+        <td>{{row[12]}}</td>
+        <td>{{row[14]}}</td>
+        <td>{{row[15]}}</td>
+        <td>{{row[16]}}</td>
+        <td>{{row[17]}}</td>
+      </tr>
+      {%endfor%}
+    </table>
+    </div>
+  </div>
+</div>
+
+{%elif flag5==1%}
+<div class="col-12">
+  <div class="row myrow">
+    <div class="col-2"><span class="texttule">Count:{{ds5|length}}</span></div>
+    <div class="col-2"><span class="texttule">From:{{frmdate.strftime('%d/%m/%Y')}}</span></div>
+    <div class="col-2"><span class="texttule">To:{{todate.strftime('%d/%m/%Y')}}</span></div>
+    <div class="col-2"><span class="texttule">Systolic:{{sys}}</span></div>
+    <div class="col-2"><span class="texttule">Diastolic:{{dia}}</span></div>
+    <div class="col-2"><span class="texttule">Filter:{{pressure}}</span></div>
+  </div>
+
+  <div class="row myrow">
+    <div style="width:100%;height:500px;line-height:1em;overflow:scroll;">
+    <table border=1 align="center" id="mainTable" style="width:98%;">
+      <thead>
+        <th style="text-align:center;">Registration No.</th>
+        <th style="text-align:center;">Name</th>
+        <th style="text-align:center;">Age</th>
+        <th style="text-align:center;">Registration Date</th>
+        <th style="text-align:center;">ANC Visit Date</th>
+        <th style="text-align:center;">Systolic</th>
+        <th style="text-align:center;">Diastolic</th>
+        <th style="text-align:center;">Oedema</th>
+        <th style="text-align:center;">Varicose Veins</th>
+        <th style="text-align:center;">Immunization Status</th>
+      </thead>
+
+      {% for row in ds5 %}
+      <tr>
+        <td>{{row[0]}}</td>
+        <td>{{row[1]}} {{row[2]}} {{row[3]}}</td>
+        <td>{{row[4]}} {{row[5]}}</td>
+        <td>{{row[12]}}</td>
+        <td>{{row[14]}}</td>
+        <td>{{row[15]}}</td>
+        <td>{{row[16]}}</td>
+        <td>{{row[17]}}</td>
+        <td>{{row[18]}}</td>
+        <td>{{row[19]}}</td>
+      </tr>
+      {%endfor%}
+    </table>
+  </div>
+  </div>
+</div>
+
+
+{%endif%}
+{% endblock %}

@@ -1,0 +1,547 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+
+<script>
+function display_c(){
+var refresh=1000; // Refresh rate in milli seconds
+mytime=setTimeout('display_ct()',refresh)
+}
+
+function display_ct(){
+
+var today = new Date();
+var h = today.getHours();
+var m = today.getMinutes();
+var s = today.getSeconds();
+var dd = today.getDate();
+var mm = today.getUTCMonth()+1;
+var yy = today.getFullYear();
+m = checkTime(m);
+s = checkTime(s);
+
+dd = checkTime(dd);
+mm = checkTime(mm);
+
+
+document.getElementById('condate').value = yy + "-" + mm + "-" + dd;
+tt=display_c();
+}
+</script>
+
+<style>
+    #collectTest {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#collectTest td, #collectTest th {
+  padding: 8px;
+}
+
+#collectTest td{
+  padding: 8px;
+  font-size: 15px;
+}
+
+
+#collectTest thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+}
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+#collectTest thead,th {
+  background-color:#778899;
+}
+
+
+
+.testname {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.testname td, .testname th {
+  padding: 8px;
+}
+
+.testname td{
+  padding: 8px;
+  font-size: 15px;
+}
+.testname tr:nth-child(even){background-color: #f2f2f2;}
+
+.testname tr:hover {background-color: #ddd;}
+
+.testname thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+}
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+.testname thead,th {
+  background-color:#778899;
+}
+
+
+.panelname {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.panelname td, .panelname th {
+  padding: 8px;
+}
+
+.panelname td{
+  padding: 8px;
+  font-size: 15px;
+}
+.panelname tr:nth-child(even){background-color: #f2f2f2;}
+
+.panelname tr:hover {background-color: #ddd;}
+
+.panelname thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+}
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+.panelname thead,th {
+  background-color:#778899;
+}
+
+
+
+
+
+    /* SEPERATE CODE */
+    .subtitle
+{
+background-color:#F0E68C;
+}
+.spnhead{
+  font-size: 20px;
+  font-weight: bold;
+}
+.spndata{
+  font-size: 18px;
+  font-weight: bold;
+}
+    </style>
+
+
+    <div class="col12">
+      <div id="content">
+        <div class="titlebox">Collect Sample Form</div>
+
+
+
+{%if ds1 != ''%}
+{%for row in ds1%}
+<div class="col-12 subtitle">
+  <div class="col-2"><span class="spnhead">Regno:</span><span class="spndata">{{row[0]}}</span></div>
+  <div class="col-3"><span class="spnhead">Name:</span><span class="spndata">{{row[1]}} {{row[2]}} {{row[3]}}</span></div>
+
+  <div class="col-2"><span class="spnhead">Sex:</span><span class="spndata">{{row[4]}}</span></div>
+  <div class="col-2"><span class="spnhead">Age:</span><span class="spndata">{{row[5]}}</span></div>
+  <div class="col-3"><span class="spnhead">Source: </span><span class="spndata">{{row[7]}}</span></div>
+</div>
+<br>
+{%endfor%}
+{%else%}
+  <br>
+  <div class="row myrow">
+    <div class="col-3">{{ack1}}</div>
+  </div>
+{%endif%}
+<div class="row myrow">
+  <div class="col-4"></div>
+
+  <div class="col-1">
+    <span class="texttule">Sample:</span>
+      <select name="sample" id="sample" >
+        <option value=" ">Select</option>
+        {%for sam in sam%}
+        <option value="{{sam[0]}}">{{sam[1]}}</option>
+        {%endfor%}
+      </select>
+  </div>
+  <div class="col-1" style="text-align:center;">
+    <span class="texttule" >ADD</span><br>
+    <div class="add-row" id="add-row-med"  style="display:inline;border:1px solid black;padding:4px 25px 5px 25px;background-color:#8FBC8F;" onclick="checkIfAlready()"><img src="../static/icon4/plus.png" title="Insert"></div>
+  </div>
+  <div class="col-1" style="text-align:center;">
+    <span class="texttule">Remove</span><br>
+    <div class="delete-row" id="delete-row-med"  style="display:inline;border:1px solid black;padding:4px 25px 5px 25px;background-color:#8FBC8F;" onclick="removeSample()"><img src="../static/icon4/minus.png" title="Remove"></div>
+  </div>
+
+</div>
+
+
+
+
+
+<div class="col-12" id='tab12' style="display:none;">
+  <table border=0 id="collectTest" >
+    <thead>
+      <th></th>
+      <th style='text-align:center;'>Sample Type</th>
+      <th style='text-align:center;'>Test</th>
+      <th>Remove</th>
+    </thead>
+    <tr>
+
+    </tr>
+  </table>
+</div>
+
+
+<div class="col-12">
+<div class="col-3">
+  <div id="panelDiv">
+
+  </div>
+</div>
+
+<form action="/test_id_collect" method="POST">
+<div class="col-9">
+    <div id="testDiv">
+    </div>
+</div>
+</div>
+    <div class="row myrow">
+        <div class="col-5"></div>
+        {%if ds1 != ''%}
+          {%for row in ds1%}
+          <input type="hidden" name="regno" value = "{{ row[0] }}">
+              <input type="hidden" name="source_id" value = "{{ row[6] }}">
+              <input type="hidden" name="source" value = "{{ row[7]}}">
+              <input type="hidden" id="condate"  name="tdate" style="display:block;">
+          {%endfor%}
+        {%endif%}
+        <div class="col-3">
+
+
+          <input type="submit" class="button" id='btnsave' value="SAVE" style="height:40px;width:150px;display:none;">
+        </div>
+      </div>
+</form>
+
+
+</div> <!--- Content --->
+</div><!--- col-12 --->
+
+
+
+<script>
+
+
+
+
+
+    var panelvalue=[];// Global Array VARIABLE
+    var testall =[];
+    //THIS FUNCTION WILL CHECK THAT THE SAMPLE THAT WE ARE GOING TO ADD IS ALREADY ADDED OR NOT
+    function checkIfAlready()
+    {
+      testall = [];
+      var sname = $("#sample").val();
+      panelvalue.push(sname);
+      var count =0
+      for (i=0;i<panelvalue.length;i++)
+      {
+        if(panelvalue[i] == sname)
+          count=count+1;
+      }
+      if(count>1){
+          alert("Selected Panel is Already Added");
+          return false;
+      }
+      else
+        addSample(sname);
+    }
+    //THIS FUNCTION JUST ADD SAMPLE NAME
+    function addSample(sname){
+      document.getElementById('tab12').style.display = 'block';
+      document.getElementById('btnsave').style.display = 'block';
+          mark = "";
+          var chk = "<tr><td><input type='radio' name='test-name' id='sradio"+sname+"' value='"+sname+"' onchange='showHidePanelTest("+sname+")' checked></td>";
+          mark = mark + chk
+          var chk = "<td style='text-align:center;'>"+$('#sample option:selected').html();+"</td>";
+          mark = mark + chk
+          var chk = "<td style='text-align:center;'><b><textarea id='alltest"+sname+"' rows='2' cols='80' readonly></textarea></b></td>";
+          mark = mark + chk
+          var chk = "<td><input type='checkbox' id='remchk' name='record' value="+sname+"></td></tr>";
+          mark = mark + chk
+
+          $("#collectTest tbody").append(mark);
+          // Add row IN table
+          //alert(panelvalue);
+          showPanelTest(sname);
+    };//function
+
+    //THIS FUNCTION WILL CREATE NEW PANEL TABLE AND TEST TABLE ACCORDING TO SAMPLE
+    function showPanelTest(samID){
+          $.ajax({
+            type:"POST",
+            url:"/getSampleDetails",
+            data:"sample="+samID,
+            success: function(string){
+              var paneldata = JSON.parse(string)['panel'];
+              var testdata = JSON.parse(string)['test'];
+
+              if(paneldata.length !=0){
+                var panel_table_body = "<table border='0' class=panelname id='panel"+samID+"' >";
+                panel_table_body = panel_table_body+"<thead ><th style='text-align:center;'>Panel</th></thead>";
+                if(samID==paneldata[0][2]){
+                  var row="";
+                  for(var i=0;i<paneldata.length;i++){
+                    row = row+ "<tr><td><input type='checkbox' name='panel"+samID+"' id='panelname"+i+"' onclick='getPanelTest("+paneldata[i][0]+","+i+","+samID+");' value='"+paneldata[i][0]+"'><label>"+paneldata[i][1]+"</label></td><td style='display:none;'><input type='text' id='pnlid"+i+"' ></td></tr>";
+                    }
+                    panel_table_body = panel_table_body+row+"</table>";
+                    $("#panelDiv").append(panel_table_body);
+
+                }//if
+              }
+              var test_table_body = "<table border='0' class=testname id='test"+samID+"' style='text-align:center;'>";
+              test_table_body = test_table_body+"<thead><tr><th style='text-align:center;' colspan=5>Test</th></tr></thead>";
+                  var row1="<tr>";
+                  for(var i=0;i<testdata.length;i++){
+                    row1 = row1+ "<td><input type='checkbox' name='samp"+samID+"test"+i+"' id='testname"+i+"' onclick='getSingleTest("+testdata[i][0]+","+samID+","+i+")' value='"+testdata[i][0]+"'><label>"+testdata[i][1]+"</label><input type='text' name='testid' id='tstid"+i+"' style='visibility: hidden;' readonly></td>";
+                    if((i+1)%3==0)
+                      row1 = row1+"</tr>"
+                  }//for
+                  test_table_body = test_table_body+row1+"</table>";
+                  //console.log(test_table_body);
+                  $("#testDiv").append(test_table_body);
+
+                $('#panelDiv table').each(function(){
+                  var tabid = this.id;
+                  if(tabid=="panel"+samID && $('input[name="test-name"]:checked').val()==samID)
+                    $("#"+tabid).show();
+                  else if(tabid!="panel"+samID)
+                    $("#"+tabid).hide();
+                });
+                $('#testDiv table').each(function(){
+                  var tabid = this.id;
+                  if(tabid=="test"+samID)
+                    $("#"+tabid).show();
+                  else if(tabid!="test"+samID)
+                    $("#"+tabid).hide();
+                });
+            }//success
+        });//ajax
+
+    };//function
+
+    // THIS FUNCTION WILL ADD REMOVE TESTS ACCORDING TO PANEL
+    function getPanelTest(panelId,c,sampleID)
+    {
+      var testnames = "";
+      var curtest="";
+      var alltest = "alltest"+sampleID;
+      if($.trim($("#"+alltest).val()) != '')
+        curtest = " "+$.trim($("#"+alltest).val());
+
+      $.ajax({
+        type:"POST",
+        url:"/getPanelTest",
+        data:"panelid="+panelId,
+        success: function(string){
+          var paneltest = JSON.parse(string)['paneltest'];
+          //alert("sampleID="+sampleID);
+          testtab = "test"+sampleID;
+          paneltab="panel"+sampleID;
+
+          $("#"+paneltab).find('tr:gt(0)').each(function(){
+            var prow = $(this);
+            var testval='';
+            if (prow.find('input[type="checkbox"]').val()==panelId) {
+              prow.find('input[type="text"]').val(prow.find('input[type="checkbox"]').val());
+            if(prow.find('input[type="checkbox"]').prop("checked")==true){          //if panel is selected
+            //  alert("IF");
+            for(var i=0;i<paneltest.length;i++){    // loop through the number of test on particular panel
+              $("#"+testtab).find('td').each(function (){
+                var row = $(this);
+                if (row.find('input[type="checkbox"]').val()==paneltest[i]) { // Matching the test id of html and database
+                  row.find('input[type="checkbox"]').prop('checked', true); // according to that make it checked
+                  row.find('input[type="checkbox"]').attr("disabled", true);
+                  row.find('input[type="text"]').val(row.find('input[type="checkbox"]:checked').val());
+                  testval = row.find('input[type="checkbox"]').next('label').text();
+                    if (testall[i]!=testval)
+                      testall.push(testval);
+                  //if(i==0)
+                    //testnames=curtest + testval;
+                  //else
+                    //testnames = testnames + "," + testval;
+                }//if
+              });//#test
+
+            }//for
+            $("#"+alltest).val(testall);
+            //alert(testval);
+          }//if
+          else if(prow.find('input[type="checkbox"]').prop("checked") == false)
+          {
+
+            for(var i=0;i<paneltest.length;i++){
+              $("#"+testtab).find('td').each(function (){
+                var row = $(this);
+                if (row.find('input[type="checkbox"]').val()==paneltest[i]) {
+                  row.find('input[type="checkbox"]').prop('checked', false);
+                  testval = row.find('input[type="checkbox"]').next('label').text();
+                  row.find('input[type="checkbox"]').attr("disabled", false);
+                  for(var p=0;p<=testall.length;p++){
+                    if(testall[p] == testval)
+                      testall.splice(p, 1);
+                  }
+                  $("#"+alltest).val(testall);
+                  row.find('input[type="text"]').val(' ');
+                  prow.find('input[type="text"]').val(' ');
+                }//if
+              });//#test
+
+            }//for
+
+          }//else
+        }//MAIN IF
+      });//#panel
+        }//success
+      });//ajax
+    }//function
+
+
+    //THIS FUNCTION WILL ADD REMOVE SINGLE TESTS NAME INTO TEXTAREA
+    function getSingleTest(testid,sampleID,c)
+    {
+      var testval='';
+      var alltest = "alltest"+sampleID;
+      var testnames = $("#"+alltest).val();
+      testtab = "test"+sampleID;
+
+      $("#"+testtab).find('td').each(function (){
+        var trow = $(this);
+      if(trow.find('input[type="checkbox"]').prop("checked")==true){
+        if (trow.find('input[type="checkbox"]:checked').val()==testid) { // Matching the test id of html and database
+          testval = trow.find('input[type="checkbox"]').next('label').text();
+          testall.push(testval);
+          //if(testnames == '')
+            //testnames= testval;
+          //else
+            //testnames = testnames + "," + testval;
+            trow.find('input[type="text"]').val(trow.find('input[type="checkbox"]:checked').val());
+        //  alert(testval);
+         }//if
+         $("#"+alltest).val(testall);
+       }
+       else if(trow.find('input[type="checkbox"]').prop("checked")==false){
+         testval=trow.find('input[type="checkbox"]').next('label').text();
+         for(var p=0;p<testall.length;p++){
+           if(testall[p] == testval)
+             testall.splice(p, 1);
+         }
+         $("#"+alltest).val(testall);
+         trow.find('input[type="text"]').val(' ');
+       }
+     });
+    }
+    // THIS FUNCTION WILL SHOW AND HIDE THE PANEL TABLE AND TESTS TABLE ON THE BASIS OF RADIO BUTTON
+
+    function showHidePanelTest(sname){
+      var alltest = "alltest"+sname;
+
+      //HERE I AM KEEPING THE TEXT AREAR VALUE (TYPE OF DATA IS STRING) IN THE FORM OF ARRAY
+
+      //THIS SECTION CONVERTING STRING TO ARRAY
+
+      testall = [];
+      var temp='';
+      var txtstr = $("#"+alltest).val()+","; // HERE I AM ADDING "," FORCEFULLY.
+      for (j=0;j<=txtstr.length;j++){
+        if(txtstr[j]!=","){
+          if(j==0)
+            temp=txtstr[j];
+          else
+            temp=temp+txtstr[j];
+        }
+        else{
+          testall.push(temp);
+          temp='';
+        }
+      }
+      //THIS SECTION CONVERTING STRING TO ARRAY
+
+      $('#panelDiv table').each(function(){
+        var tabid = this.id;
+        if(tabid=="panel"+sname && $('input[name="test-name"]:checked').val()==sname)
+          $("#"+tabid).show();
+        else if(tabid!="panel"+sname)
+          $("#"+tabid).hide();
+      });
+
+      $('#testDiv table').each(function(){
+        var tabid = this.id;
+        if(tabid=="test"+sname)
+          $("#"+tabid).show();
+        else if(tabid!="test"+sname)
+          $("#"+tabid).hide();
+      });
+    }
+
+    //THIS FUNCTION WILL DELETE THE SELECTED SAMPLE AND RELETED PANEL AND TEST TABLE
+
+    function removeSample(){
+        $("#collectTest tbody").find('input[name="record"]').each(function(){
+          var curid=0;
+            var sname=$('input[type="checkbox"]:checked').val();
+            //var sname = $("#sample").val();
+          if($(this).is(":checked")){
+            var curid = $(this).val();
+            $(this).parents("tr").remove();
+            panelvalue = jQuery.grep(panelvalue, function(value) {
+                return value != sname;
+            });
+            $('input[name="test-name"]').prop("checked",true);  //auto Checked After delete
+            showHidePanelTest($('input[name="test-name"]:checked').val()); // auto show selected
+          }
+            $("#panelDiv").find('table').each(function(){
+              if($(this).attr("id") =="panel"+curid)
+                $(this).remove();
+              $("#testDiv").find('table').each(function(){
+                if($(this).attr("id") =="test"+curid)
+                  $(this).remove();
+              });
+            });
+        });
+    }
+
+</script>
+<!--<button id="sampleok" onclick="checkIfAlready()">Add</button>-->
+<!--<button id="samplenotok" onclick="removeSample()">Remove</button>-->
+
+
+
+
+{% endblock %}

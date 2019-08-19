@@ -1,0 +1,60 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+<style>
+#mainTable td, #mainTable th {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align:center
+
+}
+</style>
+
+<div class="col-12">
+  <div id="content">
+    <div class="titlebox">VIEW AVAILAIBLE DRUG NAME</div>
+     <br>
+     <form action ="ShowDrugnames" method="POST">
+     <div class="row myrow">
+     <div class="col-3">
+      <span class="texttule">Drug Type:</span>
+      <select name="drugtype1" id="drugtype1" >
+      <option value="">--Select--</option>
+      {%for row in getdata1%}
+      <option value="{{row[0]}}">{{row[0]}}</option>
+      {%endfor%}
+      </select>
+   <input type="submit" class="button" value="SHOW" style="height:30px;width:100px;background-color:#A9A9A9;font-weight:bold">
+   {%if ack1 == 'Excel Sheet Generated Successfully'%}
+   <a href="static/MedicineUploads/ViewAvailableDrugList.xlsx" download>
+   <img src="static/icon4/excel6.png" width="40px" height="40px"></a>
+     {%endif%}
+     <p style="inline"><b> {{ack1}}</b></p>
+      </div></form>
+
+    <br><br>
+      <div class="col-12">
+       <table border=1 id="mainTable" style="width:100%">
+             <thead>
+                 <tr>
+                     <th>Drug Name</th>
+                     <th>Drug Type</th>
+                     <th>Minimum Value</th>
+                     <th>Maximum Value</th>
+
+                  </tr>
+              </thead>
+              {%for row in getdata%}
+
+            	<tr>
+                <td>{{row[0]}}</td>
+                <td>{{row[1]}}</td>
+                <td>{{row[2]}}</td>
+                <td>{{row[3]}}</td>
+                </tr>
+                {%endfor%}
+                </table>
+            </div>
+</div></div>
+
+
+{% endblock %}

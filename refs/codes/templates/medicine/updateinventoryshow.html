@@ -1,0 +1,371 @@
+{% extends "Frame/inventoryFrame.html" %}
+{% block content %}
+
+<script>
+$(function()
+  {
+    var val = document.getElementById('pack').value;
+    packqty=val.split(" ",1)
+
+    document.getElementById('pack').value=(packqty);
+
+      $("#drugname").autocomplete
+      ({
+          source: function(request,response )
+          {
+            var drugname=document.getElementById('drugname').value;
+              $.ajax
+              ({
+                  type:"POST",
+                  url: "getAllDrugname",
+                  data:'drugname='+drugname,
+                  success: function( data )
+                  {
+                    //alert(data['d'][2]);
+                    response(data);
+                  }
+              });
+          },
+      });
+  });
+function bring()
+{
+
+	var valu = document.getElementById('drugname').value;
+
+
+	$.ajax({
+                  type:"POST",
+                  url: "getSelectedDrug",
+                  data:'drugtype='+valu,
+                  success: function( string )
+                  {
+					var data = JSON.parse(string)['drugdata'];
+
+					$('#drug_id').val(data[0]);
+					$('#drugname').val(data[1]);
+					$('#drugtype').val(data[2]);
+
+
+                  }
+             });
+}
+
+
+ function getDistName()
+{
+  var val = $("#dis_type").val();
+  $.ajax({
+  type: "POST",
+  url: "/getDistributorName",
+  data:"dist_type_id=" + val,
+  success: function(string){
+    var data = JSON.parse(string)['data'];
+    //alert(data);
+	 $("#dis_id").html(htmlify(data));
+  }
+  });
+};
+function htmlify(val)
+{
+  var Data = "<option value=''>--Select--</option>";
+  for (var index = 0; index < val.length; ++index) {
+      var entry = val[index];
+    Data = Data + "<option value='"+entry[0]+"'>"+entry[1]+"</option>";
+    };
+    return Data;
+};
+function CalTaxAmt()
+{
+  var qty = document.getElementById('qty').value;
+  var rate = document.getElementById('rate').value;
+  var taxamt=qty*rate;
+  document.getElementById('tax_am').value=(taxamt);
+}
+
+function CalAmount()
+{
+
+  var cgst = document.getElementById('cgst').value;
+  var sgst = document.getElementById('sgst').value;
+  var taxamt = document.getElementById('tax_am').value;
+  var taxamt1=taxamt*(cgst/100);
+
+  var taxcgst=parseFloat(taxamt)+parseFloat(taxamt1);
+
+  document.getElementById('amt').value=(taxcgst);
+  var taxamt2=taxamt*(sgst/100);
+  var ftaxamt=parseFloat(taxcgst)+parseFloat(taxamt2);
+document.getElementById('amt').value=(ftaxamt);
+
+}
+
+function CalUnitPrice()
+{
+var drugtype = document.getElementById('drugtype').value;
+var  totalqty= document.getElementById('totalqty').value;
+var  tstrip= document.getElementById('qty').value;
+var mrp = document.getElementById('mrp').value;
+
+if (drugtype === "TABLET" ||drugtype === "CAPSULE")
+{
+var mul=mrp*tstrip;
+var up;
+if (mul == 0)
+  up=1
+else
+  up=mul/totalqty
+
+document.getElementById('unitprice').value=(up);
+
+}
+else
+ {
+   var mrp = document.getElementById('mrp').value;
+   document.getElementById('unitprice').value=(mrp);
+}
+}
+
+
+function CalTotalAmount()
+{
+var amt=document.getElementById('netamt').value;
+  var amount = document.getElementById('amt').value;
+  var newamt=parseFloat(amt)+parseFloat(amount);
+document.getElementById('netamt').value=(newamt);
+
+}
+
+
+function CalTotalQuantity()
+{
+    var  pack= document.getElementById('pack').value;
+    var  qty= document.getElementById('qty').value;
+    var totalqty=qty*pack;
+    document.getElementById('totalqty').value=(totalqty);
+}
+
+function Findtaxamt()
+{
+
+  var drugtype = document.getElementById('drugtype').value;
+
+  if (drugtype === "Tablet" || drugtype === "Capsule")
+  {
+
+  var qty = document.getElementById('qty').value;
+  var rate = document.getElementById('rate').value;
+  var taxamt=qty*rate;
+  document.getElementById('tax_am').value=(taxamt);
+  }
+  else{
+
+    var qty = document.getElementById('totalqty').value;
+
+    var rate = document.getElementById('rate').value;
+
+    var taxamt=qty*rate;
+
+
+    document.getElementById('tax_am').value=(taxamt);
+  }
+
+}
+</script>
+<div class="col-12">
+  <div id="content">
+    <div class="titlebox"></div>
+     <br>
+
+	{%for rows in getdata1%}
+
+     <form action="UpdateInventory" method="POST">
+		<div class="row myrow">
+		<input type="text" name="inventoryid" value="{{rows[0]}}" style="display:none;">
+		</div>
+
+
+		<div class="row myrow">
+
+		<div class="col-2">
+        <span class="texttule">Entry date:</span>
+        <input type="date" name="entrydate" id="entrydate" size="8"  value="{{rows[25]}}">
+		</div>
+
+        <div class="col-2">
+        <span class="texttule">Distributor Type:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <select name="dist_type_id" id="dis_type" onchange="getDistName()">
+		<option value="{{rows[1]}}">{{rows[2]}}</option>
+        <option value="">--Select--</option>
+        {%for row in disdata%}
+         <option value="{{row[0]}}">{{row[1]}}</option>
+         {%endfor%}
+         </select>
+
+		 </div>
+
+
+        <div class="col-2">
+        <span class="texttule">Distributors Name:</span>
+        <select name="distdet_id"  id="dis_id">
+		<option value="{{rows[3]}}">{{rows[4]}}</option>
+        <option value=''>--Select--</option>
+        </select>
+        </div>
+
+ 		<div class="col-2">
+        <span class="texttule">Consumed By:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <select id="drugdept"  name= "ddrugdept">
+            <option value="" >--select--</option>
+            <option value="OPD">OPD</option>
+            <option value="Lab">Lab</option>
+            <option value="Xray">Xray</option>
+  			</select>
+		</div>
+
+		<div class="col-2">
+		<span class="texttule">Free Medicine:</span>
+		<input type="text" name="freemed" id="freemed" value="{{rows[15]}}" readonly>
+        </div>
+
+		<div class="col-2">
+		<span class="texttule">Rack Number:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+		<input type="text" name="rackno" id="rackno" size="8"  value="{{rows[22]}}">
+		</div>
+
+		</div>
+		<br>
+
+		<div class="row myrow">
+
+		<div class="ui-widget">
+		<div class="col-2">
+        <span class="texttule">Drug Name:</span>
+        <input type="text" name="drugname" id="drugname" class="alphanumeric" value="{{rows[6]}}" onblur="bring()">
+        <input type="text" name="drug_id"  id="drug_id" value="{{rows[5]}}" style="display:none;">
+		</div>
+		</div>
+
+        <div class="col-2">
+        <span class="texttule">Drug Type:</span>
+        <input type="text" name="drugtype" id="drugtype"  class="alphaonly" value="{{rows[7]}}">
+        </div>
+
+
+        <div class="col-2">
+        <span class="texttule">Batch Number:</span>
+        <input type="text" name="batchno" id="batchno" class="alphanumeric" value="{{rows[11]}}">
+        </div>
+
+        <div class="col-2">
+        <span class="texttule">Manufacturing Date:</span>
+        <input type="date" name="mfgdate" id="mfgdate" size="8"  value="{{rows[13]}}" >
+        </div>
+
+		    <div class="col-2">
+        <span class="texttule">Expiry Date:</span>
+        <input type="date" name="expirydate" id="expirydate" value="{{rows[12]}}" >
+        </div>
+
+        <div class="col-2">
+            <span class="texttule">Discount:</span>
+            <input type="text" name="discount" id="discount"  value="{{rows[14]}}" readonly>
+    		</div>
+
+
+        </div>
+        <br>
+        <div class="row myrow">
+
+		     <div class="col-2">
+        <span class="texttule">PackQuantity&nbsp;&nbsp;</span>
+        <input type="text" name="pack" id="pack" class="numeric"  value="{{rows[17]}}" onblur="CalTotalQuantity();"  >
+		    </div>
+
+
+         <div class="col-2">
+         <span class="texttule">TotalStrip:</span>
+         <input type="text" name="qty" id="qty"  class="numeric" onblur="CalTotalQuantity();CalUnitPrice();" value="{{rows[9]}}">
+		     </div>
+
+     <div class="col-2">
+     <span class="texttule">TotalQuantity:</span>
+     <input type="text" name="totalqty" id="totalqty" class="numeric" onblur="Findtaxamt();CalUnitPrice();" value="{{rows[27]}}" >
+ </div>
+        <div class="col-2">
+        <span class="texttule">Rate:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <input type="text" name="rate" id="rate"  class="numeric" value="{{rows[10]}}" onblur="Findtaxamt();" >
+		</div>
+
+    <div class="col-2">
+       <span class="texttule">MRP:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+       <input type="text" name="mrp" id="mrp" class="numeric" onblur="CalUnitPrice()" value="{{rows[16]}}">
+       </div>
+
+    <div class="col-2">
+    <span class="texttule">Unit Price:</span>
+    <input type="text" name="unitprice" id="unitprice" class="numeric" value="{{rows[26]}}" readonly>
+    </div>
+
+
+
+
+		 </div>
+        <br>
+        <div class="row myrow">
+
+        <div class="col-2">
+        <span class="texttule">Taxable Amount:</span>
+        <input type="text" name="tax_am" id="tax_am" class="numeric" value="{{rows[18]}}" readonly>
+		</div>
+
+        <div class="col-2">
+        <span class="texttule">CGST:&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <input type="text" name="cgst" id="cgst"  class="numeric" value="{{rows[19]}}" onblur="CalAmount()">
+        </div>
+
+        <div class="col-2">
+        <span class="texttule">SGST:&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <input type="text" name="sgst" id="sgst" class="numeric"  value="{{rows[20]}}" onblur="CalAmount()">
+        </div>
+
+         <div class="col-2">
+         <span class="texttule">Amount:</span>
+         <input type="text" name="amt" id="amt" class="numeric" value="{{rows[21]}}" readonly>
+		 </div>
+
+
+		 <div class="col-2">
+         <span class="texttule">Remark:</span>
+         <input type="text" name="remark" id="remark"  value="{{rows[24]}}">
+		 </div>
+
+     <div class="col-2">
+     <span class="texttule">Hsn Code:</span>
+     <input type="text" name="hsncode" id="hsncode" class="numeric" value="{{rows[8]}}" >
+     </div>
+
+
+
+		 </div>
+          {%endfor%}
+          <br>
+        <div class="row myrow">
+        <div class="col-5"></div>
+        <div class="col-3">
+          <input type="submit" class="button" id='btnsave' value="UPDATE" style="height:40px;width:100px;background-color:#A9A9A9;font-weight:bold">
+          </div> </div>
+        <br><br>
+         <br>
+      {%if ack%}
+      <div class="row myrow">
+        <div class="col-5"></div>
+          <div class="col-3"><p>{{ack}}</p></div>
+      </div>
+          {%endif%}
+
+        </form>
+
+
+
+{% endblock %}

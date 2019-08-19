@@ -1,0 +1,330 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+
+
+
+
+			<head>
+		<style>
+/* GENERAL CODE */
+#mainTable {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#mainTable td, #mainTable th {
+  padding: 8px;
+}
+
+#mainTable td{
+  padding: 8px;
+  font-size: 15px;
+}
+#mainTable tr:nth-child(even){background-color: #f2f2f2;}
+
+#mainTable tr:hover {background-color: #ddd;}
+
+#mainTable thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+}
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+#mainTable thead,th {
+  background-color:#778899;
+}
+/* SEPERATE CODE */
+
+.subtitle
+{
+background-color:#F0E68C;
+}
+.spnhead{
+  font-size: 20px;
+  font-weight: bold;
+}
+.spndata{
+  font-size: 18px;
+  font-weight: bold;
+}
+</style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+</head>
+
+
+<div class="col12">
+	<div id="content">
+		<div class="titlebox" style="text-align:center;">OPD Billing</div>
+		<div class="row" style="padding-bottom:3px;"></div>
+		{% for row in ds1%}
+		<div class="col-12 subtitle">
+			<div class="col-2"><span class="spnhead">Regno:</span><span class="spndata">{{row[0]}}</span></div>
+			<div class="col-3"><span class="spnhead">Name:</span><span class="spndata">{{row[1]}} {{row[2]}} {{row[3]}}</span></div>
+			<div class="col-2"><span class="spnhead">Sex:</span><span class="spndata">{{row[4]}}</span></div>
+			<div class="col-2"><span class="spnhead">Age:</span><span class="spndata">{{row[5]}}{{row[7]}}</span></div>
+			<div class="col-3"><span class="spnhead">Category:</span><span class="spndata">{{row[8]}}</span></div>
+
+		</div>
+		{%endfor%}
+		<form action ="/insertOpdBilling" method="POST" enctype="multipart/form-data">
+			{% for row in ds1%}
+			<input type="text" id="regno" name="regno" value="{{row[0]}}" style="display:none;">
+			<input type="text" name="opdid" value="{{row[6]}}" style="display:none;">
+			{%endfor%}
+			<input type="text" name="totalamount" id="totalamt" style="display:none;">
+			<div class="col-2"><span class="texttule">Date:</span><br>
+				<input type="date" id="date" name="date" ></div>
+				<div class="col-2">
+					<span class="texttule">Investigation Type:</span>
+					<select id='sel'  onchange="getinvdata()">
+						<option value="">--Select--</option>
+						<option value="Xray">Xray</option>
+						<option value="ECG">ECG</option>
+          	<option value="LAB">LAB</option>
+						<option value="Dressing">Dressing</option>
+						<option value="Physiotherapy">Physiotherapy</option>
+					</select>
+				</div>
+				<div class="col-2">
+					<span class="texttule">Investigation Name:</span>
+					<select  id='sele' onchange="getAllInvAmount()">
+						<option value="">--Select--</option>
+					</select>
+				</div>
+				<div class="col-2"><span class="texttule">Amount:</span><br>
+					<input type="text" id="amount" class="spalphanum" style="width:90px"></div>
+					<div class="col-2" style="text-align:left;">
+						<span class="texttule" >Add:</span><br>
+						<div class="add-row"   style="display:inline;border:1px solid black;padding:4px 25px 5px 25px;background-color:#8FBC8F;"><img src="../static/icon4/plus.png" title="Add" ></div>
+					</div>
+					<div class="col-2" style="text-align:left;">
+						<span class="texttule">Remove:</span><br>
+						<div class="delete-row" style="display:inline;border:1px solid black;padding:4px 25px 5px 25px;background-color:#8FBC8F;"><img src="../static/icon4/minus.png" title="Remove"></div>
+					</div>
+					<div class="col-12" align="center">
+						<div style="width:100%;height:auto;line-height:1em;overflow:auto;">
+
+						<table border=1 id="mainTable" >
+							<thead>
+								<tr>
+									<th>Select</th>
+									<th>Investigation Type</th>
+									<th>Investigation Name/Services</th>
+                	<th>Amount</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr style="background-color:#228B22">
+									<td></td>
+            			<td></td>
+									<td></td>
+            			<td style="color:white;font-weight:bold;">Total Amount:<span id="netamt"></span></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					</div>
+					<div class="row myrow">
+						<div class="col-8"></div>
+						<div class="col-2"><span class="texttule">Recieved By:</span><br>
+							<input type="text" name="recievedby" style="color:black;font-weight:bold;" required>
+						</div>
+						<div class="col-2">
+							<span class="texttule">Payment Status:</span><br>
+							<select name="payment_status" >
+								<option value="">--Select--</option>
+								<option value="Paid">Paid</option>
+								<option value="Not Paid">Not Paid</option>
+								<option value="Free">Free</option>
+
+							</select>
+						</div>
+					</div>
+					<div class="row myrow">
+						<div class="col-5"></div>
+						<div class="col-1">
+							<input type="submit" value="Save"  style="height:40px;width:100px;background-color:#A9A9A9;font-weight:bold">
+						</div>
+		</form>
+		<form action="opdDetailsPrint" method="POST">
+			<div class="col-1">
+				<input type="submit" value="Print" style="height:40px;width:100px;background-color:#A9A9A9;font-weight:bold">
+				{% for ds3 in ds3 %}
+				<input type="text" name="opmid" value="{{ds3[0]}}" style="display:none;">
+				{% endfor %}
+			</div>
+		</form>
+		<p style="display:inline;color:green;">{{ack1}}</p>
+	</div>
+</div>
+
+
+
+
+
+
+
+			<!--Add multiple rows-->
+			<script type="text/javascript">
+			    var c=0;
+					var netamount;
+			    $(document).ready(function(){
+			        $(".add-row").click(function(){
+			            mark = "";
+									netamount=0.0;
+
+
+			            var sel = "sel"+c;
+			            var sele = "sele"+c;
+			            var amount = "amount"+c;
+
+
+
+
+			            var selid = $("#sel option:selected").html();
+			            var seleid =$("#sele option:selected").html();
+			            var valselid = document.getElementById('sel').value;
+			            var valseleid = document.getElementById('sele').value;
+			            var amountid = document.getElementById('amount').value;
+
+
+
+
+			            var chk = "<tr><td><input type='checkbox' name='record'  style='width:50px;height: 30px;'></td>";
+			            mark = mark + chk
+
+
+			           var sel = "<td><input type='text'  name='invtype' value='"+selid+"'><input type='text'  name='xtype' value='"+valselid+"' style='display:none;'></td>";
+			           mark = mark + sel;
+
+
+			            var sele = "<td><input type='text'  name='invname' value='"+seleid+"'><input type='text'  name='stype' value='"+valseleid+"' style='display:none;'></td>";
+			            mark = mark + sele;
+
+			            var amount = "<td><input type='text'  name='amnt' value='"+amountid+"' required></td>";
+			            mark = mark + amount;
+
+
+									$("#mainTable tbody").prepend(mark);
+									$('#mainTable tbody').find('input[name="amnt"]').each(function()
+									{
+										var temp = parseFloat($(this).val());
+										//alert(netamount);
+										netamount = netamount+temp;
+									//	alert(netamount);
+
+									});
+
+			      $("#netamt").html(netamount.toFixed(2));
+						$("#totalamt").val(netamount.toFixed(2));
+
+
+			            c=c+1;
+
+			          //autoclear input after pressing add button
+
+
+			            document.getElementById('sel').value='';
+			            document.getElementById('sele').value='';
+			            document.getElementById('amount').value='';
+			        });
+
+
+
+			        // Find and remove selected table rows
+			        $(".delete-row").click(function(){
+			            $("#mainTable tbody").find('input[name="record"]').each(function(){
+			              if($(this).is(":checked")){
+			                  var amount=parseFloat($(this).closest("tr").find('input[name="amnt"]').val());
+												//alert(amount);
+												var net_amt=$('#netamt').html();
+			                  nettotal=net_amt-amount
+			                  $('#netamt').html(nettotal.toFixed(2));
+												$('#totalamt').val(nettotal.toFixed(2));
+
+			                      $(this).parents("tr").remove();
+			                  }
+			            });
+			            c=c-1;
+			        });
+			    });
+
+			    function CalTotalAmount()
+
+			    {
+			    var amt=document.getElementById('netamt').value;
+			      var amount = document.getElementById('amount').value;
+			      var newamt=parseFloat(amt)+parseFloat(amount);
+
+			      $('#netamout').html(newamt);
+
+			    }
+
+
+			</script>
+
+
+
+			<!--Ajax AutoSelect-->
+
+			<script>
+			      function getinvdata()
+			  {
+			      var val = $("#sel").val();
+			      $.ajax({
+			      type: "POST",
+			      url: "/getInvestigationName",
+			      data:"invname=" + val,             //invname is a variable
+			      success: function(string){
+			      var data = JSON.parse(string)['data'];
+			      $("#sele").html(htmlify(data));
+			          }
+			       });
+			  };
+
+			      function htmlify(val)
+			  {
+			      var Data = "<option value=''>--Select--</option>";
+			      for (var index = 0; index < val.length; ++index) {
+			      var entry = val[index];
+			      Data = Data + "<option value='"+entry[0]+"'>"+entry[1]+"</option>";
+			        };
+			      return Data;
+			  };
+			</script>
+
+			<!--THis will pick amount on change of Investigation------>
+			<script>
+			      function getAllInvAmount()
+
+			  {
+			      var val = $("#sele").val();
+						var invtype = $("#sel").val();
+			      $.ajax({
+			      type: "POST",
+			      url: "/getInvestigationAmount",
+			      data:{"invtype":invtype,"invid":val}, //invtype,invid is a variable
+			      success: function(string){
+			      var data = JSON.parse(string)['data'];
+			      $("#amount").val(data[0]);
+
+			          }
+			       });
+			  };
+
+
+			</script>
+
+
+
+{% endblock %}

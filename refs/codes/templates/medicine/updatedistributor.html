@@ -1,0 +1,155 @@
+{% extends "Frame/inventoryFrame.html" %}
+{% block content %}
+<script>
+function getDistName()
+{
+  var val = $("#dis_type").val();
+  $.ajax({
+  type: "POST",
+  url: "/getDistributorName",
+  data:"dist_type_id=" + val,
+  success: function(string){
+    var data = JSON.parse(string)['data'];
+	 $("#dis_id").html(htmlify(data));
+  }
+  });
+};
+function htmlify(val)
+{
+  var Data = "<option value=''>--Select--</option>";
+  for (var index = 0; index < val.length; ++index) {
+      var entry = val[index];
+    Data = Data + "<option value='"+entry[0]+"'>"+entry[1]+"</option>";
+    };
+    return Data;
+};
+
+function getenabledtext(value)
+{
+	var val = $("#dis_id").val();
+
+	$.ajax(
+	{
+		type: "POST",
+		url: "/getUpdateDistributor",
+		data:"distributor_id=" + val,
+		success: function(string)
+		{
+			var data = JSON.parse(string)['disname'];
+
+			$("#dis_name").val(data[0][1]);
+			$("#address").val(data[0][3]);
+			$("#contact").val(data[0][5]);
+			$("#druglicense").val(data[0][6]);
+			$("#gst").val(data[0][7]);
+			$("#aadhar").val(data[0][8]);
+			$("#pancard").val(data[0][9]);
+			$("#emailid").val(data[0][4]);
+      $("#dis_type_name").html(htmlify(JSON.parse(string)['distype']));
+      $("#dis_type_name").prepend(new Option(data[0][11], data[0][2]));
+      $("#dis_type_name").val($("#dis_type_name option:first").val());
+
+  }
+  });
+	var element=document.getElementById('textcontent');
+	if(value !='')
+	element.style.display='block';
+	else
+	element.style.display='none';
+};
+
+
+
+</script>
+<!--
+<div class="col12">
+-->
+<div id="content">
+  <div class="titlebox"> EDIT DISTRIBUTOR DETAILS</div>
+  <br>
+  <form action="new_distributor_update" method="POST">
+    <div class="row myrow">
+      <div class="col-3">
+        <span class="texttule">Distributor Type:</span>
+        <select name="dist_type_id" id="dis_type" onchange="getDistName()" required>
+          <option value="">--Select--</option>
+          {%for row in disdata%}
+          <option value="{{row[0]}}">{{row[1]}}</option>
+          {%endfor%}
+        </select>
+      </div>
+      <div class="col-3">
+        <span class="texttule">Distributors:</span>
+        <select name="distributor_id" id="dis_id"  onchange="getenabledtext(this.value)">
+          <option value=''>--Select--</option>
+        </select>
+      </div>
+    </div>
+    <br>
+    <div id="textcontent" style="display: none;" >
+      <div class="row myrow">
+        <div class="col-2"></div>
+        <div class="col-3">
+          <span class="texttule">Name:</span>
+          <input type="text" name="distributor_name" id="dis_name" class="alphaonly">
+        </div>
+        <div class="col-3">
+          <span class="texttule">Distributor Type:</span>
+            <select name="dis_type_name" id="dis_type_name" required>
+            </select>
+        </div>
+        <div class="col-3">
+          <span class="texttule">Address:</span>
+          <input type="text" name="address" id="address" placeholder="Address" class="alphanumeric" >
+        </div>
+      </div>
+      <br>
+      <div class="row myrow">
+        <div class="col-2"></div>
+        <div class="col-3">
+          <span class="texttule">Email Id:</span>
+          <input type="text" name="emailid"  size="20" class="spalphanum" id="emailid" placeholder="Email id">
+        </div>
+
+
+        <div class="col-3">
+          <span class="texttule">GST Number:</span>
+          <input type="text" name="gst_no" id="gst" class="alphanumeric" size="16" placeholder="GST Number" maxlength="15">
+        </div>
+
+        <div class="col-3">
+          <span class="texttule">Drug License:</span>
+          <input type="text" name="drug_license" id="druglicense" size="16" placeholder="Drug License" >
+        </div>
+      </div>
+      <br>
+      <div class="row myrow">
+        <div class="col-2"></div>
+
+		    <div class="col-3">
+          <span class="texttule">Aadhar Number:</span>
+          <input type="text" name="aadhar_no" id="aadhar" class="numeric" size="12" placeholder="Aadhar Number" maxlength="12">
+        </div>
+        <div class="col-3">
+          <span class="texttule">PAN card Number:</span>
+          <input type="text" name="pancard_no" id="pancard"  class="alphanumeric" size="12" placeholder="PAN card number" maxlength="10">
+        </div>
+        <div class="col-2">
+          <span class="texttule">Contact Number:</span>
+          <textarea name="contact_no"  id="contact" placeholder="Contact number" class="spalphanum" rows="5" cols="20" style="border:2px solid black;font-weight:bold" required></textarea>
+        </div>
+      </div>
+      <div class="col-12"></div>
+    </div>
+    <br>
+    <div class="row myrow">
+      <div class="col-5"></div>
+      <div class="col-5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="submit" class="button" id='btnsave' value="UPDATE" style="height:40px;width:100px;background-color:#A9A9A9;font-weight:bold">
+        <p style="display:inline;"><b> {{ack}}</b></p>
+      </div>
+      </div>
+  </form>
+</div>
+
+{% endblock %}

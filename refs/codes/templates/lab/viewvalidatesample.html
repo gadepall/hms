@@ -1,0 +1,128 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+<style>
+<style>
+  #showLabData {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#showLabData td, #showLabData th {
+  padding: 8px;
+}
+
+#showLabData td{
+  padding: 8px;
+  font-size: 15px;
+}
+
+
+#showLabData thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+}
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+#showLabData thead,th {
+  background-color:#778899;
+}
+
+
+</style>
+
+
+
+<div class="col12">
+  <div id="content">
+    <div class="titlebox">Sample Validation View</div>
+    <div class="row myrow">
+      <form action="getValSampleByAccNo" method="POST">
+        <div class="col-3">
+          <span class="texttule">Accession No:</span>
+          <input type="text" name="acno" size=8 class="alphanumeric">
+          <input type="submit" value="Search">
+        </div>
+      </form>
+
+      <form action="getValSampleByRegNo" method="POST">
+        <div class="col-3">
+          <span class="texttule">RegnoNo:</span>
+          <input type="text" name="regno" size=8 class="alphanumeric">
+          <input type="submit" value="Search">
+        </div>
+      </form>
+
+      <form action="getValSampleByDate" method="POST">
+        <div class="col-4">
+          <div>
+          <span class="texttule">Validation Date:</span>
+        </div>
+          <span class="texttule">From:</span>
+          <input type="date" name="fdate">
+          <span class="texttule">To:</span>
+          <input type="date" name="tdate">
+          <input type="submit" value="Search">
+        </div>
+      </div>
+    </form>
+
+  </div> <!--- Content --->
+</div><!--- col-12 --->
+
+<div class="row myrow">
+    <div class="col-3">{{ack}}</div>
+  </div>
+
+
+        <div class="col-12">
+          <table id="showLabData" style="width:100%;" border=1>
+            <thead>
+            <tr style="font-weight:bold;">
+              <th style="padding:0px;">Edit</th>
+              <th style="padding:0px;">Print</th>
+              <th>AccessionNo</th>
+              <th>Regno</th>
+              <th>Name</th>
+              <th>Age</th>
+              <th>Sample Date</th>
+              <th>Test Values</th>
+              <th>Validation Date</th>
+              <th>Patient From</th>
+            </tr>
+          </thead>
+            {%for row in labdata%}
+            <tr>
+              <td><form action="validate_sample" method="POST"><button name="accession_no" value="{{row[0]}}">Edit</button><input type="hidden" value="Spage" name="page"></form></td>
+              <td><form action="printLabReport" method="POST"><button name="acno" value="{{row[0]}}">Print</button></form></td>
+              <td>{{row[0]}}</td>
+              <td>{{row[1]}}</td>
+              <td>{{row[2]}} {{row[3]}} {{row[4]}}</td>
+              <td>{{row[5]}} {{row[6]}}</td>
+              <td>{{row[7].strftime('%d/%m/%Y')}}</td>
+              <td>
+              {%for trow in testdata%}
+                {%if row[0]==trow[0]%}
+                {{trow[1]}}-<b>{{trow[2]}}</b>
+                  {%if vdata|length != loop.index%}
+                  ,
+                  {%endif%}
+                {%endif%}
+              {%endfor%}
+            </td>
+            <td>{{row[9].strftime('%d/%m/%Y')}}</td>
+            <td>{{row[8]}}</td>
+            </tr>
+            {%endfor%}
+          </table>
+        </div>
+
+
+
+{% endblock %}

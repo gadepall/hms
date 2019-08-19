@@ -1,0 +1,117 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+<style>
+
+#mainTable {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#mainTable td, #mainTable th {
+  padding: 8px;
+}
+
+#mainTable td{
+  padding: 8px;
+  font-size: 15px;
+}
+#mainTable tr:nth-child(even){background-color: #f2f2f2;}
+
+#mainTable tr:hover {background-color: #ddd;}
+
+#mainTable thead,th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  font-size: 17px;
+}
+
+/* GENERAL CODE */
+
+
+/* SEPERATE CODE */
+#mainTable thead,th {
+  background-color:#778899;
+}
+/* SEPERATE CODE */
+
+
+.subtitle
+{
+background-color:#F0E68C;
+}
+.spnhead{
+  font-size: 20px;
+  font-weight: bold;
+}
+.spndata{
+  font-size: 18px;
+  font-weight: bold;
+}
+</style>
+<div class="col-12">
+  <div id="content">
+    <div class="titlebox">View/Update Patient Consult</div>
+    <br>
+
+    <form action="opdConsultViewUpdateList" method="POST">
+    <div class="row myrow">
+        <div class="col-3">
+            <span class="texttule">RegNo:</span>
+            <input type="text" name="regno" class="alphanumeric" style="width:120px;" required>
+            <input type="submit" value="Search">
+        </div>
+      </form>
+
+    <br>
+  </div>
+</div> <!--- Content --->
+</div><!--- col-12 --->
+<br>
+{%if ds1 != ''%}
+{%for row in ds1%}
+<div class="col-12 subtitle">
+  <div class="col-2"><span class="spnhead">Regno:</span><span class="spndata">{{row[1]}}</span></div>
+  <div class="col-3"><span class="spnhead">Name:</span><span class="spndata">{{row[2]}} {{row[3]}} {{row[4]}}</span></div>
+  <div class="col-3">
+    <span class="spnhead">{{row[5]}}:-</span>
+    <span class="spndata"> {{row[6]}} {{row[7]}} {{row[8]}}</span>
+  </div>
+  <div class="col-2"><span class="spnhead">Sex:</span><span class="spndata">{{row[13]}}</span></div>
+  <div class="col-2"><span class="spnhead">Age:</span><span class="spndata">{{row[11]}} {{row[12]}}</span></div>
+  <div class="col-2"><span class="spnhead">Address:</span><span class="spndata">{{row[21]}}</span></div>
+</div>
+<br>
+{%endfor%}
+{%else%}
+  <br>
+  <div class="row myrow">
+    <div class="col-3">{{ack1}}</div>
+  </div>
+{%endif%}
+
+<div class="col-12">
+  <table id="mainTable" border=1 >
+    <thead>
+      <th>VISIT DATE</th>
+      <th>COMPLAINT</th>
+      <th>ACTION</th>
+   </thead>
+   {%for row in ds2%}
+   <tr>
+     <td>{{row[1]}}</td>
+     <td>{{row[2]}}</td>
+     <td>
+       <form action="opdConsultViewUpdate" method="POST">
+         <input type="text" name="regno" value="{{row[3]}}" style="display:none;">
+       <button name="conid" value="{{row[0]}}">Edit</button>
+     </form>
+     </td>
+   </tr>
+   {%endfor%}
+ </table>
+</div>
+
+{%endblock%}

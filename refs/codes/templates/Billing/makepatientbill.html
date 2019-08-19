@@ -1,0 +1,484 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+
+<style>
+.block {
+  display: block;
+  height:40px;
+  width:100px;
+  border: none;
+  background-color:#A9A9A9;
+  color: black;
+  padding: 11px 28px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+}
+.subtitle
+{
+background-color:#F0E68C;
+width: 100%;
+}
+.spnhead{
+  font-size: 20px;
+  font-weight: bold;
+}
+.spndata{
+  font-size: 20px;
+}
+
+/* TABLE CSS FOR TPR START */
+
+    /* GENERAL CODE */
+    #pharmacy {
+      font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+      }
+
+    #pharmacy td, #pharmacy th {
+      padding: 8px;
+      }
+
+    #pharmacy td{
+      padding: 8px;
+      font-size: 18px;
+      text-align: center;
+      }
+    #pharmacy tr:nth-child(even){background-color: #f2f2f2;}
+
+    #pharmacy tr:hover {background-color: #ddd;}
+
+    #pharmacy thead,th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: center;
+      color: white;
+      font-size: 17px;
+      }
+
+    /* GENERAL CODE */
+
+
+    /* SEPERATE CODE */
+    #pharmacy thead,th {
+        background-color:#778899;
+    }
+    /* SEPERATE CODE */
+
+/*This is a Class of autocomplete */
+.ui-menu-item-wrapper{
+  font-size:18px;
+}
+</style>
+
+<script>
+// INSERT DATA USING AJAX
+$(document).ready(function () {
+$('form').submit(function (e) {
+  var formurl = $(this).attr('action');
+        $.ajax({
+            type: "POST",
+            url: $(this).attr('action'), // url to post to, from the forms action
+            data: $(this).serialize(),
+            success: function (data) {
+              if (formurl == 'insertPatientDetailBilling' && data['ack']=='DATA SUCCESSFULLY STORED!'){
+                document.getElementById('medack').innerHTML = data['ack'];
+                alert(data['ack']);
+              }
+              else if (formurl == 'updatePatientDetailBilling' && data['ack']=='DATA SUCCESSFULLY UPDATED!'){
+                document.getElementById('upmedack').innerHTML = data['ack'];
+                alert(data['ack']);
+              }
+            }
+        })
+        e.preventDefault(); // block the traditional submission of the form.
+    });
+  });
+
+</script>
+
+
+<script>
+function display_c(){
+var refresh=1000; // Refresh rate in milli seconds
+mytime=setTimeout('display_ct()',refresh)
+}
+
+function display_ct(){
+
+var today = new Date();
+var h = today.getHours();
+var m = today.getMinutes();
+var s = today.getSeconds();
+var dd = today.getDate();
+var mm = today.getUTCMonth()+1;
+var yy = today.getFullYear();
+m = checkTime(m);
+s = checkTime(s);
+
+dd = checkTime(dd);
+mm = checkTime(mm);
+
+document.getElementById('bmdate').value = yy + "-" + mm + "-" + dd;
+tt=display_c();
+}
+
+// GET DRUG NAMES BY AJAX FOR MEDICINE
+$(document).ready(function(){
+  $("#drugname").autocomplete({
+    source: function(request,response)
+      {
+        drugname=$('#drugname').val();
+        $.ajax({
+                type:"POST",
+                url:"getMedicinePharmacy",
+                data:{"drugname":drugname},
+                success: function(data)
+                {
+                  if (data=="")
+                    $("#mmsg").text('Requested Medicine Is Not Issued To You Or Quantity Is Zero.');
+                  else{
+                      response(data);
+                      $("#mmsg").text(' ');
+                  }
+                }
+          });
+      },
+  });
+});
+
+function showMData(idval)
+{
+  var idval = idval.value;
+  var arr = idval.split(" > ");
+  $('#drugname').val(arr[0]);
+  temp = arr[1];
+  $('#drugtype').val(temp.substring(1,temp.length-1));
+  $('#curqty').val(arr[2]);
+  $('#uprice').val(arr[3]);
+  $('#med_id').val(arr[4]);
+  $('#qty').focus();
+}
+function checkQty(qty){
+  var qval = parseInt(qty.value);
+  var cqty = parseInt($("#curqty").val());
+  if(cqty<qval){
+    alert("Issuning Quantity is Greater Than On Hand Quantity!");
+    $('#qty').css("background-color","red");
+  }
+}
+function resetQty()
+{
+  $('#qty').val('');
+  $('#qty').css("background-color","white");
+
+}
+</script>
+<div class="col-12">
+  <div id="content">
+    <div class="titlebox" align="center">Medicine Billing</div>
+    <div class="row" style="padding-bottom:2px;"></div>
+    {% for row in data%}
+    <div class="col-12 subtitle">
+      <div class="col-2"><span class="spnhead">Regno:</span><span class="spndata">{{row[0]}}</span></div>
+      <div class="col-3"><span class="spnhead">Name:</span><span class="spndata">{{row[1]}} {{row[2]}} {{row[3]}}</span></div>
+      <div class="col-1"><span class="spnhead">Sex:</span><span class="spndata">{{row[4]}}</span></div>
+      <div class="col-2"><span class="spnhead">Age:</span><span class="spndata">{{row[5]}} {{row[6]}}</span></div>
+      <div class="col-2"><span class="spnhead">Category:</span><span class="spndata">{{row[7]}}</span></div>
+      <div class="col-2"><span class="spnhead">Last Visit Date:</span><span class="spndata">{{row[8].strftime('%d/%m/%Y')}}</span></div>
+    </div>
+    {%endfor%}
+{%if user=='pharmacy'%}
+  <form action="insertPatientDetailBilling" method="POST">
+    <div class="row myrow" style="display:none;">
+      <input type="text" name="netamount" id="totalamount">
+      <input type="text" name="regno" value="{{data[0][0]}}">
+      <input type="text" name="opdid" value="{{data[0][9]}}">
+      <input type="text" name="docid" value="-1">
+    </div>
+  <div class="row" style="padding-bottom:3px;"></div>
+    <div class="row myrow">
+      <div class="col-1" style="width:12%;">
+        <span class="texttule">Date:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="date" id="bmdate" name="bmdate"  required>
+      </div>
+      <div class="col-1" style="width:10%;">
+        <span class="texttule">Given By:</span>
+        <input type="text" name="mgivenby" size=12 required>
+      </div>
+      <div class="col-2">
+        <div class="ui-widget">
+          <span class="texttule">Drug Name:</span>
+          <input type="text" id="drugname" size=20 onblur="showMData(this)" >
+          <p id="mmsg" style="color:red;font-weight:bold;"></p>
+          <input type="hidden" id="med_id" >
+        </div>
+      </div>
+      <div class="col-2">
+        <span class="texttule">Drug Type:</span>
+        <input type="text" id="drugtype" >
+      </div>
+      <div class="col-1">
+        <span class="texttule">Unit Price:</span>
+        <input type="text" id="uprice" size=8 readonly>
+      </div>
+      <div class="col-1">
+        <span class="texttule">On Hand:</span>
+        <input type="text" id="curqty" size=7  readonly>
+      </div>
+      <div class="col-1">
+        <span class="texttule">Quantity:</span>
+        <input type="text" id="qty" size=7  onblur="checkQty(this)" onfocus="resetQty()">
+      </div>
+      <div class="col-1" style="text-align:left;">
+        <span class="texttule">ADD</span><br>
+        <div class="add-row-" id="add-row-bmed"  style="display:inline;border:1px solid black;padding:4px 25px 5px 25px;background-color:#8FBC8F;"><img src="../static/icon4/plus.png" title="Insert"></div>
+      </div>
+      &nbsp;&nbsp;
+      <div class="col-1" style="text-align:left;">
+        <span class="texttule">Remove</span><br>
+        <div class="delete-row" id="delete-row-bmed"  style="display:inline;border:1px solid black;padding:4px 25px 5px 25px;background-color:#8FBC8F;"><img src="../static/icon4/minus.png" title="Remove"></div>
+      </div>
+    </div>
+    <table id="pharmacy" border=0>
+        <thead>
+            <tr>
+                <th style="width:10px;">Remove</th>
+                <th>DrugType</th>
+                <th>Drug Name</th>
+                <th>Unit Price</th>
+                <th>On Hand</th>
+                <th>Remain Qty</th>
+                <th>Issued Qty</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+
+        <tbody>
+          <tr style="background-color:#228B22;">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td style="color:white;font-weight:bold;font-size:20px;">Total Amount</td>
+            <td  colspan=7 style="color:white;font-weight:bold;font-size:20px;"><span id="tamount"></span>
+            </td>
+          </tr>
+        </tbody>
+    </table>
+    <div class="row myrow">
+      <div class="col-9"></div>
+      <div class="col-2">
+        <span class="texttule">Payment Status:</span>
+        <select name="pstatus" required>
+          <option value="">--Select--</option>
+          <option value="Paid">Paid</option>
+          <option value="Not Paid">Not Paid</option>
+          <option value="Free">Free</option>
+
+        </select>
+      </div>
+      </div>
+      <div class="row myrow">
+        <div class="col-5"></div>
+        <div class="col-1">
+          <input type="submit" value="Save" style="height:40px;width:100px;background-color:#A9A9A9">
+        </div>
+        <div class="col-1">
+          <a href="{{url_for('opdbillprint',rfrom='pharmacy')}}"><div id="print" class='block'>Print</div></a>
+        </div>
+      </div>
+      <div class="row myrow">
+        <div class="col-5" style="width:45%;"></div>
+        <div class="col-2">
+          <p id="medack"></p>
+        </div>
+      </div>
+    <div class="row myrow"><div class="col-5"></div></div>
+  </div>
+</form>
+{%elif user=='doctor'%}
+<form action="updatePatientDetailBilling" method="POST">
+<div class="row" style="padding-bottom:3px;"></div>
+  <div class="row myrow">
+    <div class="col-1" style="width:12%;">
+      <span class="texttule">Date:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <input type="date" id="bmdate" name="bmdate"  required>
+    </div>
+    <div class="col-1" style="width:10%;">
+      <span class="texttule">Given By:</span>
+      <input type="text" name="mgivenby" size=12 required>
+    </div>
+    <div class="col-2">
+      <span class="texttule">Payment Status:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+      <select name="pstatus" required>
+        <option value="">--Select--</option>
+        <option value="Paid">Paid</option>
+        <option value="Not Paid">Not Paid</option>
+      </select>
+    </div>
+    <input type="text" name="bmid" value="{{data1[0][7]}}">
+</div>
+  <table id="pharmacy" border=0>
+      <thead>
+          <tr>
+              <th>DrugType</th>
+              <th>Drug Name</th>
+              <th>Unit Price</th>
+              <th>Remain Qty</th>
+              <th>Issued Qty</th>
+              <th>Amount</th>
+          </tr>
+      </thead>
+
+      <tbody>
+        {%for row in data1%}
+        <tr>
+          <td>{{row[0]}}</td>
+          <td>{{row[1]}}</td>
+          <td>{{row[2]}}</td>
+          <td>{{row[3]}}</td>
+          <td>{{row[5]}}</td>
+          <td class='damount'>{{row[6]}}</td>
+        </tr>
+        {%endfor%}
+        <tr style="background-color:#228B22;">
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td style="color:white;font-weight:bold;font-size:20px;">Total Amount</td>
+          <td  colspan=5 style="color:white;font-weight:bold;font-size:20px;"><span id="dtamount"></span>
+          </td>
+        </tr>
+      </tbody>
+  </table>
+    <div class="row myrow">
+      <div class="col-5"></div>
+      <div class="col-1">
+        <input type="submit" value="Update" style="height:40px;width:100px;background-color:#A9A9A9">
+      </div>
+      <div class="col-1">
+        <a href="{{url_for('opdbillprint',rfrom='doctor',bmid=data1[0][7])}}"><div id="print" class='block'>Print</div></a>
+      </div>
+    </div>
+    <div class="row myrow">
+      <div class="col-5" style="width:41.5%;"></div>
+      <div class="col-3">
+        <p id="upmedack"></p>
+      </div>
+    </div>
+  <div class="row myrow"><div class="col-5"></div></div>
+</div>
+</form>
+<script>
+$(document).ready(function(){
+  var sum=0.0;
+$('#pharmacy .damount').each(function()
+{
+  var qty=parseFloat($(this).html());
+  if (isNaN(qty))
+    qty=0;
+  sum = sum + qty;
+});
+$("#dtamount").html(sum.toFixed(3));
+});
+</script>
+{%endif%}
+
+  </div> <!--- Content --->
+</div><!--- col-12 --->
+
+<script>
+var total;
+$(document).ready(function(){
+    $("#add-row-bmed").click(function(){
+      total=0.0;
+      var dname = $("#drugname").val();
+      var dtype = $("#drugtype").val();
+      var med_id = $("#med_id").val();
+      var uprice = $("#uprice").val();
+      var curqty = $("#curqty").val();
+      var qty = $("#qty").val();
+      var remqty = curqty-qty;
+      var amount = (uprice*parseFloat(qty)).toFixed(3);
+      if($("#drugname").val()==''){
+        alert("Please Fill Medicine!");
+        return false;
+      }
+      else if($("#qty").val()==''){
+        alert("Please Fill Issued Quantity!");
+        return false;
+      }
+        mark = "";
+        var chk = "<tr><td><input type='checkbox' name='record' style='width:23px;height:23px;'></td>";
+        mark = mark + chk
+
+        var dtype = "<td>"+dtype+"</td>";
+        mark = mark + dtype;
+
+        var dname = "<td style='text-align: left;'>"+dname+"</td>";
+        mark = mark + dname;
+
+        var uprice = "<td>"+uprice+"</td>";
+        mark = mark + uprice;
+
+        var curqty = "<td>"+curqty+"</td>";
+        mark = mark + curqty;
+
+        var remqty1 = "<td>"+remqty+"</td>";
+        mark = mark + remqty1;
+
+        var qty1 = "<td style='font-weight:bold;'>"+qty+"</td>";
+        mark = mark + qty1;
+
+        var amount1 = "<td class='amount'>"+amount+"</td>";
+        mark = mark + amount1;
+
+        var med_id = "<td style='display:none;'><input type='text' name='med_id' value='"+med_id+"' style='width:100px;display:none;'  readonly></td></tr>";
+        mark = mark + med_id;
+        var remqty = "<td style='display:none;'><input type='text' name='remquantity' value='"+remqty+"' style='width:100px;display:none;'  readonly></td></tr>";
+        mark = mark + remqty
+        var qty = "<td style='display:none;'><input type='text' name='quantity' value='"+qty+"' style='width:100px;display:none;'  readonly></td></tr>";
+        mark = mark + qty;
+        var amount = "<td style='display:none;'><input type='text' name='unitamount' value='"+amount+"' style='width:100px;display:none;'  readonly></td></tr>";
+        mark = mark + amount;
+        $("#pharmacy tbody").prepend(mark);
+
+        $('#pharmacy .amount').each(function()
+        {
+          var qty=parseFloat($(this).html());
+          if (isNaN(qty))
+            qty=0;
+          total = total + qty;
+        });
+        $("#tamount").html(total.toFixed(3));
+        $("#totalamount").val(total.toFixed(3));
+        $("#drugname").val('');
+        $("#drugtype").val('');
+        $("#med_id").val('');
+        $("#uprice").val('');
+        $("#curqty").val('');
+        $("#qty").val('');
+    });
+
+    // Find and remove selected table rows
+    $("#delete-row-bmed").click(function(){
+        $("#pharmacy tbody").find('input[name="record"]').each(function(){
+          if($(this).is(":checked")){
+
+            var amount= parseFloat($(this).closest("tr").find('td:eq(7)').text());
+            var atotal=$("#tamount").html();
+            total = atotal - amount;
+            $("#tamount").html(total.toFixed(3));
+            $("#totalamount").val(total.toFixed(3));
+            $(this).parents("tr").remove();
+          }
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+<style>
+#panel td, #panel th {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align:center
+}
+</style>
+<div class="col-12">
+  <div id="content">
+    <div id="content">
+      <div class="titlebox" style="text-align:center">
+        <span style="text-align:center">Edit Panel Name</span>
+        <div style="text-align:right;display:inline;border:2px solid #000080;padding:6px;border-radius:3px;"><a href="labadmin" style="text-decoration:none;color:green;font-size:30px;color:#000080"><img src="static/icon4/home.svg" height="40px" width="40px"></a></div>
+      </div>
+<div class="row myrow">
+    <div class="col-5"></div>
+  <form action="ViewpanelById" method="POST">
+  <div class="col-3">
+    <span class="texttule">Samples:</span>
+    <select name="samplename">
+      <option value="">--Select--</option>
+      {%for row in sdata%}
+      <option value="{{row[0]}}">{{row[1]}}</option>
+      {%endfor%}
+    </select>
+    <input type="submit" value="Search">
+  </div>
+  </form>
+</div>
+
+<div class="row myrow">
+    <div class="col-5"></div>
+  <div class="col-4">
+<table id="panel">
+    <thead>
+    <tr>
+        <th>Sample Name</th>
+        <th>Panel Name</th>
+        <th>Edit</th>
+    </tr>
+    </thead>
+    <tbody>
+        {% for row in data %}
+            <tr>
+                <td>{{row[4]}}</td>
+                <td>{{row[2]}}</td>
+                <td><a href="{{url_for('Updatepanel',pid=row[0])}}">Edit</a></td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+
+
+{% endblock %}

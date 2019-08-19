@@ -1,0 +1,76 @@
+{% extends "Frame/framepage.html" %}
+{% block content %}
+<style>
+#todaysample td, #todaysample th {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align:center
+}
+</style>
+<div class="col12">
+  <div id="content">
+    <div class="titlebox">Collect Sample</div>
+    <br>
+
+    <form action="getpatientdatafromsource" method="POST">
+    <div class="row myrow">
+        <div class="col-2">
+            <span class="texttule">RegNo:</span>
+            <input type="text" name="regno" style="width:120px;" class="alphanumeric" required>
+        </div>
+        <div class="col-2">
+            <span class="texttule">Source:</span>
+            <select name="location" id='location'  required>
+                    <option value="">---select---</option>
+                    <option value="OPD">OPD</option>
+                    <option value="Ward">Ward</option>
+                  </select>
+                  </div>
+                  <div class="col-1">
+                    <input type="submit" value="Search">
+                 </div>
+    </form>
+    {%if ack1 != ' '%}
+      <div class="row myrow">
+        <div class="col-3">{{ack1}}</div>
+      </div>
+    {%endif%}
+  </div> <!--- Content --->
+</div><!--- col-12 --->
+<div class="col-12">
+  <h4>Number Of Sample Collected Today : <b>{{acno|length}}</b></h4>
+  <table id="todaysample" style="width:100%;">
+    <tr style="font-weight:bold;">
+      <td style="padding:0px;">Edit</td>
+      <td style="padding:0px;">VALIDATE</td>
+      <td>AccessionNo</td>
+      <td>Regno</td>
+      <td>Name</td>
+      <td>Age</td>
+      <td>Date</td>
+      <td>Test(s) Name</td>
+      <td>Patient From</td>
+    </tr>
+    {%for row in acno%}
+    <tr>
+      <td><form action="editSample" method="POST"><button name="accession_no" value="{{row[0]}}">Edit</button><input type="hidden" value="Fpage" name="page"></form></td>
+      <td><form action="validate_sample" method="POST"><button name="accession_no" value="{{row[0]}}">Validate</button></form></td>
+      <td>{{row[0]}}</td>
+      <td>{{row[1]}}</td>
+      <td>{{row[2]}} {{row[3]}} {{row[4]}}</td>
+      <td>{{row[5]}} {{row[6]}}</td>
+      <td>{{row[7]}}</td>
+      <td>
+      {%for trow in tname%}
+        {%if row[0]==trow[0]%}
+        {{trow[1]}}
+          {%if tname|length != loop.index%},{%endif%}
+        {%endif%}
+      {%endfor%}
+    </td>
+      <td>{{row[8]}}</td>
+    </tr>
+    {%endfor%}
+  </table>
+</div>
+{% endblock %}
